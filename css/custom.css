@@ -1,0 +1,24 @@
+﻿/* Custom CSS */
+.btnTracker {
+    /*margin-right:5px;*/
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+    .btnTracker i {
+        color: #f00;
+    }
+
+.triggerI {
+    margin-top: -5px;
+}
+
+.triggerLI {
+    background-color: #ff0;
+}
+
+@media print {
+    .no-print, .no-print * {
+        display: none !important;
+    }
+}
