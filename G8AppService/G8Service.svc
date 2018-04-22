@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="G8Service" CodeBehind="~/App_Code/G8Service.cs" %>
