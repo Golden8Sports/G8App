@@ -6,22 +6,30 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using G8_App.G8AppService;
+using HouseReport_BL.Logic;
 
 namespace G8_App.Views
 {
     public partial class dashboard : System.Web.UI.Page
     {
-        G8ServiceClient cli = new G8ServiceClient();
+        private G8ServiceClient cli = new G8ServiceClient();
+        private blSport sportDB = new blSport();
 
         protected void Page_Load(object sender, EventArgs e)
         {
             userName.InnerText = csUser.Name + " - " + csUser.Profile;
+            if (!IsPostBack)
+            {
+                LoadSport(sender,e);
+            }
         }
 
-        protected void Perilla(object sender, EventArgs e)
+        private void LoadSport(object sender, EventArgs e)
         {
-            //rptTable.DataSource = cli.ListarTest("");
-           // rptTable.DataBind();
+            inSport.DataSource = sportDB.ListSport();
+            inSport.DataTextField = "SportName";
+            inSport.DataValueField = "IdSport";
+            inSport.DataBind();
         }
     }
 }
