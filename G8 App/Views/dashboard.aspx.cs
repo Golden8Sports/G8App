@@ -20,7 +20,8 @@ namespace G8_App.Views
             userName.InnerText = csUser.Name + " - " + csUser.Profile;
             if (!IsPostBack)
             {
-                LoadSport(sender,e);
+                LoadSport(sender, e);
+
             }
         }
 
