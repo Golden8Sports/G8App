@@ -22,6 +22,24 @@ namespace G8_App.Views {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl userName;
         
         /// <summary>
+        /// Control startDate.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputText startDate;
+        
+        /// <summary>
+        /// Control endDate.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputText endDate;
+        
+        /// <summary>
         /// Control inSport.
         /// </summary>
         /// <remarks>
@@ -29,15 +47,6 @@ namespace G8_App.Views {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList inSport;
-        
-        /// <summary>
-        /// Control inLeague.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList inLeague;
         
         /// <summary>
         /// Control rptTable.

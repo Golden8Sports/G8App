@@ -304,6 +304,7 @@
     <Compile Include="Entities\NHL Ranges\csReportNHL.cs" />
     <Compile Include="Entities\NHL Ranges\csTeam.cs" />
     <Compile Include="Entities\NHL Ranges\csTeamRange.cs" />
+    <Compile Include="Entities\Profiling\csSummary.cs" />
     <Compile Include="Logic\blLogin.cs" />
     <Compile Include="Logic\Leans\blbet.cs" />
     <Compile Include="Logic\Leans\blGame.cs" />
@@ -316,6 +317,7 @@
     <Compile Include="Logic\NHL Ranges\blTeam.cs" />
     <Compile Include="Logic\NHL Ranges\csGenerateExcel.cs" />
     <Compile Include="Logic\NHL Ranges\csRealTeamName.cs" />
+    <Compile Include="Logic\Profiling\blSummary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\dashboard.aspx.cs">
       <DependentUpon>dashboard.aspx</DependentUpon>
