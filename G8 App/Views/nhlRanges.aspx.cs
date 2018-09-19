@@ -103,30 +103,33 @@ namespace G8_App.Views
                 Response.Write("<script>window.alert('" + ex.Message + "');</script>");
             }
 
-
-
         }
 
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
-            if (!IsPostBack)
+            if(Session["Login"] != null)
             {
-                userName.InnerText = csUser.Name + " - " + csUser.Profile;
-
-                ObservableCollection<csTeam> TeamsListNHL = teamDB.TeamsListNHL(7, 15);
-                TeamsListNHL = realNames.GetNHLTeams(TeamsListNHL);
-
-                if (TeamsListNHL != null)
+                if (!IsPostBack)
                 {
-                    inputTeam.DataSource = TeamsListNHL;
-                    inputTeam.DataTextField = "Name";
-                    inputTeam.DataValueField = "Name";
-                    inputTeam.DataBind();
-                    inputTeam.SelectedIndex = inputTeam.Items.Count - 1;
-                }
+                    userName.InnerText = csUser.Name + " - " + csUser.Profile;
 
+                    ObservableCollection<csTeam> TeamsListNHL = teamDB.TeamsListNHL(7, 15);
+                    TeamsListNHL = realNames.GetNHLTeams(TeamsListNHL);
+
+                    if (TeamsListNHL != null)
+                    {
+                        inputTeam.DataSource = TeamsListNHL;
+                        inputTeam.DataTextField = "Name";
+                        inputTeam.DataValueField = "Name";
+                        inputTeam.DataBind();
+                        inputTeam.SelectedIndex = inputTeam.Items.Count - 1;
+                    }
+
+                }
+            }else
+            {
+                Response.Redirect("Login.aspx");
             }
         }
 

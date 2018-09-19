@@ -14,7 +14,7 @@ namespace NHL_BL.Logic
 {
     public class blGame : csComponentsConnection
     {
-        public ObservableCollection<csGame> ListGames(string dt1, string dt2, String idSport, int idLeague)
+        public ObservableCollection<csGame> ListGames(string dt1, string dt2, String idSport, int idLeague, string player)
         {
             ObservableCollection<csGame> list = new ObservableCollection<csGame>();
             try
@@ -23,11 +23,11 @@ namespace NHL_BL.Logic
                 parameters.Add("@pEndDate", dt2);
                 parameters.Add("@pIdSport", idSport);
                 parameters.Add("@pIdLeague", idLeague);
-            
+                parameters.Add("@pPlayer", player);
+
                 dataset = csConnection.ExecutePA("[dbo].[web_GetLeansIdGames]", parameters);
                 if (dataset.Tables[0].Rows.Count > 0)
                 {
-
                     foreach (DataRow fila in dataset.Tables[0].Rows)
                     {
                         list.Add(new csGame(Convert.ToInt32(fila["IdGame"]),

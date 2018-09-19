@@ -12,7 +12,9 @@ namespace NHL_BL.Entities
         public int ContLeansBets = 0, TotalBets = 0, ContNoLeansBets = 0;
         public int ContWins = 0;
         public string sport = "";
-        public string Event = "", Odds = "" , Points = "";
+        public string Event = "";
+        public string Odds = "";
+        public string Points = "";
         public string Line = "";
         public string Time = "";
         public int WinBetsLeans = 0, LostBetsLeans = 0;
@@ -25,11 +27,7 @@ namespace NHL_BL.Entities
         public int? IdPlayer = 0;
         public String Team = "";
 
-
-
         public double? WinAmount = 0, RiskAmount = 0, Net = 0;
-
-
 
         public csSummary() { }
     }

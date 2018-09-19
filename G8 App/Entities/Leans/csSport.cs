@@ -40,5 +40,12 @@ namespace NHL_BL.Entities
             _sportName = name;
             _sportOrder = order;
         }
+
+
+        public csSport(string id, string name)
+        {
+            _idSport = id;
+            _sportName = name;
+        }
     }
 }

@@ -24,7 +24,6 @@ namespace NHL_BL.Entities
         private string Score { get; set; }
   
         private string BeatLine { get; set; }
-
         public int IdWager { get; set; }
         public int IdWagerDetail { get; set; }
         public Nullable<int> IdAgent { get; set; }
@@ -49,20 +48,57 @@ namespace NHL_BL.Entities
         public int HomeScore { get; set; }
         public string OverUnder = "";
 
-
         public double? CrisPoints { get; set; }
         public int? CrisJuice { get; set; }
 
-
         public double? PinniPoints { get; set; }
         public int? PinniJuice { get; set; }
-
 
         public double? OurPoints { get; set; }
         public int? OurJuice { get; set; }
         //public int? ML { get; set; }
 
         public string VisHome { get; set; }
+        public int IdSportDonBest { get; set; }
+
+        public string Pick { get; set; }
+        public string GameDate { get; set; }
+
+        public string EventName { get; set; }
+        public DateTime EventDate  { get; set; }
+
+
+        public string OurNextLine { get; set; }
+
+
+
+        //to summary
+        public double? NetLeans { get; set; }
+        public double? WinLeans { get; set; }
+        public double? RiskLeans { get; set; }
+        public double? WinPerLeans { get; set; }
+        public double? WinPerNoLeans { get; set; }
+        public double? NetNoLeans { get; set; }
+        public double? WinNoLeans { get; set; }
+        public double? RiskNoLeans { get; set; }
+        public int ContLeansBets { get; set; }
+        public int TotalBets { get; set; }
+        public int ContNoLeansBets { get; set; }
+        public int ContWins { get; set; }
+        public string Sport { get; set; }
+
+        public string Event { get; set; }
+        public string Line { get; set; }
+        public string Time { get; set; }
+        public int WinBetsLeans { get; set; }
+        public int LostBetsLeans { get; set; }
+        public int WinBetsNoLeans { get; set; }
+        public int LostBetsNoLeans { get; set; }
+        public double? LeansHold { get; set; }
+        public double? NoLeansHold { get; set; }
+        public string CrisLine { get; set; }
+        public string PinniLine { get; set; }
+        public string OurLine { get; set; }
 
 
         public csBet(long id_BI, int idWager, int idWagerDetail, int? idAgent, string agent, int? idPlayer, string player, int idLineType, string lineTypeName, string loginName, double winAmount, double riskAmount, string result, double? net, string gamePeriod, string league, string completeDescription, string detailDescription, string team, int idGame, int idLeague, int? period, string fAV_DOG, int play, string wagerPlay, string idSport, DateTime settledDate, DateTime placedDate, int odds, double points, string score, string iP, string beatLine)
@@ -102,9 +138,27 @@ namespace NHL_BL.Entities
             BeatLine = beatLine;
             Rot = CastRotation(detailDescription);
             CastScores(score);
+            IdSportDonBest = CastIdSportDonBest(IdSport);
         }
 
-        public csBet() { }
+        public csBet()
+        {
+            this.NetLeans = 0;
+            this.WinLeans = 0;
+            this.RiskLeans = 0;
+            this.WinPerLeans = 0;
+            this.WinPerNoLeans = 0;
+            this.NetNoLeans = 0;
+            this.WinNoLeans = 0;
+            this.RiskNoLeans = 0;
+            this.ContLeansBets = 0;
+            this.TotalBets = 0;
+            this.ContNoLeansBets = 0;
+            this.ContWins = 0;
+            this.Sport = "";
+            this.Event = "";
+            this.WinBetsLeans = 0;
+        }
 
 
         private string WagerType(string txt)
@@ -130,18 +184,32 @@ namespace NHL_BL.Entities
                 this.OverUnder = (d.Contains("TOTAL u")) ? "u" : OverUnder = "o";
             }
 
-
-
             return Convert.ToInt32(detail[0]);
         }
+
+
+        private int CastIdSportDonBest(string sport)
+        {
+            if (sport == "SOC") return 5;
+            else if (sport == "NHL") return 4;
+            else if (sport == "NFL") return 1;
+            else if (sport == "NBA") return 2;
+            else if (sport == "MLB") return 3;
+            else if (sport == "BOXING") return 6;
+            else if (sport == "GOLF") return 7;
+            else if (sport == "TENNIS") return 8;
+            else if (sport == "RAC") return 9;
+            else return 10;
+        }
+
 
 
         private void CastScores(string score)
         {
             var scores = score.Split('-');
 
-            this.VisitorScore = Convert.ToInt32(scores[0]);
-            this.HomeScore = Convert.ToInt32(scores[1]);
+            this.VisitorScore = Convert.ToInt32(scores[0].Trim());
+            this.HomeScore = Convert.ToInt32(scores[1].Trim());
         }
 
 

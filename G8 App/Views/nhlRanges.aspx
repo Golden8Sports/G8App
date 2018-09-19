@@ -3,10 +3,8 @@
 <asp:Content runat="server" ContentPlaceHolderID="MainContent" ID="Content1">
       <div class="mainpanel">
     
-    <div class="headerbar">
-      
-      <a class="menutoggle"><i class="fa fa-bars"></i></a>
-      
+    <div class="headerbar">      
+      <a class="menutoggle"><i class="fa fa-bars"></i></a>  
       <div class="header-right">
       
       </div><!-- header-right -->
@@ -69,7 +67,7 @@
                           <label class="col-sm-2 control-label">Start Date:</label>
                             <div class="col-sm-3">
                               <div class="input-group">
-                                <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="startDate" runat="server" name="startDate" required="required" value="" />
+                                <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="startDate" runat="server" name="startDate" required="required" autocomplete="off" />
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                               </div>
                             </div>
@@ -79,7 +77,7 @@
                             <label class="col-sm-2 control-label">End Date:</label>
                             <div class="col-sm-3">
                               <div class="input-group">
-                                  <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="endDate" runat="server" name="endDate" required="required" value="" />
+                                  <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="endDate" runat="server" name="endDate" required="required" autocomplete="off" />
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                               </div>
                             </div>

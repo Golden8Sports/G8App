@@ -1,4 +1,5 @@
 ﻿<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -24,15 +25,51 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>2.6</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;x</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PublishDatabaseSettings>
+      <Objects>
+        <ObjectGroup Name="ConnectionG8Apps-Implementación" Order="1">
+          <Destination Path="" />
+          <Object Type="DbFullSql">
+            <PreSource Path="data source=10.10.10.30%3binitial catalog=G8Apps%3buser id=sportbookdba%3bpassword=lumalu%3b" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
+            <Source Path="obj\Debug\AutoScripts\ConnectionG8Apps-Implementación_SchemaOnly.sql" Transacted="True" />
+          </Object>
+        </ObjectGroup>
+        <ObjectGroup Name="ConnectionDGS-Implementación" Order="2">
+          <Destination Path="" />
+          <Object Type="DbFullSql">
+            <PreSource Path="data source=10.10.10.30%3binitial catalog=DGSDATA%3buser id=sportbookdba%3bpassword=lumalu%3b" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
+            <Source Path="obj\Debug\AutoScripts\ConnectionDGS-Implementación_SchemaOnly.sql" Transacted="True" />
+          </Object>
+        </ObjectGroup>
+        <ObjectGroup Name="DonBest-Implementación" Order="3">
+          <Destination Path="" />
+          <Object Type="DbFullSql">
+            <PreSource Path="Data Source=10.10.10.46%3b Initial Catalog=DonBest%3b User Id=sportbookdba%3b Password=lumalu%3b" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
+            <Source Path="obj\Debug\AutoScripts\DonBest-Implementación_SchemaOnly.sql" Transacted="True" />
+          </Object>
+        </ObjectGroup>
+        <ObjectGroup Name="Pinnacle-Implementación" Order="4">
+          <Destination Path="" />
+          <Object Type="DbFullSql">
+            <PreSource Path="Data Source=10.10.10.30%3b Initial Catalog=PINNACLE%3b User Id=sportbookdba%3b Password=lumalu%3b" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
+            <Source Path="obj\Debug\AutoScripts\Pinnacle-Implementación_SchemaOnly.sql" Transacted="True" />
+          </Object>
+        </ObjectGroup>
+        <ObjectGroup Name="NewConnection1-Implementación" Order="5">
+          <Destination Path="" />
+        </ObjectGroup>
+      </Objects>
+    </PublishDatabaseSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,10 +81,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AjaxControlToolkit, Version=18.1.0.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <HintPath>..\packages\AjaxControlToolkit.18.1.0\lib\net40\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.8.2.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.8.2\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
@@ -87,6 +133,11 @@
     <Reference Include="Nevron.Nov.WpfControls, Version=17.5.29.12, Culture=neutral, PublicKeyToken=b33b1a04bb5ca8ad, processorArchitecture=MSIL">
       <HintPath>..\packages\Nevron.Nov.Chart.17.5.29.12\lib\net40\Nevron.Nov.WpfControls.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DataVisualization" />
@@ -135,16 +186,17 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\G8AppService\G8Service.disco" />
-    <None Include="Connected Services\G8AppService\configuration91.svcinfo" />
-    <None Include="Connected Services\G8AppService\configuration.svcinfo" />
-    <Content Include="Connected Services\G8AppService\G8_App.G8AppService.myTest.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <None Include="Connected Services\G8AppService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
+    <None Include="Scripts\jquery-1.8.0.intellisense.js" />
+    <Content Include="css\loading.css" />
+    <Content Include="js\canvas.js" />
+    <Content Include="js\GoogleCharts.js" />
+    <Content Include="js\loading.js" />
+    <Content Include="Scripts\jquery-1.8.0.js" />
+    <Content Include="Scripts\jquery-1.8.0.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Security\AppClass.asax" />
+    <Content Include="css\tables.css" />
     <Content Include="fonts\fontawesome-webfontba72.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\lato\Lato-Bla-webfont.svg" />
@@ -221,21 +273,23 @@
     <Content Include="fonts\lato\Lato-RegIta-webfont.ttf" />
     <Content Include="fonts\lato\Lato-RegIta-webfont.woff" />
     <Content Include="fonts\lato\Lato-RegIta-webfontd41d.eot" />
-    <None Include="Connected Services\G8AppService\G8Service.wsdl" />
-    <None Include="Connected Services\G8AppService\G8Service.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\G8AppService\G8Service1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\G8AppService\G8Service2.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Views\BusinessIntelligence.aspx" />
+    <Content Include="Views\BusinessR.aspx" />
+    <Content Include="Views\BusinessReview.aspx" />
+    <Content Include="Views\CheckScores.aspx" />
+    <Content Include="Views\Games.aspx" />
+    <Content Include="Views\GeneralProfile.aspx" />
+    <Content Include="Views\GraphByGame.aspx" />
     <Content Include="Views\leansReport.aspx" />
     <Content Include="Views\menu.Master" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile3.pubxml" />
+    <None Include="Properties\PublishProfiles\G8 Publicate.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -275,16 +329,78 @@
     <Content Include="js\toggles.min.js" />
     <Content Include="Views\dashboard.aspx" />
     <Content Include="Views\Login.aspx" />
+    <Content Include="Views\MLB_Series.aspx" />
+    <Content Include="Views\NBAStats.aspx" />
+    <Content Include="Views\NCAABStats.aspx" />
+    <Content Include="Views\NCAAFStats.aspx" />
+    <Content Include="Views\NFLStats.aspx" />
     <Content Include="Views\nhlRanges.aspx" />
+    <Content Include="Views\ProfileTools\BusinessIntelligence.aspx" />
+    <Content Include="Views\ProfilingPlayer.aspx" />
+    <Content Include="Views\RangesReport.aspx" />
+    <Content Include="Views\Scraping.aspx" />
+    <Content Include="Views\ScrapingMLB.aspx" />
+    <Content Include="Views\SoccerProps.aspx" />
+    <Content Include="Views\MLB.aspx" />
+    <Content Include="Views\TopPlayers.aspx" />
+    <Content Include="Views\UpdateScores.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connected Services\G8AppService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
+    <Compile Include="Connection\csConnectionMLB.cs" />
+    <Compile Include="Connection\csStats.cs" />
+    <Compile Include="Entities\Bet\csBets.cs" />
+    <Compile Include="Entities\Business Intelligence\csAgent.cs" />
+    <Compile Include="Entities\Business Intelligence\csBet.cs" />
+    <Compile Include="Entities\Games\csGame.cs" />
+    <Compile Include="Entities\Games\csGameStats.cs" />
+    <Compile Include="Entities\Leans\csSum.cs" />
+    <Compile Include="Entities\Lines\csLine.cs" />
+    <Compile Include="Entities\Lines\csLineType.cs" />
+    <Compile Include="Entities\MLB\csAgrupation.cs" />
+    <Compile Include="Entities\MLB\csGamesBySerie.cs" />
+    <Compile Include="Entities\MLB\csGroupSerie.cs" />
+    <Compile Include="Entities\MLB\csMlbSeries.cs" />
+    <Compile Include="Entities\MLB\csMlbStat.cs" />
+    <Compile Include="Entities\MLB\csSummary.cs" />
+    <Compile Include="Entities\MLB\csTeam.cs" />
+    <Compile Include="Entities\MLB\csTeams.cs" />
+    <Compile Include="Entities\MLB\csTeamStat.cs" />
+    <Compile Include="Entities\Pinnacle Appi\PinniAppi.cs" />
+    <Compile Include="Entities\Profiling\csPlayer.cs" />
+    <Compile Include="Entities\Profiling\csProfile.cs" />
+    <Compile Include="Entities\Scores\csDictionary.cs" />
+    <Compile Include="Entities\Scores\csScore.cs" />
+    <Compile Include="Entities\SportsIntelligence\csMlbTrends.cs" />
+    <Compile Include="Entities\SportsIntelligence\csYear.cs" />
+    <Compile Include="Entities\Sports\csSport.cs" />
+    <Compile Include="Entities\Sports\Soccer\csContestant.cs" />
+    <Compile Include="Entities\Sports\Soccer\csLine.cs" />
+    <Compile Include="Entities\Sports\Soccer\csSocProp.cs" />
+    <Compile Include="Logic\Administration\blCheckScores.cs" />
+    <Compile Include="Logic\Administration\blInterpreter.cs" />
+    <Compile Include="Logic\Bet\blBets.cs" />
+    <Compile Include="Logic\Business Intelligence\blAgent.cs" />
+    <Compile Include="Logic\Business Intelligence\blBet.cs" />
+    <Compile Include="Logic\Games\blGame.cs" />
+    <Compile Include="Logic\Lines\blLine.cs" />
+    <Compile Include="Logic\Lines\blLineType.cs" />
+    <Compile Include="Logic\MLB\blGamesSerie.cs" />
+    <Compile Include="Logic\MLB\blGroupSerie.cs" />
+    <Compile Include="Logic\MLB\blMlbSeries.cs" />
+    <Compile Include="Logic\MLB\blStatMLB.cs" />
+    <Compile Include="Logic\MLB\blTeam.cs" />
+    <Compile Include="Logic\Profiling\blPlayer.cs" />
+    <Compile Include="Logic\Profiling\blProfile.cs" />
+    <Compile Include="Logic\Scores\blScores.cs" />
+    <Compile Include="Logic\SportsIntelligence\MlbInformation.cs" />
+    <Compile Include="Logic\Sports\Soc\blSoccer.cs" />
+    <Compile Include="Logic\WL_BI\csData.cs" />
+    <Compile Include="Logic\WL_BI\csWIBI.cs" />
+    <Compile Include="Security\AppClass.asax.cs">
+      <DependentUpon>AppClass.asax</DependentUpon>
     </Compile>
     <Compile Include="Connection\csComponentsConnection.cs" />
     <Compile Include="Connection\csConnection.cs" />
@@ -305,6 +421,7 @@
     <Compile Include="Entities\NHL Ranges\csTeam.cs" />
     <Compile Include="Entities\NHL Ranges\csTeamRange.cs" />
     <Compile Include="Entities\Profiling\csSummary.cs" />
+    <Compile Include="Entities\Scraping\Covers\csCovers.cs" />
     <Compile Include="Logic\blLogin.cs" />
     <Compile Include="Logic\Leans\blbet.cs" />
     <Compile Include="Logic\Leans\blGame.cs" />
@@ -318,13 +435,63 @@
     <Compile Include="Logic\NHL Ranges\csGenerateExcel.cs" />
     <Compile Include="Logic\NHL Ranges\csRealTeamName.cs" />
     <Compile Include="Logic\Profiling\blSummary.cs" />
+    <Compile Include="Logic\Scraping\Covers\blCovers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\BusinessIntelligence.aspx.cs">
+      <DependentUpon>BusinessIntelligence.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\BusinessIntelligence.aspx.designer.cs">
+      <DependentUpon>BusinessIntelligence.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessR.aspx.cs">
+      <DependentUpon>BusinessR.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\BusinessR.aspx.designer.cs">
+      <DependentUpon>BusinessR.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessReview.aspx.cs">
+      <DependentUpon>BusinessReview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\BusinessReview.aspx.designer.cs">
+      <DependentUpon>BusinessReview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CheckScores.aspx.cs">
+      <DependentUpon>CheckScores.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\CheckScores.aspx.designer.cs">
+      <DependentUpon>CheckScores.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Views\dashboard.aspx.cs">
       <DependentUpon>dashboard.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Views\dashboard.aspx.designer.cs">
       <DependentUpon>dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Games.aspx.cs">
+      <DependentUpon>Games.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Games.aspx.designer.cs">
+      <DependentUpon>Games.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GeneralProfile.aspx.cs">
+      <DependentUpon>GeneralProfile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\GeneralProfile.aspx.designer.cs">
+      <DependentUpon>GeneralProfile.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GraphByGame.aspx.cs">
+      <DependentUpon>GraphByGame.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\GraphByGame.aspx.designer.cs">
+      <DependentUpon>GraphByGame.aspx</DependentUpon>
     </Compile>
     <Compile Include="Views\leansReport.aspx.cs">
       <DependentUpon>leansReport.aspx</DependentUpon>
@@ -347,6 +514,41 @@
     <Compile Include="Views\menu.Master.designer.cs">
       <DependentUpon>menu.Master</DependentUpon>
     </Compile>
+    <Compile Include="Views\MLB_Series.aspx.cs">
+      <DependentUpon>MLB_Series.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\MLB_Series.aspx.designer.cs">
+      <DependentUpon>MLB_Series.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NBAStats.aspx.cs">
+      <DependentUpon>NBAStats.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\NBAStats.aspx.designer.cs">
+      <DependentUpon>NBAStats.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NCAABStats.aspx.cs">
+      <DependentUpon>NCAABStats.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\NCAABStats.aspx.designer.cs">
+      <DependentUpon>NCAABStats.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NCAAFStats.aspx.cs">
+      <DependentUpon>NCAAFStats.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\NCAAFStats.aspx.designer.cs">
+      <DependentUpon>NCAAFStats.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NFLStats.aspx.cs">
+      <DependentUpon>NFLStats.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\NFLStats.aspx.designer.cs">
+      <DependentUpon>NFLStats.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Views\nhlRanges.aspx.cs">
       <DependentUpon>nhlRanges.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -354,10 +556,71 @@
     <Compile Include="Views\nhlRanges.aspx.designer.cs">
       <DependentUpon>nhlRanges.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Views\ProfileTools\BusinessIntelligence.aspx.cs">
+      <DependentUpon>BusinessIntelligence.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\ProfileTools\BusinessIntelligence.aspx.designer.cs">
+      <DependentUpon>BusinessIntelligence.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProfilingPlayer.aspx.cs">
+      <DependentUpon>ProfilingPlayer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\ProfilingPlayer.aspx.designer.cs">
+      <DependentUpon>ProfilingPlayer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RangesReport.aspx.cs">
+      <DependentUpon>RangesReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\RangesReport.aspx.designer.cs">
+      <DependentUpon>RangesReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Scraping.aspx.cs">
+      <DependentUpon>Scraping.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Scraping.aspx.designer.cs">
+      <DependentUpon>Scraping.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ScrapingMLB.aspx.cs">
+      <DependentUpon>ScrapingMLB.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\ScrapingMLB.aspx.designer.cs">
+      <DependentUpon>ScrapingMLB.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SoccerProps.aspx.cs">
+      <DependentUpon>SoccerProps.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\SoccerProps.aspx.designer.cs">
+      <DependentUpon>SoccerProps.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MLB.aspx.cs">
+      <DependentUpon>MLB.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\MLB.aspx.designer.cs">
+      <DependentUpon>MLB.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TopPlayers.aspx.cs">
+      <DependentUpon>TopPlayers.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\TopPlayers.aspx.designer.cs">
+      <DependentUpon>TopPlayers.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UpdateScores.aspx.cs">
+      <DependentUpon>UpdateScores.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\UpdateScores.aspx.designer.cs">
+      <DependentUpon>UpdateScores.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Scripts\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">
       <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
@@ -391,13 +654,14 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\G8AppService\" />
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ProjectExtensions>

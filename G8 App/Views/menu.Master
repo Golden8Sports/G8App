@@ -6,19 +6,29 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
     
-<head>
+<head runat="server">
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title>G8 Web Apps</title>
     <link href="../css/style.default.css" rel="stylesheet" />
     <link href="../css/summernote.css" rel="stylesheet" />
 	<link href="../css/custom.css" rel="stylesheet" />
-    <link href="../css/datatables.min.css" rel="stylesheet" />
+    <link href="../css/datatables.min.css" rel="stylesheet"/>
+    <link href="../css/tables.css" rel="stylesheet" />
+    <link href="../css/loading.css" rel="stylesheet" />
 
-     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/resources/demos/style.css">
+
+
+      <asp:contentplaceholder id="head1" runat="server">
+           <!-- Page-specific content will go here... -->
+      </asp:contentplaceholder>
+
+   
 </head>
 
  
@@ -58,103 +68,51 @@
     <h5 class="sidebartitle">Navigation</h5>
     <ul class="nav nav-pills nav-stacked nav-bracket">
         <li class=""><a href="dashboard.aspx"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
-        <li class=""><a href="#"><i class="fa fa-money"></i> <span>Billing</span></a></li>
-        <li class="nav-parent">
-            <a href="#"><i class="fa fa-envelope-o"></i> <span>Player Message</span></a>
-            <ul class="children">
-                <li><a href="#"><i class="fa fa-caret-right"></i> New </a></li>
-                <li><a href="#"><i class="fa fa-caret-right"></i> View </a></li>
-            </ul>
-        </li>
-        <li class="nav-parent">
-            <a href="#"><i class="fa fa-envelope-o"></i> <span>Agent Message</span></a>
-            <ul class="children">
-                <li><a><i class="fa fa-caret-right"></i> New </a></li>
-                <li><a ="><i class="fa fa-caret-right"></i> View </a></li>
-            </ul>
-        </li>
-
-        <li class=""><a href="#"><i class="glyphicon glyphicon-trash"></i> <span>Delete Bet</span></a></li>
-        <li class="nav-parent">
-            <a href="#"><i class="fa fa-bug"></i> <span>Player Tracker</span></a>
-            <ul class="children">
-                <li><a href="#"><i class="fa fa-caret-right"></i> Configuration </a></li>
-                <li><a href="#"><i class="fa fa-caret-right"></i> Start </a></li>
-            </ul>
-        </li>
-        <li class="nav-parent">
-            <a href="#"><i class="glyphicon glyphicon-list-alt"></i> <span> Betting Out</span></a>
-            <ul class="children">
-                <li><a><i class="fa fa-caret-right"></i> Player List </a></li>
-            </ul>
-        </li>
         <li class="nav-parent">
             <a href="#"><i class="fa fa-briefcase"></i> <span>Profile Tools</span></a>
             <ul class="children">
-                <li><a><i class="fa fa-caret-right"></i> Business Intelligence </a></li>
-                <li><a><i class="fa fa-caret-right"></i> Business Review </a></li>
-                <li><a><i class="fa fa-caret-right"></i> Top Players </a></li>
-                <li><a><i class="fa fa-caret-right"></i> Game Statistics </a></li>
-                <li><a><i class="fa fa-caret-right"></i> Graph by Game </a></li>
-            </ul>
-        </li>
-        <li class="nav-parent">
-            <a href="#"><i class="fa fa-handshake-o"></i> <span>Customer Service</span></a>
-            <ul class="children">
-                <li><a><i class="fa fa-caret-right"></i> Create Players </a></li>
-            </ul>
-        </li>
-        <li class="nav-parent">
-            <a href="#"><i class="fa fa-bar-chart-o"></i> <span>Stats</span></a>
-            <ul class="children">
-                <li><a><i class="fa fa-caret-right"></i> NBA </a></li>
-            </ul>
-        </li>
-        <li class="nav-parent">
-            <a href="#"><i class="fa fa-pencil"></i> <span>Creation</span></a>
-            <ul class="children">
-                <li><a><i class="fa fa-caret-right"></i> Games </a></li>
-                <li><a><i class="fa fa-caret-right"></i> Soccer Games </a></li>
-                <li><a><i class="fa fa-caret-right"></i> Miscellaneous </a></li>
-            </ul>
-        </li>
-        <li class="nav-parent">
-            <a href="#"><i class="fa fa-upload"></i> <span>Importer</span></a>
-            <ul class="children">
-                <li><a><i class="fa fa-caret-right"></i> CFB Props </a></li>
-                <li><a><i class="fa fa-caret-right"></i> NBA Props </a></li>
-                <li><a><i class="fa fa-caret-right"></i> NFL Props </a></li>
-                <li><a><i class="fa fa-caret-right"></i> NHL Props </a></li>
-                <li><a><i class="fa fa-caret-right"></i> MLB Props </a></li>
-                <li><a><i class="fa fa-caret-right"></i> CFB Player Props </a></li>
-                <li><a><i class="fa fa-caret-right"></i> NBA Player Props </a></li>
-                <li><a><i class="fa fa-caret-right"></i> NFL Player Props </a></li>
-
-                <li><a><i class="fa fa-caret-right"></i> NHL Player Props </a></li>
-                <li><a><i class="fa fa-caret-right"></i> MLB Player Props </a></li>
-            </ul>
-        </li>
-        <li class="nav-parent">
-            <a href="#"><i class="fa fa-link"></i> <span>Auto Line</span></a>
-            <ul class="children">
-                <li><a><i class="fa fa-caret-right"></i> Match Games </a></li>
-                <li><a><i class="fa fa-caret-right"></i> Match Team Totals </a></li>
-                <li><a><i class="fa fa-caret-right"></i> Games List</a></li>
-                <li><a><i class="fa fa-caret-right"></i> Games Adjustment</a></li>
-                <li><a><i class="fa fa-caret-right"></i> Player Adjustment</a></li>
-                <li><a><i class="fa fa-caret-right"></i> DonBest </a></li>
+                <li><a href="BusinessIntelligence.aspx"><i class="fa fa-caret-right"></i> Business Intelligence </a></li>
+                <li><a href="BusinessReview.aspx"><i class="fa fa-caret-right"></i> Business Review </a></li>
+                <li><a href="TopPlayers.aspx"><i class="fa fa-caret-right"></i> Top Players </a></li>            
+                <li><a href="GraphByGame.aspx"><i class="fa fa-caret-right"></i> Graph by Game </a></li>
+                <li><a href="GeneralProfile.aspx"><i class="fa fa-caret-right"></i> Profiling </a></li>
+                <li><a href="ProfilingPlayer.aspx"><i class="fa fa-caret-right"></i> Profiling by Player </a></li>           
             </ul>
         </li>
 
-           <li class="nav-parent">
+       <li class="nav-parent">
             <a href="#"><i class="fa fa-file-excel-o"></i> <span>Reports</span></a>
             <ul class="children">
                 <li><a href="nhlRanges.aspx"><i class="fa fa-caret-right"></i> NHL Ranges</a></li>
                 <li><a href="leansReport.aspx"><i class="fa fa-caret-right"></i> Leans Report </a></li>
+                <li><a href="MLB_Series.aspx"><i class="fa fa-caret-right"></i> MLB Series </a></li>
+                <li><a href="Games.aspx"><i class="fa fa-caret-right"></i> Games Report </a></li>
+                <li><a href="CheckScores.aspx"><i class="fa fa-caret-right"></i> Check Scores </a></li>
+                <%--<li><a href="RangesReport.aspx"><i class="fa fa-caret-right"></i> Ranges Report </a></li>--%>
             </ul>
         </li>
 
-        <li class=""><a href="Login.aspx"><i class="fa fa-sign-out"></i> <span>LogOut</span></a></li>
+        <li class="nav-parent">
+            <a href="#"><i class="fa fa-soccer-ball-o"></i> <span> Sports Intelligence </span></a>
+            <ul class="children">
+               <li><a href="MLB.aspx"><i class="fa fa-caret-right"></i> MLB </a></li> 
+               <li><a href="NFLStats.aspx"><i class="fa fa-caret-right"></i> NFL </a></li>
+               <li><a href="NBAStats.aspx"><i class="fa fa-caret-right"></i> NBA </a></li>
+               <li><a href="NCAAFStats.aspx"><i class="fa fa-caret-right"></i> NCAAF </a></li>
+               <li><a href="NCAABStats.aspx"><i class="fa fa-caret-right"></i> NCAAB </a></li>
+            </ul>
+        </li>
+
+        <li class="nav-parent">
+            <a href="#"><i class="fa fa-wrench"></i> <span> Tools </span></a>
+            <ul class="children">
+                <li><a href="Scraping.aspx"><i class="fa fa-caret-right"></i> Scraping Covers </a></li>
+                <li><a href="ScrapingMLB.aspx"><i class="fa fa-caret-right"></i> Scraping MLB </a></li>
+                <li><a href="UpdateScores.aspx"><i class="fa fa-caret-right"></i> Update Scores </a></li>
+            </ul>
+        </li>
+
+        <li class=""><a href="Login.aspx" runat="server"><i class="fa fa-sign-out"></i><span>LogOut</span></a></li>
     </ul>
 
 
@@ -166,7 +124,6 @@
                   <!-- Page-specific content will go here... -->
                 </asp:contentplaceholder>
             </div>
-
   
 </section>
 
@@ -190,9 +147,11 @@
 <script src="../js/toggles.min.js"></script>
 <script src="../js/datatables.min.js"></script>
 
-
 <script src="../Scripts/fusioncharts.js"></script>
 <script src="../Scripts/fusioncharts.charts.js"></script>
+
+
+
 
 
   <script>
@@ -209,19 +168,74 @@
               "sPaginationType": "full_numbers",
               "iDisplayLength": 25,
               "bLengthChange": false,
-              "bSort": false,
+              "bSort": true,
+              fixedHeader: true,
+              responsive: true,
+              dom: 'Bfrtip',
+              buttons: ['csv'],
+              "order": [[ 1, "asc" ]]
+          });
+
+
+          $('#table2').dataTable({
+              "sPaginationType": "full_numbers",
+              "iDisplayLength": 25,
+              "bLengthChange": false,
+              "bSort": true,
               fixedHeader: true,
               responsive: true,
               dom: 'Bfrtip',
               buttons: ['csv']
           });
 
-      });
 
+
+           $('#table3').dataTable({
+              "sPaginationType": "full_numbers",
+              "iDisplayLength": 25,
+              "bLengthChange": false,
+              "bSort": true,
+              fixedHeader: true,
+              responsive: true,
+              dom: 'Bfrtip',
+              buttons: ['csv']
+          });
+
+
+
+             $('.tables').dataTable({
+              "sPaginationType": "full_numbers",
+              "iDisplayLength": 25,
+              "bLengthChange": false,
+              "bSort": true,
+              fixedHeader: true,
+              responsive: false,
+              dom: 'Bfrtip',
+              buttons: ['csv']
+          });
+
+
+
+          $('.customTable').dataTable({
+              "sPaginationType": "full_numbers",
+              "iDisplayLength": 25,
+              "bLengthChange": false,
+              "bSort": true,
+              fixedHeader: true,
+              responsive: true,
+              dom: 'Bfrtip',
+              buttons: ['csv'],
+              "order": [[3, 'desc']]
+          });
+
+
+
+      });
 
       $(document).ready(function () {
           $('[data-toggle="tooltip"]').tooltip();
       });
+ 
 
   </script>
 

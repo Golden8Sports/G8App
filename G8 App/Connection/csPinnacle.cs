@@ -50,6 +50,7 @@ namespace G8_App.Connection
             DataSet ds = new DataSet();
             try
             {
+                OpenConnection();
                 SqlDataAdapter adapter = new SqlDataAdapter(namePA, conex);
                 adapter.SelectCommand.CommandType = CommandType.StoredProcedure;
                 adapter.Fill(ds);
@@ -61,7 +62,7 @@ namespace G8_App.Connection
             }
             finally
             {
-
+                CloseConnection();
             }
         }
 

@@ -28,6 +28,10 @@ namespace NHL_BL.Logic
                 parameters.Add("@pPeriod", b.GamePeriod);
                 parameters.Add("@pRot2", g.VisitorNumber);
                 parameters.Add("@pWagerPlay", b.WagerPlay);
+                parameters.Add("@pIdSport", b.IdSportDonBest);
+                parameters.Add("@pDateEvent", g.EventDate);
+                parameters.Add("@pPoints", b.Points);
+                parameters.Add("@pOdds", b.Odds);
 
                 dataset = csDonBest.ExecutePA("[dbo].[spGetLeansLines]", parameters);
                 if (dataset.Tables[0].Rows.Count > 0)
@@ -93,7 +97,7 @@ namespace NHL_BL.Logic
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 b.CrisJuice = 0;
                 b.CrisPoints = 0;
@@ -212,86 +216,13 @@ namespace NHL_BL.Logic
                 parameters.Add("@pIdGame", g.IdGame);
                 parameters.Add("@pPlay", b.Play);
 
-                dataset = csG8Apps.ExecutePA("[dbo].[web_GetLeansLine]", parameters);
+                dataset = csConnection.ExecutePA("[dbo].[web_getOurNextLine]", parameters);
                 if (dataset.Tables[0].Rows.Count > 0)
                 {
-                    foreach (DataRow fila in dataset.Tables[0].Rows)
-                    {
-                        if(b.VisHome == "H")
-                        {
-                            if (b.WagerPlay == "SP")
-                            {
-                                try { b.OurPoints = Convert.ToDouble(fila["HomeSpread"]); } catch (Exception) { b.OurJuice = 0; }
-                                try { b.OurJuice = Convert.ToInt32(fila["HomeJuice"]); } catch (Exception) { b.OurJuice = 0; }    
-
-                            }
-                            else if (b.WagerPlay == "ML" || b.WagerPlay == "DR")
-                            {
-                                b.OurPoints = 0;
-                                try { b.OurJuice = Convert.ToInt32(fila["HomeMoneyLine"]); } catch (Exception) { b.OurJuice = 0; }
-                            }
-                            else if (b.WagerPlay == "TOT")
-                            {
-                                try
-                                {
-
-                                    if (b.OverUnder == "u")
-                                    {
-
-                                        try { b.OurPoints = Convert.ToDouble(fila["Total"]); } catch (Exception) { b.OurJuice = 0; }
-                                        try { b.OurJuice = Convert.ToInt32(fila["TotalUnderJuice"]); } catch (Exception) { b.OurJuice = 0; }
-
-                                    }
-                                    else
-                                    {
-                                        try { b.OurPoints = Convert.ToDouble(fila["Total"]); } catch (Exception) { b.OurJuice = 0; }
-                                        try { b.OurJuice = Convert.ToInt32(fila["TotalOverJuice"]); } catch (Exception) { b.OurJuice = 0; }
-                                    }
-
-                                }
-                                catch (Exception) { }
-                            }
-
-
-                        }else
-                        {
-                            if (b.WagerPlay == "SP")
-                            {
-                                try { b.OurPoints = Convert.ToDouble(fila["AwaySpread"]); } catch (Exception) { b.OurJuice = 0; }
-                                try { b.OurJuice = Convert.ToInt32(fila["AwayJuice"]); } catch (Exception) { b.OurJuice = 0; }
-
-                            }
-                            else if (b.WagerPlay == "ML" || b.WagerPlay == "DR")
-                            {
-                                b.OurPoints = 0;
-                                try { b.OurJuice = Convert.ToInt32(fila["AwayMoneyLine"]); } catch (Exception) { b.OurJuice = 0; }
-                            }
-                            else if (b.WagerPlay == "TOT")
-                            {
-                                try
-                                {
-
-                                    if (b.OverUnder == "u")
-                                    {
-
-                                        try { b.OurPoints = Convert.ToDouble(fila["Total"]); } catch (Exception) { b.OurJuice = 0; }
-                                        try { b.OurJuice = Convert.ToInt32(fila["TotalUnderJuice"]); } catch (Exception) { b.OurJuice = 0; }
-
-                                    }
-                                    else
-                                    {
-                                        try { b.OurPoints = Convert.ToDouble(fila["Total"]); } catch (Exception) { b.OurJuice = 0; }
-                                        try { b.OurJuice = Convert.ToInt32(fila["TotalOverJuice"]); } catch (Exception) { b.OurJuice = 0; }
-                                    }
-
-                                }
-                                catch (Exception) { }
-                            }
-                        }
-                    }
+                    b.OurNextLine = dataset.Tables[0].Rows[0]["ChangeValue"].ToString();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 b.OurJuice = 0;
                 b.OurPoints = 0;

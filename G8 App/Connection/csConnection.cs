@@ -113,9 +113,10 @@ namespace NHL_BL.Connection
         {
             //SqlConnection sqlCon = new SqlConnection(ConnectionString());
             DataSet ds = new DataSet();
-            Boolean retorno;
+            Boolean retorno = false;
             try
             {
+                OpenConnection();
                 SqlCommand sqlComm = new SqlCommand();
                 sqlComm = conex.CreateCommand();
                 sqlComm.CommandType = CommandType.StoredProcedure;
@@ -126,8 +127,10 @@ namespace NHL_BL.Connection
                 {
                     sqlComm.Parameters.AddWithValue(paramsPA.Key.ToString(), paramsPA.Value);
                 }
-                sqlComm.ExecuteNonQuery();
+
+                int reference = sqlComm.ExecuteNonQuery();
                 retorno = true;
+
             }
             catch (Exception ex)
             {
@@ -136,6 +139,7 @@ namespace NHL_BL.Connection
             }
             finally
             {
+                CloseConnection();
                 parameters.Clear();
             }
             return retorno;

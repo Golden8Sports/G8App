@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Services;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using G8_App.Logic;
@@ -16,10 +18,9 @@ namespace G8_App.Views
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            Session.Clear();
+            Session.RemoveAll();
         }
-
-
 
         public void ClickLogin(object sender, EventArgs e)
         {
@@ -30,7 +31,12 @@ namespace G8_App.Views
             {
                 // csConnection.OpenConnection();            
                 string log = loginDB.Login(user, pass);
-                if (log == "TRUE") Response.Redirect("dashboard.aspx");
+                if (log == "TRUE")
+                {
+                    Session.Add("Login",user);
+                    Response.Redirect("dashboard.aspx");
+                }
+
                 else if (log == "FALSE") Response.Write("<script>window.alert('User or Password Incorrect');</script>");
                 else Response.Write("<script>window.alert('" + log + "');</script>");
                 p.Value = "";

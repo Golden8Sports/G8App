@@ -1,4 +1,5 @@
-﻿using NHL_BL.Entities;
+﻿using G8_App.Entities.Leans;
+using NHL_BL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -6,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -17,82 +19,93 @@ namespace NHL_BL.Logic
         private ObservableCollection<csSummary> Players = new ObservableCollection<csSummary>();
         private blbet betDB = new blbet();
         private List<String> Sports = new List<String>();
-        private int index = 0;
         private csSummary summary = new csSummary();
         private ObservableCollection<csSummary> SummaryList = new ObservableCollection<csSummary>();
 
         public csGenerateLeansExcel() { }
 
-        public void GenerateExcel(ObservableCollection<csGame> Games, String path)
+        public void GenerateExcel(ObservableCollection<csGame> Games, string player, ObservableCollection<csBet> BetsWithLeans, ObservableCollection<csBet> NoLeansBets, ObservableCollection<csBet> L, ObservableCollection<csBet> SumGames)
         {
             try
             {
                 if (Games != null)
                 {
-
-                    Excel.Application app = new Microsoft.Office.Interop.Excel.Application();
-                    Excel.Workbook wb = app.Workbooks.Add(Excel.XlWBATemplate.xlWBATWorksheet);
-
-                    ObservableCollection<csBet> BetsWithLeans = new ObservableCollection<csBet>();
-                    ObservableCollection<csBet> NoLeansBets = new ObservableCollection<csBet>();
-
-                    ObservableCollection<csSummary> SummaryListGame = new ObservableCollection<csSummary>();
-
+                    //Excel.Application app = new Microsoft.Office.Interop.Excel.Application();
+                    // Excel.Workbook wb = app.Workbooks.Add(Excel.XlWBATemplate.xlWBATWorksheet);
+                    //ObservableCollection<csBet> BetsWithLeans = new ObservableCollection<csBet>();
+                    //ObservableCollection<csBet> NoLeansBets = new ObservableCollection<csBet>();
+                    //ObservableCollection<csSummary> SummaryListGame = new ObservableCollection<csSummary>();
 
                     foreach (var g in Games)
                     {
-                        ObservableCollection<csBet> LeansBets = betDB.BetListFromIdGame(g);
-                        csSummary GameSum = new csSummary();
-
-                        GameSum.Event = g.VisitorTeam + " vs " + g.HomeTeam;
-                        
-                        GameSum.sport = g.IdSport;
+                        ObservableCollection<csBet> LeansBets = betDB.BetListFromIdGame(g,player);
+                        csBet GameSum = new csBet();
+                        GameSum.Event = g.VisitorTeam + " vs " + g.HomeTeam;                      
+                        GameSum.Sport = g.IdSport;
+                        GameSum.GameDate = g.EventDate.Month + "/" + g.EventDate.Day + "/" + g.EventDate.Year;
 
                         if (LeansBets != null)
                         {
                             foreach (var l in LeansBets)
                             {
-                                ObservableCollection<csBet> bets = betDB.GetBetsAfterLeans(g.IdGame, l, l.WagerPlay);
-                                GameSum.Line += l.WagerPlay + " [Odd: " + l.Odds + ", PTs: " + l.OverUnder + l.Points + "] ";
-                                GameSum.CrisLine += l.WagerPlay + " [Odd: " + l.CrisJuice + ", PTs: " + l.OverUnder + l.CrisPoints + "] ";
-                                GameSum.PinniLine += l.WagerPlay + " [Odd: " + l.PinniJuice + ", PTs: " + l.OverUnder + l.PinniPoints + "] ";
-                                GameSum.OurLine += l.WagerPlay + " [Odd: " + l.OurJuice + ", PTs: " + l.OverUnder + l.OurPoints + "] ";
-                                GameSum.Team += (l.Rot == g.HomeNumber) ? l.WagerPlay + " [" + g.HomeTeam + "] " : l.WagerPlay + " [" + g.VisitorTeam + "] ";
-                                GameSum.Time = l.PlacedDate.ToString();
+                                ObservableCollection<csBet> bets = betDB.GetBetsAfterLeans(g.IdGame, l, l.WagerPlay, player);
+                                GameSum.Line +=  l.Odds + ", " + l.OverUnder + l.Points;
+                                GameSum.CrisLine += l.CrisJuice + ", " + l.OverUnder + l.CrisPoints;
+                                GameSum.PinniLine += l.PinniJuice + ", " + l.OverUnder + l.PinniPoints;
+                                GameSum.OurLine += l.OurNextLine;
+                                GameSum.Team += (l.Rot == g.HomeNumber) ? g.HomeTeam : g.VisitorTeam;
+                                GameSum.WagerPlay = l.WagerPlay;
+                                l.GameDate = GameSum.GameDate;
+                                //GameSum.Time = l.PlacedDate.ToString();
 
                                 LeansBetsList.Add(l);
-
+                                L.Add(l);
                                 // to check if the sport doesn't exist.
-                                bool has = Sports.Any(x => x == l.IdSport);
-                                if (!has)
-                                {
-                                    Sports.Add(l.IdSport);
-                                }
+                                //bool has = Sports.Any(x => x == l.IdSport);
+                                //if (!has)
+                                //{
+                                //    Sports.Add(l.IdSport);
+                                //}
 
-
-                                if (bets != null)
+                                if (bets != null && bets.Count > 0)
                                 {
                                     foreach (var b in bets)
                                     {
                                         // **************************** Aqui es donde hay que generar el excel ***********************
+                                        b.EventDate = g.EventDate;
+                                        b.EventName = g.VisitorTeam + " vs " + g.HomeTeam;
+                                        b.GameDate = GameSum.GameDate;
 
                                         try
                                         {
                                             if (b.Rot == l.Rot)
                                             {
                                                 //Same team with LEANS
+                                                b.Pick = (g.VisitorNumber == b.Rot) ? g.VisitorTeam : g.HomeTeam;
+
+                                                GameSum.ContLeansBets += 1;
+                                                GameSum.WinLeans += b.WinAmount;
+                                                GameSum.RiskLeans += b.RiskAmount;
+                                                GameSum.NetLeans += b.Net;
+
                                                 BetsWithLeans.Add(b);
                                                 summary.ContLeansBets += 1;
                                             }
                                             else
                                             {
                                                 //Different team with LEANS
+                                                b.Pick = (g.VisitorNumber == b.Rot) ? g.VisitorTeam : g.HomeTeam;
+
+                                                GameSum.ContNoLeansBets += 1;
+                                                GameSum.WinNoLeans += b.WinAmount;
+                                                GameSum.RiskNoLeans += b.RiskAmount;
+                                                GameSum.NetNoLeans += b.Net;
+
                                                 NoLeansBets.Add(b);
                                                 summary.ContNoLeansBets += 1;
                                             }
 
-
-
+                                            //by player
                                             bool flag = Players.Any(x => x.IdPlayer == b.IdPlayer);
                                             if (!flag)
                                             {
@@ -101,288 +114,254 @@ namespace NHL_BL.Logic
                                                 s.Player = b.Player;
                                                 Players.Add(s);
                                             }
-
-
-
                                             // sum total
-
-                                            GameSum.TotalBets += 1;
-                                            GameSum.WinAmount += b.WinAmount;
-                                            GameSum.RiskAmount += b.RiskAmount;
-                                            GameSum.Net += b.Net;
-
-
+                                            //GameSum.TotalBets += 1;
+                                            //GameSum.WinAmount += b.WinAmount;
+                                            //GameSum.RiskAmount += b.RiskAmount;
+                                            //GameSum.Net += b.Net;
                                         }
                                         catch (Exception)
                                         {
                                         }
                                         // fin generacion de Excel
                                     }
-
                                 }
                             }
-
                         }
 
-                        SummaryListGame.Add(GameSum);
-                    }
+                        GameSum.LeansHold = Math.Round(Convert.ToDouble((GameSum.NetLeans * 100) / GameSum.RiskLeans), 2, MidpointRounding.AwayFromZero);
+                        GameSum.NoLeansHold = Math.Round(Convert.ToDouble((GameSum.NetNoLeans * 100) / GameSum.RiskNoLeans), 2, MidpointRounding.AwayFromZero);
 
-   // (sender as BackgroundWorker).ReportProgress(20);
+                        SumGames.Add(GameSum);
+                    }
 
                     // ************************* bets with the same bet from Leans *********************
-                    if (Sports != null)
-                    {
-                        ObservableCollection<csSummary> SummaryList = new ObservableCollection<csSummary>();
-
-                        foreach (var sp in Sports)
-                        {
-                            Excel.Worksheet wsSport = wb.Sheets.Add();
-                            wsSport.Name = sp;
-                            CompleteRange(wsSport);
-                            index = 0;
-                            bool flag = true;
-
-                            foreach (var g in Games)
-                            {
-                                if (g.IdSport.Trim(' ') == sp)
-                                {
-                                    if(!flag) index += 1;
-
-                                    if (LeansBetsList != null)
-                                    {
-
-                                        for (int j = 0; j < LeansBetsList.Count; j++)
-                                        {
-
-                                            if (LeansBetsList[j].IdGame == g.IdGame)
-                                            {
-                                                if (BetsWithLeans != null)
-                                                {
-                                                    if (LeansBetsList[j].IdSport == sp)
-                                                    {
-                                                        if (!flag) index += 1;
-                                                        else flag = false;
-
-                                                        ShowInfo(wsSport, index, j, LeansBetsList, 3, g);
-                                                        CenterAllInfo(wsSport, index);
+                    //if (Sports != null)
+                    //{
+                    //    ObservableCollection<csSummary> SummaryList = new ObservableCollection<csSummary>();
+
+                    //    foreach (var sp in Sports)
+                    //    {
+                    //        //Excel.Worksheet wsSport = wb.Sheets.Add();
+                    //        //wsSport.Name = sp;
+                    //        //CompleteRange(wsSport);
+                    //        index = 0;
+                    //        bool flag = true;
+
+                    //        foreach (var g in Games)
+                    //        {
+                    //            if (g.IdSport.Trim(' ') == sp)
+                    //            {
+                    //                if(!flag) index += 1;
+
+                    //                if (LeansBetsList != null)
+                    //                {
+
+                    //                    for (int j = 0; j < LeansBetsList.Count; j++)
+                    //                    {
+
+                    //                        if (LeansBetsList[j].IdGame == g.IdGame)
+                    //                        {
+                    //                            if (BetsWithLeans != null)
+                    //                            {
+                    //                                if (LeansBetsList[j].IdSport == sp)
+                    //                                {
+                    //                                    if (!flag) index += 1;
+                    //                                    else flag = false;
+
+                    //                                    //ShowInfo(wsSport, index, j, LeansBetsList, 3, g);
+                    //                                    //CenterAllInfo(wsSport, index);
 
-                                                        for (int i = 0; i < BetsWithLeans.Count; i++)
-                                                        {
-                                                            if (LeansBetsList[j].IdGame == BetsWithLeans[i].IdGame &&
-                                                               LeansBetsList[j].Rot == BetsWithLeans[i].Rot &&
-                                                               LeansBetsList[j].WagerPlay == BetsWithLeans[i].WagerPlay)
-                                                            {
-                                                                index += 1;
-                                                                ShowInfo(wsSport, index, i, BetsWithLeans, 1, g);
-                                                                CenterAllInfo(wsSport, index);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-
-                                                if (LeansBetsList[j].IdSport == sp)
-                                                {
-                                                    if (NoLeansBets != null)
-                                                    {
-
-                                                        for (int i = 0; i < NoLeansBets.Count; i++)
-                                                        {
-
-                                                            if (LeansBetsList[j].IdGame == NoLeansBets[i].IdGame &&
-                                                               LeansBetsList[j].Rot != NoLeansBets[i].Rot &&
-                                                               LeansBetsList[j].WagerPlay == NoLeansBets[i].WagerPlay)
-                                                            {
-                                                                index += 1;
-                                                                ShowInfo(wsSport, index, i, NoLeansBets, 2, g);
-                                                                CenterAllInfo(wsSport, index);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
+                    //                                    for (int i = 0; i < BetsWithLeans.Count; i++)
+                    //                                    {
+                    //                                        if (LeansBetsList[j].IdGame == BetsWithLeans[i].IdGame &&
+                    //                                           LeansBetsList[j].Rot == BetsWithLeans[i].Rot &&
+                    //                                           LeansBetsList[j].WagerPlay == BetsWithLeans[i].WagerPlay)
+                    //                                        {
+                    //                                            index += 1;
+                    //                                            //ShowInfo(wsSport, index, i, BetsWithLeans, 1, g);
+                    //                                            //CenterAllInfo(wsSport, index);
+                    //                                        }
+                    //                                    }
+                    //                                }
+                    //                            }
+
+                    //                            if (LeansBetsList[j].IdSport == sp)
+                    //                            {
+                    //                                if (NoLeansBets != null)
+                    //                                {
+
+                    //                                    for (int i = 0; i < NoLeansBets.Count; i++)
+                    //                                    {
+
+                    //                                        if (LeansBetsList[j].IdGame == NoLeansBets[i].IdGame &&
+                    //                                           LeansBetsList[j].Rot != NoLeansBets[i].Rot &&
+                    //                                           LeansBetsList[j].WagerPlay == NoLeansBets[i].WagerPlay)
+                    //                                        {
+                    //                                            index += 1;
+                    //                                            //ShowInfo(wsSport, index, i, NoLeansBets, 2, g);
+                    //                                            //CenterAllInfo(wsSport, index);
+                    //                                        }
+                    //                                    }
+                    //                                }
+                    //                            }
+                    //                        }
+                    //                    }
+                    //                }
 
-                                    index += 2;
-                                }
-
-                            }
-
-                            SummaryList.Add(GetValuesFromSummary(sp, BetsWithLeans, NoLeansBets));
-
-                        }
-
-
-                       // (sender as BackgroundWorker).ReportProgress(40);
-
-                        Excel.Worksheet ws3 = wb.Sheets.Add();
-                        ws3.Name = "SUMMARY";
-                        index = 0;
-
-                        csSummary general = new csSummary();
-
-                        if (SummaryList != null)
-                        {
-                            CompleteRangeSport(ws3);
-                            for (int i = 0; i < SummaryList.Count; i++)
-                            {
-                                ShowInfoSport(ws3, i, SummaryList[i].sport, SummaryList[i]);
-                                CenterAllInfoSport(ws3, i);
-
-                                general.ContLeansBets += SummaryList[i].ContLeansBets;
-                                general.RiskLeans += SummaryList[i].RiskLeans;
-                                general.NetLeans += SummaryList[i].NetLeans;
-                                general.WinBetsLeans += SummaryList[i].WinBetsLeans;
+                    //                index += 2;
+                    //            }
+
+                    //        }
+
+                    //        SummaryList.Add(GetValuesFromSummary(sp, BetsWithLeans, NoLeansBets));
+
+                    //    }
+
+
+                    //   // (sender as BackgroundWorker).ReportProgress(40);
+
+                    //    //Excel.Worksheet ws3 = wb.Sheets.Add();
+                    //    //ws3.Name = "SUMMARY";
+                    //    index = 0;
+
+                    //    csSummary general = new csSummary();
+
+                    //    if (SummaryList != null)
+                    //    {
+                    //        //CompleteRangeSport(ws3);
+                    //        for (int i = 0; i < SummaryList.Count; i++)
+                    //        {
+                    //            //ShowInfoSport(ws3, i, SummaryList[i].sport, SummaryList[i]);
+                    //            //CenterAllInfoSport(ws3, i);
 
-                                general.ContNoLeansBets += SummaryList[i].ContNoLeansBets;
-                                general.RiskNoLeans += SummaryList[i].RiskNoLeans;
-                                general.NetNoLeans += SummaryList[i].NetNoLeans;
-                                general.WinBetsNoLeans += SummaryList[i].WinBetsNoLeans;
+                    //            general.ContLeansBets += SummaryList[i].ContLeansBets;
+                    //            general.RiskLeans += SummaryList[i].RiskLeans;
+                    //            general.NetLeans += SummaryList[i].NetLeans;
+                    //            general.WinBetsLeans += SummaryList[i].WinBetsLeans;
 
-                                index = i;
-                            }
-                        }
+                    //            general.ContNoLeansBets += SummaryList[i].ContNoLeansBets;
+                    //            general.RiskNoLeans += SummaryList[i].RiskNoLeans;
+                    //            general.NetNoLeans += SummaryList[i].NetNoLeans;
+                    //            general.WinBetsNoLeans += SummaryList[i].WinBetsNoLeans;
 
+                    //            index = i;
+                    //        }
+                    //    }
 
-                        try { general.WinPerLeans = (general.WinBetsLeans * 100 / general.ContLeansBets); } catch (Exception) { general.WinPerLeans = 0; }
-                        try { general.WinPerNoLeans = (general.WinBetsNoLeans * 100 / general.ContNoLeansBets); } catch (Exception) { general.WinPerNoLeans = 0; }
 
-                        try { general.LeansHold = (general.NetLeans * 100 / general.RiskLeans); } catch (Exception) { general.LeansHold = 0; }
-                        try { general.NoLeansHold = (general.NetNoLeans * 100 / general.RiskNoLeans); } catch (Exception) { general.NoLeansHold = 0; }
+                    //    try { general.WinPerLeans = (general.WinBetsLeans * 100 / general.ContLeansBets); } catch (Exception) { general.WinPerLeans = 0; }
+                    //    try { general.WinPerNoLeans = (general.WinBetsNoLeans * 100 / general.ContNoLeansBets); } catch (Exception) { general.WinPerNoLeans = 0; }
 
+                    //    try { general.LeansHold = (general.NetLeans * 100 / general.RiskLeans); } catch (Exception) { general.LeansHold = 0; }
+                    //    try { general.NoLeansHold = (general.NetNoLeans * 100 / general.RiskNoLeans); } catch (Exception) { general.NoLeansHold = 0; }
 
 
-                        index += 6;
-                        RangeGeneral(ws3, index);
-                        index += 1;
-                        ShowInfoGeneral(ws3, index, general);
-                        CenterAllInfoGeneral(ws3, index - 2);
 
+                    //    index += 6;
+                    //    //RangeGeneral(ws3, index);
+                    //    index += 1;
+                    //    //ShowInfoGeneral(ws3, index, general);
+                    //    //CenterAllInfoGeneral(ws3, index - 2);
 
-                       // (sender as BackgroundWorker).ReportProgress(60);
 
-                    }
+                    //   // (sender as BackgroundWorker).ReportProgress(60);
 
+                    //}
 
 
-                    // ********************** area by player ********************************** //
 
+                    //// ********************** area by player ********************************** //
 
-                    if (Players != null)
-                    {
-                        Excel.Worksheet wsp = wb.Sheets.Add();
-                        wsp.Name = "By Player";
-                        index = 1;
-                        CompleteRangePlayer(wsp, index);
-                        index -= 2;
 
-                        foreach (var p in Players)
-                        {
-                            index += 1;
+                    //if (Players != null)
+                    //{
+                    //    //Excel.Worksheet wsp = wb.Sheets.Add();
+                    //    //wsp.Name = "By Player";
+                    //    index = 1;
+                    //    //CompleteRangePlayer(wsp, index);
+                    //    index -= 2;
 
-                            if (BetsWithLeans != null)
-                            {
-                                foreach (var s in BetsWithLeans)
-                                {
-                                    if (p.IdPlayer == s.IdPlayer)
-                                    {
-                                        p.ContLeansBets += 1;
-                                        p.RiskLeans += s.RiskAmount;
-                                        p.NetLeans += s.Net;
+                    //    foreach (var p in Players)
+                    //    {
+                    //        index += 1;
 
-                                        if (s.Result == "WIN") p.WinBetsLeans += 1;
-                                        else p.LostBetsLeans += 1;
-                                    }
-                                }
+                    //        if (BetsWithLeans != null)
+                    //        {
+                    //            foreach (var s in BetsWithLeans)
+                    //            {
+                    //                if (p.IdPlayer == s.IdPlayer)
+                    //                {
+                    //                    p.ContLeansBets += 1;
+                    //                    p.RiskLeans += s.RiskAmount;
+                    //                    p.NetLeans += s.Net;
 
-                                try { p.WinPerLeans = (p.WinBetsLeans * 100 / p.ContLeansBets); } catch (Exception) { p.WinPerLeans = 0; }
-                                try { if (p.ContLeansBets > 0) { p.LeansHold = (p.NetLeans * 100 / p.RiskLeans); } else p.LeansHold = 0; } catch (Exception) { p.LeansHold = 0; }
+                    //                    if (s.Result == "WIN") p.WinBetsLeans += 1;
+                    //                    else p.LostBetsLeans += 1;
+                    //                }
+                    //            }
 
-                            }
+                    //            try { p.WinPerLeans = (p.WinBetsLeans * 100 / p.ContLeansBets); } catch (Exception) { p.WinPerLeans = 0; }
+                    //            try { if (p.ContLeansBets > 0) { p.LeansHold = (p.NetLeans * 100 / p.RiskLeans); } else p.LeansHold = 0; } catch (Exception) { p.LeansHold = 0; }
 
+                    //        }
 
-                            if (NoLeansBets != null)
-                            {
-                                foreach (var s in NoLeansBets)
-                                {
-                                    if (p.IdPlayer == s.IdPlayer)
-                                    {
-                                        p.ContNoLeansBets += 1;
-                                        p.RiskNoLeans += s.RiskAmount;
-                                        p.NetNoLeans += s.Net;
 
-                                        if (s.Result == "WIN") p.WinBetsNoLeans += 1;
-                                        else p.LostBetsNoLeans += 1;
+                    //        if (NoLeansBets != null)
+                    //        {
+                    //            foreach (var s in NoLeansBets)
+                    //            {
+                    //                if (p.IdPlayer == s.IdPlayer)
+                    //                {
+                    //                    p.ContNoLeansBets += 1;
+                    //                    p.RiskNoLeans += s.RiskAmount;
+                    //                    p.NetNoLeans += s.Net;
 
-                                    }
-                                }
+                    //                    if (s.Result == "WIN") p.WinBetsNoLeans += 1;
+                    //                    else p.LostBetsNoLeans += 1;
 
-                                try { p.WinPerNoLeans = (p.WinBetsNoLeans * 100 / p.ContNoLeansBets); } catch (Exception) { p.WinPerNoLeans = 0; }
-                                try { if (p.ContNoLeansBets > 0) { p.NoLeansHold = (p.NetNoLeans * 100 / p.RiskNoLeans); } else p.NoLeansHold = 0; } catch (Exception) { p.NoLeansHold = 0; }
-                            }
+                    //                }
+                    //            }
 
-                            ShowPlayer(wsp, index, p);
-                            CenterAllInfoSport(wsp, index);
+                    //            try { p.WinPerNoLeans = (p.WinBetsNoLeans * 100 / p.ContNoLeansBets); } catch (Exception) { p.WinPerNoLeans = 0; }
+                    //            try { if (p.ContNoLeansBets > 0) { p.NoLeansHold = (p.NetNoLeans * 100 / p.RiskNoLeans); } else p.NoLeansHold = 0; } catch (Exception) { p.NoLeansHold = 0; }
+                    //        }
 
-                        }
+                    //        //ShowPlayer(wsp, index, p);
+                    //        //CenterAllInfoSport(wsp, index);
 
-                        //(sender as BackgroundWorker).ReportProgress(80);
-                    }  //fin area player
+                    //    }
+                    //}  //fin area player
 
 
+                    //// ********************** Shett by game ********************************** //
+                    //if (SummaryListGame != null)
+                    //{
+                    //    //Excel.Worksheet ws4 = wb.Sheets.Add();
+                    //    //ws4.Name = "BY GAME";
 
+                    //    index = 0;
+                    //    //CompleteRangeGame(ws4,player);
 
+                    //    foreach (var i in SummaryListGame)
+                    //    {
+                    //        //ShowInfoGame(ws4, index, i);
+                    //        //CenterAllInfoGame(ws4, index);
+                    //        index += 2;
+                    //    }
+                    //   // (sender as BackgroundWorker).ReportProgress(100);
+                    //}
 
-
-
-
-
-                    // ********************** Shett by game ********************************** //
-
-                    if (SummaryListGame != null)
-                    {
-                        Excel.Worksheet ws4 = wb.Sheets.Add();
-                        ws4.Name = "BY GAME";
-
-                        index = 0;
-                        CompleteRangeGame(ws4);
-
-                        foreach (var i in SummaryListGame)
-                        {
-                            ShowInfoGame(ws4, index, i);
-                            CenterAllInfoGame(ws4, index);
-                            index += 2;
-                        }
-
-                       // (sender as BackgroundWorker).ReportProgress(100);
-                    }
-
-
-
-
-                    // ************************* SAVE THE DOCUMENT *********************
-
-                    if (path != null)
-                    {
-                        wb.SaveAs(path);
-                        wb.Saved = true;
-                        wb.Close(true);
-                        app.Quit();
-                    }
-                    else
-                    {
-                        string mydocpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                        wb.SaveAs(mydocpath + @"\" + DateTime.Now.Day + "." + DateTime.Now.Month + "." + DateTime.Now.Year + " LeansReport.xls");
-                        wb.Saved = true;
-                        wb.Close(true);
-                        app.Quit();
-                    }
-
+                    //// ************************* SAVE THE DOCUMENT *********************
+                    ////wb.SaveAs(path + @"/LeansReport.xls");
+                    ////wb.Saved = true;
+                    ////wb.Close(true);
+                    ////app.Quit();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error to generate the Excel document: " + ex.Message, "Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -773,11 +752,11 @@ namespace NHL_BL.Logic
         // ******************* last sheet filer by game ***************************** //
 
 
-        private void CompleteRangeGame(Excel.Worksheet ws)
+        private void CompleteRangeGame(Excel.Worksheet ws, string player)
         {
             Range(ws, "A1", "Game", 42);
-            Range(ws, "B1", "Leans", 50);
-            Range(ws, "C1", "Leans Line", 42);
+            Range(ws, "B1", player, 50);
+            Range(ws, "C1", player +" Line", 42);
             Range(ws, "D1", "Cris", 42);
             Range(ws, "E1", "Pinnacle", 42);
             Range(ws, "F1", "Next Line", 42);

@@ -1,4 +1,4 @@
-﻿    using Data.Connection;
+﻿using Data.Connection;
 using G8_App.Connection;
 using NHL_BL.Connection;
 using NHL_BL.Entities;
@@ -18,7 +18,7 @@ namespace NHL_BL.Logic
 
         private blLeansLines LeansDB = new blLeansLines();
 
-        public ObservableCollection<csBet> BetListFromIdGame(csGame game)
+        public ObservableCollection<csBet> BetListFromIdGame(csGame game, string player)
         {
             ObservableCollection<csBet> data = new ObservableCollection<csBet>();
 
@@ -26,6 +26,7 @@ namespace NHL_BL.Logic
             {
                 parameters.Clear();
                 parameters.Add("@pIgGame", game.IdGame);
+                parameters.Add("@pPlayer", player);
 
                 dataset = csG8Apps.ExecutePA("[dbo].[web_GetBetsFromLeansByIdGame]", parameters);
 
@@ -63,7 +64,7 @@ namespace NHL_BL.Logic
                             Convert.ToDateTime(fila["SettledDate"]),
                             Convert.ToDateTime(fila["PlacedDate"]),
                             Convert.ToInt32(fila["Odds"]),
-                            Convert.ToInt32(fila["Points"]),
+                            Convert.ToDouble(fila["Points"]),
                             Convert.ToString(fila["Score"]),
                             Convert.ToString(fila["IP"]),
                             Convert.ToString(fila["BeatLine"]));
@@ -71,10 +72,12 @@ namespace NHL_BL.Logic
                             u = LeansDB.OurNextLine(u, game);
                             u = LeansDB.CrisLines(u, game, 489);
                             u = LeansDB.PinniLines(u, game);
-                            
-                            data.Add(u);
-                    }
+                            u.EventDate = game.EventDate;
+                            u.EventName = game.VisitorTeam + " vs " + game.HomeTeam;
+                            u.Pick = (game.VisitorNumber == u.Rot) ? game.VisitorTeam : game.HomeTeam;
 
+                        data.Add(u);
+                    }
                 }
                 else
                 {
@@ -97,9 +100,7 @@ namespace NHL_BL.Logic
 
 
 
-
-
-        public ObservableCollection<csBet> GetBetsAfterLeans(int idGame, csBet bet, string wagerPlay)
+        public ObservableCollection<csBet> GetBetsAfterLeans(int idGame, csBet bet, string wagerPlay,string player)
         {
             ObservableCollection<csBet> data = new ObservableCollection<csBet>();
 
@@ -121,6 +122,7 @@ namespace NHL_BL.Logic
                 parameters.Add("@pIgGame", idGame);
                 parameters.Add("@pPlacedDate", date);
                 parameters.Add("@pWagerType", wagerPlay);
+                parameters.Add("@pPlayer", player);
 
                 dataset = csG8Apps.ExecutePA("[dbo].[web_GetAfterLeans]", parameters);
 
@@ -165,13 +167,11 @@ namespace NHL_BL.Logic
 
                         data.Add(u);
                     }
-
                 }
                 else
                 {
                     data = null;
                 }
-
             }
             catch (Exception ex)
             {
