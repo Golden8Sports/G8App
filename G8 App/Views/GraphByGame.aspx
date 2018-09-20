@@ -36,6 +36,7 @@
            obj = document.getElementById(t);
            obj.style.display = 'none';
        }
+
        function Show(t)
        {
            obj = document.getElementById(t);
