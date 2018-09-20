@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Web;
 using System.Web.Helpers;
+using System.Web.Mvc;
 using System.Web.Script.Services;
 using System.Web.Services;
 using System.Web.UI;
@@ -107,7 +108,9 @@ namespace G8_App.Views
 
 
         //web request
-        [System.Web.Services.WebMethod]
+        [System.Web.Services.WebMethod()]
+        //[WebMethod]
+        //[ScriptMethod(UseHttpGet = true)]
         public static Object GetLines(int idgame, string type, string by, string period, string side, int idPeriod, int idEvent)
         {
             Object obj = "";
@@ -125,7 +128,8 @@ namespace G8_App.Views
             {
                 int df = 2;
             }
-            return Convert.ToString(obj);
+
+            return obj;
         }
 
 

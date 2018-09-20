@@ -41,309 +41,302 @@
            obj = document.getElementById(t);
            obj.style.display = 'block';
        }
-       function DrawChart()
-       {
-           Pause();
-           var Tool;
-           var ToolPlayer;
 
-           var Wager = document.getElementById("inType").value;
 
-           if (document.getElementById("inBy").value == "PT")
-           {
-               if (Wager == "DR" || Wager == "ML")
-               {
-                 Tool = "<strong>{name}</strong> </br>  {t}</br> <strong>{y}</strong>";
-                 ToolPlayer = "<strong>{w}</strong> </br>   {t}</br> {r}</br> <strong>{y}</strong>";
-               } else
-               {
-                  Tool = "<strong>{name}</strong> </br>  {t}</br> <strong>{y}</strong> </br> {z[1]}";
-                  ToolPlayer = "<strong>{w}</strong> </br>  {t}</br> {r}</br> <strong>{y}</strong> </br> {z[1]}";
-               }
-              
-           } else
-           {
-               if (Wager == "DR" || Wager == "ML")
-               {
-                 Tool = "<strong>{name}</strong> </br> {t}</br> <strong>{y}</strong>";
-                 ToolPlayer = "<strong>{w}</strong> </br>  {t}</br> <strong>{y}</strong>";
-               } else
-               {
-                  Tool = "<strong>{name}</strong> </br>  {t}</br> <strong>{y}</strong> </br> {z[0]}";
-                  ToolPlayer = "<strong>{w}</strong> </br>  {t}</br> <strong>{y}</strong> </br> {z[0]}";
-               }
-           }
+       function DrawChart() {
+          Pause();
+          var Tool;
+          var ToolPlayer;
+          var Wager = document.getElementById("inType").value;
 
-           var chart = new CanvasJS.Chart("divChart", {
-                animationEnabled: true,
-                zoomEnabled: true,
-                exportEnabled: true,
-                zoomType: 'xy',
-                theme: "light2",
+                if (document.getElementById("inBy").value == "PT") {
+                    if (Wager == "DR" || Wager == "ML") {
+                        Tool = "<strong>{name}</strong> </br>  {t}</br> <strong>{y}</strong>";
+                        ToolPlayer = "<strong>{w}</strong> </br>   {t}</br> {r}</br> <strong>{y}</strong>";
+                    } else {
+                        Tool = "<strong>{name}</strong> </br>  {t}</br> <strong>{y}</strong> </br> {z[1]}";
+                        ToolPlayer = "<strong>{w}</strong> </br>  {t}</br> {r}</br> <strong>{y}</strong> </br> {z[1]}";
+                    }
 
-                axisX:{
-		            crosshair: {
-                        enabled: true
+                } else {
+                    if (Wager == "DR" || Wager == "ML") {
+                        Tool = "<strong>{name}</strong> </br> {t}</br> <strong>{y}</strong>";
+                        ToolPlayer = "<strong>{w}</strong> </br>  {t}</br> <strong>{y}</strong>";
+                    } else {
+                        Tool = "<strong>{name}</strong> </br>  {t}</br> <strong>{y}</strong> </br> {z[0]}";
+                        ToolPlayer = "<strong>{w}</strong> </br>  {t}</br> <strong>{y}</strong> </br> {z[0]}";
+                    }
+                }
+
+                var chart = new CanvasJS.Chart("divChart", {
+                    animationEnabled: true,
+                    zoomEnabled: true,
+                    exportEnabled: true,
+                    zoomType: 'xy',
+                    theme: "light2",
+
+                    axisX: {
+                        crosshair: {
+                            enabled: true
+                        },
+                        valueFormatString: "DD MMM",
+                        labelFontSize: 12,
                     },
-                    valueFormatString: "DD MMM",
-                    labelFontSize:12,
-                },
 
-	            axisY:{
-                    title: "Values",
-                    suffix: "",
-                    crosshair: {
-                        enabled: true                   
+                    axisY: {
+                        title: "Values",
+                        suffix: "",
+                        crosshair: {
+                            enabled: true
+                        },
+                        includeZero: false,
+                        labelFontSize: 12,
                     },
-                    includeZero: false,
-                    labelFontSize: 12,
-                },
 
-	            legend: {
-		            cursor: "pointer",
-		            itemclick: toggleDataSeries
-                },
+                    legend: {
+                        cursor: "pointer",
+                        itemclick: toggleDataSeries
+                    },
 
-	            data: [{   //pinnacle
-		            type: lineType,
-		            name: "Pinnacle",
-                    color: "#b84cdf",
-                    markerSize:4,
-                    showInLegend: true,
-                    toolTipContent: Tool,
-                    dataPoints: []               
-	            },
-	            {
-		            type: lineType, //Jaz
-                    name: "Jazz",
-		            color: "#C24642",
-                    markerSize:4,
-                    showInLegend: true,
-                    toolTipContent: Tool,
-		            dataPoints: []
-	            },
-	            {
-		            type: lineType, //PPH
-		            name: "PPH",
-                    color: "#17ce24",
-                    markerSize:4,
-                    showInLegend: true,
-                    toolTipContent: Tool,
-		            dataPoints: []
-	            },
-                {
-		            type: lineType, //Cris
-		            name: "Cris",
-                    color: "#FF1A72",
-                    markerSize:4,
-                    showInLegend: true,
-                    toolTipContent: Tool,
-		            dataPoints: []
-	            },
-                {
-		            type: lineType, //Grande
-		            name: "Grande",
-                    color: "#FFE638",
-                    markerSize:4,
-                    showInLegend: true,
-                    toolTipContent: Tool,
-		            dataPoints: []
-	            },
-                {
-		            type: lineType, // 5Dimes
-                    name: "5Dimes",
-                    color: "#0079CF",
-                    markerSize:4,
-                    showInLegend: true,   
-                    toolTipContent: Tool,
-		            dataPoints: []
-	            },
-                {
-                    type: lineType,
-                    name: 'Bets',
-                    color: "#000",
-                    markerType: "triangle",
-                    markerColor: "black",
-                    markerSize: 13,
-                    lineDashType: "dot",
-                    showInLegend: true,
-                    toolTipContent: ToolPlayer,
-		            dataPoints: []
-	            }]  //pinnacle
-              });
-           var flag = true;
+                    data: [{   //pinnacle
+                        type: lineType,
+                        name: "Pinnacle",
+                        color: "#b84cdf",
+                        markerSize: 4,
+                        showInLegend: true,
+                        toolTipContent: Tool,
+                        dataPoints: []
+                    },
+                    {
+                        type: lineType, //Jaz
+                        name: "Jazz",
+                        color: "#C24642",
+                        markerSize: 4,
+                        showInLegend: true,
+                        toolTipContent: Tool,
+                        dataPoints: []
+                    },
+                    {
+                        type: lineType, //PPH
+                        name: "PPH",
+                        color: "#17ce24",
+                        markerSize: 4,
+                        showInLegend: true,
+                        toolTipContent: Tool,
+                        dataPoints: []
+                    },
+                    {
+                        type: lineType, //Cris
+                        name: "Cris",
+                        color: "#FF1A72",
+                        markerSize: 4,
+                        showInLegend: true,
+                        toolTipContent: Tool,
+                        dataPoints: []
+                    },
+                    {
+                        type: lineType, //Grande
+                        name: "Grande",
+                        color: "#FFE638",
+                        markerSize: 4,
+                        showInLegend: true,
+                        toolTipContent: Tool,
+                        dataPoints: []
+                    },
+                    {
+                        type: lineType, // 5Dimes
+                        name: "5Dimes",
+                        color: "#0079CF",
+                        markerSize: 4,
+                        showInLegend: true,
+                        toolTipContent: Tool,
+                        dataPoints: []
+                    },
+                    {
+                        type: lineType,
+                        name: 'Bets',
+                        color: "#000",
+                        markerType: "triangle",
+                        markerColor: "black",
+                        markerSize: 13,
+                        lineDashType: "dot",
+                        showInLegend: true,
+                        toolTipContent: ToolPlayer,
+                        dataPoints: []
+                    }]  //pinnacle
+                });
+                var flag = true;
 
-            //sleep(100);
-            updateChart();
-          
-              function updateChart()
-              {
-                  var bet = 0;
-                  var risk = 0;
+                //sleep(100);
+                updateChart();
 
-                  if (flag == true)
-                  {
-                      var obj;
-                      var index = 0;
-                      var type = document.getElementById("inType").value;
-                      var by = document.getElementById("inBy").value;
-                      var parameter = { 'idgame': $("#idGame").text(), 'type': $("#inType").val(), 'by': $("#inBy").val(), 'period': $("#idPeriod").text(), 'side': $("#inSide").val(), 'idPeriod': $("#idPeriodId").text(), 'idEvent': $("#idEventID").text() };
+                function updateChart() {
+                    var bet = 0;
+                    var risk = 0;
 
-                      $.ajax({
-                              type: 'POST',
-                              url: 'GraphByGame.aspx/GetLines',
-                              dataType: 'json',
-                              data: JSON.stringify(parameter),
-                              contentType: 'application/json; charset=utf-8',
-                              async: false,
-                              success: function (response) {
-                                  Show('divChart');
-                                  obj = JSON.parse(response.d);
-                                  index = obj.length;
-                                  var dataPoints0 = [];// Pinnacle 37
-                                  var dataPoints1 = [];// Jazz 52
-                                  var dataPoints2 = [];// PPH 364
-                                  var dataPoints3 = [];// Cris 489
-                                  var dataPoints4 = [];// Grande 39
-                                  var dataPoints5 = [];// 5Dimes 92
-                                  var playerList = [];// Bets -1
+                    if (flag == true) {
+                        var obj;
+                        var index = 0;
+                        var type = document.getElementById("inType").value;
+                        var by = document.getElementById("inBy").value;
+                        var parameter = { 'idgame': $("#idGame").text(), 'type': $("#inType").val(), 'by': $("#inBy").val(), 'period': $("#idPeriod").text(), 'side': $("#inSide").val(), 'idPeriod': $("#idPeriodId").text(), 'idEvent': $("#idEventID").text() };
 
-                                  for (var i = 0; i < index; i++) {
-                                      if (obj[i]["Casino"] == 37 || obj[i]["Casino"] == '37') {
-                                          if (type == 'ML' || type == 'DR') {
-                                              dataPoints0.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
-                                              chart.options.data[0].legendText = "Pinnacle " + obj[i]["Juice"];
-                                          }
-                                          else {
-                                              if (by == "OD") {
-                                                  dataPoints0.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
-                                                  chart.options.data[0].legendText = "Pinnacle " + obj[i]["Juice"];
-                                              } else {
-                                                  dataPoints0.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Line"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });;
-                                                  chart.options.data[0].legendText = "Pinnacle " + obj[i]["Line"];
-                                              }
-                                          }
-                                      }
-                                      else if (obj[i]["Casino"] == 52 || obj[i]["Casino"] == '52') //
-                                      {
-                                          if (type == 'ML' || type == 'DR') {
-                                              dataPoints1.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
-                                              chart.options.data[1].legendText = "Jazz " + obj[i]["Juice"];
-                                          }
-                                          else {
-                                              if (by == "OD") {
-                                                  dataPoints1.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
-                                                  chart.options.data[1].legendText = "Jazz " + obj[i]["Juice"];
-                                              } else {
-                                                  dataPoints1.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Line"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
-                                                  chart.options.data[1].legendText = "Jazz " + obj[i]["Line"];
-                                              }
-                                          }
-                                      }
-                                      else if (obj[i]["Casino"] == 364 || obj[i]["Casino"] == '364') {
-                                          if (type == 'ML' || type == 'DR') {
-                                              dataPoints2.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
-                                              chart.options.data[2].legendText = "PPH " + obj[i]["Juice"];
-                                          }
-                                          else {
-                                              if (by == "OD") {
-                                                  dataPoints2.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
-                                                  chart.options.data[2].legendText = "PPH " + obj[i]["Juice"];
-                                              } else {
-                                                  dataPoints2.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Line"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
-                                                  chart.options.data[2].legendText = "PPH " + obj[i]["Line"];
-                                              }
-                                          }
-                                      }
-                                      else if (obj[i]["Casino"] == 489 || obj[i]["Casino"] == '489') {
-                                          if (type == 'ML' || type == 'DR') {
-                                              dataPoints3.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
-                                              chart.options.data[3].legendText = "Cris " + obj[i]["Juice"];
-                                          }
-                                          else {
-                                              if (by == "OD") {
-                                                  dataPoints3.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
-                                                  chart.options.data[3].legendText = "Cris " + obj[i]["Juice"];
-                                              } else {
-                                                  dataPoints3.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Line"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
-                                                  chart.options.data[3].legendText = "Cris " + obj[i]["Line"];
-                                              }
-                                          }
-                                      }
-                                      else if (obj[i]["Casino"] == 39 || obj[i]["Casino"] == '39') {
-                                          if (type == 'ML' || type == 'DR') {
-                                              dataPoints4.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
-                                              chart.options.data[4].legendText = "Grande " + obj[i]["Juice"];
-                                          }
-                                          else {
-                                              if (by == "OD") {
-                                                  dataPoints4.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
-                                                  chart.options.data[4].legendText = "Grande " + obj[i]["Juice"];
-                                              } else {
-                                                  dataPoints4.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Line"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
-                                                  chart.options.data[4].legendText = "Grande " + obj[i]["Line"];
-                                              }
-                                          }
-                                      }
-                                      else if (obj[i]["Casino"] == 92 || obj[i]["Casino"] == '92') {
-                                          if (type == 'ML' || type == 'DR') {
-                                              dataPoints5.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
-                                              chart.options.data[5].legendText = "5 Dimes " + obj[i]["Juice"];
-                                          }
-                                          else {
-                                              if (by == "OD") {
-                                                  dataPoints5.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
-                                                  chart.options.data[5].legendText = "5 Dimes " + obj[i]["Juice"];
-                                              } else {
-                                                  dataPoints5.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Line"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
-                                                  chart.options.data[5].legendText = "5 Dimes " + obj[i]["Line"];
-                                              }
-                                          }
-                                      }
-                                      else if (obj[i]["Casino"] == -1 || obj[i]["Casino"] == '-1') {
-                                          bet = bet + 1;
-                                          risk = risk + obj[i]["Risk"];
+                        $.ajax({
+                            type: 'POST',
+                            url: 'GraphByGame.aspx/GetLines',
+                            dataType: 'json',
+                            data: JSON.stringify(parameter),
+                            contentType: 'application/json; charset=utf-8',
+                            async: true,
+                            success: function (response) {
+                                Show('divChart');
+                                obj = JSON.parse(response.d);
+                                index = obj.length;
+                                var dataPoints0 = [];// Pinnacle 37
+                                var dataPoints1 = [];// Jazz 52
+                                var dataPoints2 = [];// PPH 364
+                                var dataPoints3 = [];// Cris 489
+                                var dataPoints4 = [];// Grande 39
+                                var dataPoints5 = [];// 5Dimes 92
+                                var playerList = [];// Bets -1
 
-                                          if (type == 'ML' || type == 'DR') {
-                                              playerList.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], w: obj[i]["Player"], t: obj[i]["Time"], r: '$' + obj[i]["Risk"] });
-                                          }
-                                          else {
-                                              if (by == "OD") {
-                                                  playerList.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], w: obj[i]["Player"], t: obj[i]["Time"], r: '$' + obj[i]["Risk"] });
-                                              } else {
-                                                  playerList.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Line"], z: [obj[i]["Line"], obj[i]["Juice"]], w: obj[i]["Player"], t: obj[i]["Time"], r: '$' + obj[i]["Risk"] });
-                                              }
-                                          }
+                                for (var i = 0; i < index; i++) {
+                                    if (obj[i]["Casino"] == 37 || obj[i]["Casino"] == '37') {
+                                        if (type == 'ML' || type == 'DR') {
+                                            dataPoints0.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
+                                            chart.options.data[0].legendText = "Pinnacle " + obj[i]["Juice"];
+                                        }
+                                        else {
+                                            if (by == "OD") {
+                                                dataPoints0.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
+                                                chart.options.data[0].legendText = "Pinnacle " + obj[i]["Juice"];
+                                            } else {
+                                                dataPoints0.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Line"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });;
+                                                chart.options.data[0].legendText = "Pinnacle " + obj[i]["Line"];
+                                            }
+                                        }
+                                    }
+                                    else if (obj[i]["Casino"] == 52 || obj[i]["Casino"] == '52') //
+                                    {
+                                        if (type == 'ML' || type == 'DR') {
+                                            dataPoints1.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
+                                            chart.options.data[1].legendText = "Jazz " + obj[i]["Juice"];
+                                        }
+                                        else {
+                                            if (by == "OD") {
+                                                dataPoints1.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
+                                                chart.options.data[1].legendText = "Jazz " + obj[i]["Juice"];
+                                            } else {
+                                                dataPoints1.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Line"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
+                                                chart.options.data[1].legendText = "Jazz " + obj[i]["Line"];
+                                            }
+                                        }
+                                    }
+                                    else if (obj[i]["Casino"] == 364 || obj[i]["Casino"] == '364') {
+                                        if (type == 'ML' || type == 'DR') {
+                                            dataPoints2.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
+                                            chart.options.data[2].legendText = "PPH " + obj[i]["Juice"];
+                                        }
+                                        else {
+                                            if (by == "OD") {
+                                                dataPoints2.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
+                                                chart.options.data[2].legendText = "PPH " + obj[i]["Juice"];
+                                            } else {
+                                                dataPoints2.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Line"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
+                                                chart.options.data[2].legendText = "PPH " + obj[i]["Line"];
+                                            }
+                                        }
+                                    }
+                                    else if (obj[i]["Casino"] == 489 || obj[i]["Casino"] == '489') {
+                                        if (type == 'ML' || type == 'DR') {
+                                            dataPoints3.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
+                                            chart.options.data[3].legendText = "Cris " + obj[i]["Juice"];
+                                        }
+                                        else {
+                                            if (by == "OD") {
+                                                dataPoints3.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
+                                                chart.options.data[3].legendText = "Cris " + obj[i]["Juice"];
+                                            } else {
+                                                dataPoints3.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Line"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
+                                                chart.options.data[3].legendText = "Cris " + obj[i]["Line"];
+                                            }
+                                        }
+                                    }
+                                    else if (obj[i]["Casino"] == 39 || obj[i]["Casino"] == '39') {
+                                        if (type == 'ML' || type == 'DR') {
+                                            dataPoints4.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
+                                            chart.options.data[4].legendText = "Grande " + obj[i]["Juice"];
+                                        }
+                                        else {
+                                            if (by == "OD") {
+                                                dataPoints4.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
+                                                chart.options.data[4].legendText = "Grande " + obj[i]["Juice"];
+                                            } else {
+                                                dataPoints4.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Line"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
+                                                chart.options.data[4].legendText = "Grande " + obj[i]["Line"];
+                                            }
+                                        }
+                                    }
+                                    else if (obj[i]["Casino"] == 92 || obj[i]["Casino"] == '92') {
+                                        if (type == 'ML' || type == 'DR') {
+                                            dataPoints5.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
+                                            chart.options.data[5].legendText = "5 Dimes " + obj[i]["Juice"];
+                                        }
+                                        else {
+                                            if (by == "OD") {
+                                                dataPoints5.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
+                                                chart.options.data[5].legendText = "5 Dimes " + obj[i]["Juice"];
+                                            } else {
+                                                dataPoints5.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Line"], z: [obj[i]["Line"], obj[i]["Juice"]], t: obj[i]["Time"] });
+                                                chart.options.data[5].legendText = "5 Dimes " + obj[i]["Line"];
+                                            }
+                                        }
+                                    }
+                                    else if (obj[i]["Casino"] == -1 || obj[i]["Casino"] == '-1') {
+                                        bet = bet + 1;
+                                        risk = risk + obj[i]["Risk"];
 
-                                          chart.options.data[6].legendText = "Bets " + bet;
-                                      }
+                                        if (type == 'ML' || type == 'DR') {
+                                            playerList.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], w: obj[i]["Player"], t: obj[i]["Time"], r: '$' + obj[i]["Risk"] });
+                                        }
+                                        else {
+                                            if (by == "OD") {
+                                                playerList.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Juice"], z: [obj[i]["Line"], obj[i]["Juice"]], w: obj[i]["Player"], t: obj[i]["Time"], r: '$' + obj[i]["Risk"] });
+                                            } else {
+                                                playerList.push({ x: new Date(obj[i]["Year"], obj[i]["Month"], obj[i]["Day"], obj[i]["Hour"], obj[i]["Minute"], obj[i]["Second"]), y: obj[i]["Line"], z: [obj[i]["Line"], obj[i]["Juice"]], w: obj[i]["Player"], t: obj[i]["Time"], r: '$' + obj[i]["Risk"] });
+                                            }
+                                        }
 
-                                      document.getElementById("idBets").innerHTML = "Risk Amount: $" + risk;
-                                  }
+                                        chart.options.data[6].legendText = "Bets " + bet;
+                                    }
 
-                                  chart.options.data[0].dataPoints = dataPoints0;
-                                  chart.options.data[1].dataPoints = dataPoints1;
-                                  chart.options.data[2].dataPoints = dataPoints2;
-                                  chart.options.data[3].dataPoints = dataPoints3;
-                                  chart.options.data[4].dataPoints = dataPoints4;
-                                  chart.options.data[5].dataPoints = dataPoints5;
-                                  chart.options.data[6].dataPoints = playerList;
-                                  chart.render();
+                                    document.getElementById("idBets").innerHTML = "Risk Amount: $" + risk;
+                                }
 
-                              },
-                              error: function (response) {
-                                  alert('No Data: ' + response.statusText);
-                                  Hide('divChart');
-                                  Pause();
-                                  //error.Show;
-                              }
-                          });
-                  }
-              }
- 
-          interval = setInterval(updateChart, 4000);
-         
-       }
+                                chart.options.data[0].dataPoints = dataPoints0;
+                                chart.options.data[1].dataPoints = dataPoints1;
+                                chart.options.data[2].dataPoints = dataPoints2;
+                                chart.options.data[3].dataPoints = dataPoints3;
+                                chart.options.data[4].dataPoints = dataPoints4;
+                                chart.options.data[5].dataPoints = dataPoints5;
+                                chart.options.data[6].dataPoints = playerList;
+                                chart.render();
+
+                            },
+                            error: function (response) {
+                                alert('No Data: ' + response.statusText);
+                                Hide('divChart');
+                                Pause();
+                                //error.Show;
+                            }
+                        });
+                    }
+                }
+
+                interval = setInterval(updateChart, 4000);
+
+            }
+
 
        function toggleDataSeries(e) {
 	       if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
@@ -536,7 +529,7 @@
       </div>      
     </div>
     
-    <div class="contentpanel">  
+  <div class="contentpanel">  
    <!-- content here -->
         <div class="row">
            <div class="panel panel-default">
