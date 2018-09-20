@@ -27,8 +27,7 @@
                     Hide('tablePlayers');
                 }
             });
-            }
-
+        }
 
         function DrawSportTableAJX(sport)
         {
