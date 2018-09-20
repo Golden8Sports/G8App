@@ -1,8 +1,146 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="BusinessReview.aspx.cs" MasterPageFile="~/Views/menu.Master" Inherits="G8_App.Views.BusinessReview" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Views/menu.Master" CodeBehind="BusinesReview.aspx.cs" Inherits="G8_App.Views.BusinesReview" %>
 
 <asp:Content ID="head" ContentPlaceHolderID="head1" runat="server">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <script type="text/javascript">
+
+        function DrawTableAJX(player)
+        {
+            $("#idPlayer").text(player + " Stats");
+            var parameter = { 'player': player }
+            $.ajax({                    
+                type: 'POST',
+                url: 'BusinesReview.aspx/GetBreakDownPlayer',
+                data: JSON.stringify(parameter),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data)
+                {
+                    Show('tablePlayers');
+                    DrawChart(data.d);                  
+                },
+                error: function (data)
+                {
+                    alert('No Data' + data.statusText);
+                    Hide('tablePlayers');
+                }
+            });
+            }
+
+
+        function DrawSportTableAJX(sport)
+        {
+            $("#idPlayer2").text("Sport: " + sport);
+            var parameter = { 'sport': sport }
+            $.ajax({                    
+                type: 'POST',
+                url: 'BusinesReview.aspx/GetBreakDownSport',
+                data: JSON.stringify(parameter),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data)
+                {
+                    Show('tableSports');
+                    DrawChartSport(data.d);
+                },
+                error: function (data)
+                {
+                    alert('No Data: ' + data.statusText);
+                    Hide('tableSports');
+                }
+            });
+        }
+
+    </script>
+
+
+
+       <script type="text/javascript" src="../js/GoogleCharts.js"></script>
+       <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['table'] });
+
+       function Hide(t)
+       {
+           obj = document.getElementById(t);
+           obj.style.display = 'none';
+       }
+
+       function Show(t)
+       {
+           obj = document.getElementById(t);
+           obj.style.display = 'block';
+       }
+
+        function DrawChart(info)
+        {
+           var data = new google.visualization.DataTable();
+           data.addColumn('string', 'Sport');
+           data.addColumn('string', 'Wager Type');
+           data.addColumn('string', 'Period');
+           data.addColumn('string', 'Wager Play');
+           data.addColumn('number', 'Risk Amount');
+           data.addColumn('number', 'Net');
+           data.addColumn('number', 'Hold%');
+
+           var obj = JSON.parse(info);
+           var index = obj.length;
+         
+           data.addRows(index);
+           for (i = 0; i < index; i++)
+           { 
+             data.setCell(i, 0, obj[i]["Sport"]);
+             data.setCell(i, 1, obj[i]["WagerType"]);
+             data.setCell(i, 2, obj[i]["GamePeriod"]);
+             data.setCell(i, 3, obj[i]["WagerPlay"]);
+             data.setCell(i, 4, obj[i]["RiskAmount"]);
+             data.setCell(i, 5, obj[i]["Net"]);
+             data.setCell(i, 6, obj[i]["HoldPercentaje"]);
+           }
+            var table = new google.visualization.Table(document.getElementById('tablePlayers'));
+            var formatter = new google.visualization.ArrowFormat();
+            formatter.format(data, 5); 
+            formatter.format(data, 6);
+            table.draw(data, { showRowNumber: false, width: '100%', height: '100%' });
+        }
+
+        function DrawChartSport(info)
+        {
+            
+           var data = new google.visualization.DataTable();
+           data.addColumn('string', 'Date');
+           data.addColumn('number', 'Risk');
+           data.addColumn('number', 'Net');
+           data.addColumn('number', 'Hold%');
+           data.addColumn('number', 'Players');
+
+           var obj = JSON.parse(info);
+           var index = obj.length;
+           //alert("1");
+           data.addRows(index);
+           for (i = 0; i < index; i++)
+           { 
+             data.setCell(i, 0, obj[i]["Date"]);
+             data.setCell(i, 1, obj[i]["RiskAmount"]);
+             data.setCell(i, 2, obj[i]["Net"]);
+             data.setCell(i, 3, obj[i]["HoldPercentaje"]);
+             data.setCell(i, 4, obj[i]["Players"]);
+           }
+            //alert("2");
+
+            var table = new google.visualization.Table(document.getElementById('tableSports'));
+            var formatter = new google.visualization.ArrowFormat();
+            formatter.format(data, 2); 
+            formatter.format(data, 3);
+            table.draw(data, { showRowNumber: false, width: '100%', height: '100%' });
+        } 
+
+
+    </script>
+
+
+
 </asp:Content>
 
 
@@ -23,6 +161,62 @@
         </ol>
       </div>      
     </div>
+
+
+
+      <%-- modal windows --%>
+
+ <div class="container">
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" id="idPlayer">Player Stats</h4>
+        </div>
+        <div class="modal-body">
+          <div id="tablePlayers" style="width:100%;"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+
+  
+ <div class="container">
+  <!-- Modal -->
+  <div class="modal fade" id="myModal2" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" id="idPlayer2">Player Stats</h4>
+        </div>
+        <div class="modal-body">
+          <div id="tableSports" style="width:100%;"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>   
+    </div>
+  </div>
+</div>
+
+
+      <%-- end modal --%>
+
+
     
    <div class="contentpanel">  
          <div class="row">
@@ -63,6 +257,12 @@
                             <label class="col-sm-2 control-label">Agent:</label>
                             <div class="col-sm-3">
                                 <asp:DropDownList ID="inAgent" runat="server"  CssClass="form-control chosen-select">
+                                </asp:DropDownList>
+                            </div>
+
+                          <label class="col-sm-2 control-label">Sport:</label>
+                            <div class="col-sm-3">
+                                <asp:DropDownList ID="inSport" runat="server"  CssClass="form-control chosen-select">
                                 </asp:DropDownList>
                             </div>
                        </div>
@@ -163,7 +363,7 @@
                                       <ItemTemplate>
                                           <tr>
                                             <td ><%# Eval("AGENT") %></td>
-                                            <td ><button class="btn btn-success" data-toggle="modal" data-target="#myModal"><%# Eval("PLAYER") %></button></td>
+                                            <td ><button class="btn btn-success" data-toggle="modal" data-target="#myModal" onclick="DrawTableAJX('<%# Eval("PLAYER") %>');"><%# Eval("PLAYER") %></button></td>
                                             <td ><%# Eval("RiskAmount") %></td>
                                             <td ><%# Eval("NET") %></td>
                                             <td ><%# Eval("HoldPercentaje") %></td>
@@ -204,7 +404,7 @@
                                   <asp:Repeater runat="server" ID="rptSport">
                                       <ItemTemplate>
                                           <tr>
-                                            <td ><button class="btn btn-success"><%# Eval("SPORT") %></button></td>
+                                            <td ><button class="btn btn-success" data-toggle="modal" data-target="#myModal2" onclick="DrawSportTableAJX('<%# Eval("SPORT") %>');"><%# Eval("SPORT") %></button></td>
                                             <td ><%# Eval("RiskAmount") %></td>
                                             <td ><%# Eval("NET") %></td>
                                             <td ><%# Eval("HoldPercentaje") %></td>

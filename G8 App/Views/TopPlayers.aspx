@@ -81,8 +81,6 @@
             formatter.format(data, 6);
             table.draw(data, { showRowNumber: false, width: '100%', height: '100%' });
         } 
-
-
     </script>
 
 </asp:Content>

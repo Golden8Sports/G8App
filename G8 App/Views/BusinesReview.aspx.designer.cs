@@ -10,7 +10,7 @@
 namespace G8_App.Views {
     
     
-    public partial class BusinessReview {
+    public partial class BusinesReview {
         
         /// <summary>
         /// userName control.
@@ -47,6 +47,15 @@ namespace G8_App.Views {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList inAgent;
+        
+        /// <summary>
+        /// inSport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList inSport;
         
         /// <summary>
         /// hola control.

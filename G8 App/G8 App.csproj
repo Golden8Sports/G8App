@@ -276,9 +276,8 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Views\BusinesReview.aspx" />
     <Content Include="Views\BusinessIntelligence.aspx" />
-    <Content Include="Views\BusinessR.aspx" />
-    <Content Include="Views\BusinessReview.aspx" />
     <Content Include="Views\CheckScores.aspx" />
     <Content Include="Views\Games.aspx" />
     <Content Include="Views\GeneralProfile.aspx" />
@@ -335,7 +334,6 @@
     <Content Include="Views\NCAAFStats.aspx" />
     <Content Include="Views\NFLStats.aspx" />
     <Content Include="Views\nhlRanges.aspx" />
-    <Content Include="Views\ProfileTools\BusinessIntelligence.aspx" />
     <Content Include="Views\ProfilingPlayer.aspx" />
     <Content Include="Views\RangesReport.aspx" />
     <Content Include="Views\Scraping.aspx" />
@@ -437,26 +435,19 @@
     <Compile Include="Logic\Profiling\blSummary.cs" />
     <Compile Include="Logic\Scraping\Covers\blCovers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\BusinesReview.aspx.cs">
+      <DependentUpon>BusinesReview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\BusinesReview.aspx.designer.cs">
+      <DependentUpon>BusinesReview.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Views\BusinessIntelligence.aspx.cs">
       <DependentUpon>BusinessIntelligence.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Views\BusinessIntelligence.aspx.designer.cs">
       <DependentUpon>BusinessIntelligence.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\BusinessR.aspx.cs">
-      <DependentUpon>BusinessR.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\BusinessR.aspx.designer.cs">
-      <DependentUpon>BusinessR.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\BusinessReview.aspx.cs">
-      <DependentUpon>BusinessReview.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\BusinessReview.aspx.designer.cs">
-      <DependentUpon>BusinessReview.aspx</DependentUpon>
     </Compile>
     <Compile Include="Views\CheckScores.aspx.cs">
       <DependentUpon>CheckScores.aspx</DependentUpon>
@@ -555,13 +546,6 @@
     </Compile>
     <Compile Include="Views\nhlRanges.aspx.designer.cs">
       <DependentUpon>nhlRanges.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ProfileTools\BusinessIntelligence.aspx.cs">
-      <DependentUpon>BusinessIntelligence.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\ProfileTools\BusinessIntelligence.aspx.designer.cs">
-      <DependentUpon>BusinessIntelligence.aspx</DependentUpon>
     </Compile>
     <Compile Include="Views\ProfilingPlayer.aspx.cs">
       <DependentUpon>ProfilingPlayer.aspx</DependentUpon>

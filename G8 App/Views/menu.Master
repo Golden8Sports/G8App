@@ -72,7 +72,7 @@
             <a href="#"><i class="fa fa-briefcase"></i> <span>Profile Tools</span></a>
             <ul class="children">
                 <li><a href="BusinessIntelligence.aspx"><i class="fa fa-caret-right"></i> Business Intelligence </a></li>
-                <li><a href="BusinessReview.aspx"><i class="fa fa-caret-right"></i> Business Review </a></li>
+                <li><a href="BusinesReview.aspx"><i class="fa fa-caret-right"></i> Business Review </a></li>
                 <li><a href="TopPlayers.aspx"><i class="fa fa-caret-right"></i> Top Players </a></li>            
                 <li><a href="GraphByGame.aspx"><i class="fa fa-caret-right"></i> Graph by Game </a></li>
                 <li><a href="GeneralProfile.aspx"><i class="fa fa-caret-right"></i> Profiling </a></li>
@@ -225,7 +225,7 @@
               responsive: true,
               dom: 'Bfrtip',
               buttons: ['csv'],
-              "order": [[3, 'desc']]
+              "order": [[3, 'desc']]             
           });
 
 

@@ -115,6 +115,8 @@ namespace G8_App.Entities.Profiling
             double holdP = Convert.ToDouble(((net * 100) / riskAmount));
             this.HoldPercentaje = Math.Round(holdP, 2, MidpointRounding.AwayFromZero);
             this.Sport = sport;
+            this.HoldPercentaje *= 1;
+            this.Net *= -1;
         }
 
 

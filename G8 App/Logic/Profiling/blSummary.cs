@@ -165,7 +165,7 @@ namespace G8_App.Logic.Profiling
 
         //*************************************************************************
 
-        public ObservableCollection<csSummary> OverAll(string dt1, string dt2, int idAgent)
+        public ObservableCollection<csSummary> OverAll(string dt1, string dt2, int idAgent, string IdSport)
         {
             ObservableCollection<csSummary> data = new ObservableCollection<csSummary>();
 
@@ -176,6 +176,7 @@ namespace G8_App.Logic.Profiling
                parameters.Add("@pEndDate", dt2);
                parameters.Add("@pIdAgent", idAgent);
                parameters.Add("@pCase", 1);
+               parameters.Add("@pIdSport", IdSport);
                dataset = csG8Apps.ExecutePA("[dbo].[web_reviewByDay]", parameters);               
 
                 if (dataset.Tables[0].Rows.Count > 0)
@@ -197,6 +198,7 @@ namespace G8_App.Logic.Profiling
                 parameters.Add("@pEndDate", dt2);
                 parameters.Add("@pIdAgent", idAgent);
                 parameters.Add("@pCase", 0);
+                parameters.Add("@pIdSport", IdSport);
                 dataset = csG8Apps.ExecutePA("[dbo].[web_reviewByDay]", parameters);
 
 
@@ -233,7 +235,7 @@ namespace G8_App.Logic.Profiling
 
         //*************************************************************************
 
-        public ObservableCollection<csSummary> BusinessBySport(string dt1, string dt2, int idAgent)
+        public ObservableCollection<csSummary> BusinessBySport(string dt1, string dt2, int idAgent, string sport)
         {
             ObservableCollection<csSummary> data = new ObservableCollection<csSummary>();
 
@@ -244,6 +246,7 @@ namespace G8_App.Logic.Profiling
                 parameters.Add("@pStartDate", dt1);
                 parameters.Add("@pEndDate", dt2);
                 parameters.Add("@pIdAgent", idAgent);
+                parameters.Add("@pIdSport", sport);
                 dataset = csG8Apps.ExecutePA("[dbo].[web_reviewBysPORT]", parameters);
 
                 if (dataset.Tables[0].Rows.Count > 0)
