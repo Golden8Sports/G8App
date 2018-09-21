@@ -139,7 +139,7 @@
 	        data: [{
 		        type: lineType,
 		        name: "Pinnacle",
-                color: "#b84cdf",
+                color: "#C900FF",
                 markerSize:4,
 		        showInLegend: true,
                 axisYIndex: 0,
@@ -149,7 +149,7 @@
 	        {
 		        type: lineType,
 		        name: "Jazz",
-		        color: "#C24642",
+		        color: "#7E4721",
                 markerSize:4,
                 showInLegend: true,
                 toolTipContent: Tool,
@@ -167,7 +167,7 @@
             {
 		        type: lineType,
 		        name: "Cris",
-                color: "#FF1A72",
+                color: "#FF0000",
                 markerSize:4,
                 showInLegend: true,
                 toolTipContent: Tool,
@@ -176,7 +176,7 @@
             {
 		        type: lineType,
 		        name: "Grande",
-                color: "#FFE638",
+                color: "#FFF400",
                 markerSize:4,
                 showInLegend: true,
                 toolTipContent: Tool,

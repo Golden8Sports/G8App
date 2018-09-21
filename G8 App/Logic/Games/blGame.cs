@@ -252,6 +252,7 @@ namespace G8_App.Logic.Games
                         g.LeagueName = Convert.ToString(fila["DESCRIP"]);
                         g.IdSportDonBest = CastIdSportDonBest((g.IdSportDGS == "TNT" || g.IdSportDGS == "MU") ? inter.Interpretar(g.LeagueName).Trim() : g.IdSportDGS.Trim()).ToString();
                         g.GamePeriod = CastPeriod(g);
+                        if (!String.IsNullOrWhiteSpace(fila["GradedDate"].ToString())) g.GraddedDate = "YES"; else g.GraddedDate = "NO";
 
                          
                         if (!String.IsNullOrWhiteSpace(fila["HomeScore"].ToString())) g.HomeScoreDGS = Convert.ToInt32(fila["HomeScore"]); else g.HomeScoreDGS = null;

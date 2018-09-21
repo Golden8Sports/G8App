@@ -8,7 +8,11 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
@@ -106,11 +110,7 @@ namespace G8_App.Views
         }
 
 
-
-        //web request
         [System.Web.Services.WebMethod()]
-        //[WebMethod]
-        //[ScriptMethod(UseHttpGet = true)]
         public static Object GetLines(int idgame, string type, string by, string period, string side, int idPeriod, int idEvent)
         {
             Object obj = "";
@@ -118,7 +118,7 @@ namespace G8_App.Views
             {
                 if (idEvent != 0)
                 {
-                    if (type == "ML") obj = Json.Encode(lineDB.GetMoneyLines(idEvent, period, side, "", 0, "", idgame, idPeriod));
+                    if (type == "ML") obj = JsonConvert.SerializeObject(lineDB.GetMoneyLines(idEvent, period, side, "", 0, "", idgame, idPeriod));
                     else if (type == "DR") obj = Json.Encode(lineDB.GetDraws(idEvent, period, "", 0, "", idgame, idPeriod));
                     else if (type == "TOT") obj = Json.Encode(lineDB.GetTotals(idEvent, period, side, "", 0, "", idgame, idPeriod));
                     else if (type == "SP") obj = Json.Encode(lineDB.GetSP(idEvent, period, side, "", 0, "", idgame, idPeriod));
@@ -131,6 +131,7 @@ namespace G8_App.Views
 
             return obj;
         }
+
 
 
         [System.Web.Services.WebMethod]

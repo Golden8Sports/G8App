@@ -68,6 +68,15 @@
     <h5 class="sidebartitle">Navigation</h5>
     <ul class="nav nav-pills nav-stacked nav-bracket">
         <li class=""><a href="dashboard.aspx"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
+        
+           <li class="nav-parent">
+            <a href="#"><i class="fa fa-briefcase"></i> <span>Modules</span></a>
+            <ul class="children">
+                <li><a href="PlayerModule.aspx"><i class="fa fa-caret-right"></i>Player Module</a></li>         
+            </ul>
+        </li>
+
+        
         <li class="nav-parent">
             <a href="#"><i class="fa fa-briefcase"></i> <span>Profile Tools</span></a>
             <ul class="children">
@@ -149,7 +158,6 @@
 
 <script src="../Scripts/fusioncharts.js"></script>
 <script src="../Scripts/fusioncharts.charts.js"></script>
-
 
 
 

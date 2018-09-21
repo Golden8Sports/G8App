@@ -20,6 +20,7 @@ namespace G8_App.Entities.Games
         public string SportDGS2 { set; get; }
         public int IdLeague { set; get; }
         public DateTime GameDate { set; get; }
+        public string GraddedDate { set; get; }
         public int Period { set; get; }
         public int VisitorNumber { set; get; }
         public int HomeNumber { set; get; }
@@ -82,7 +83,8 @@ namespace G8_App.Entities.Games
             this.ScoreString = "";
             this.Score = "";
             this.RISK = 0;
-            this.BETS = 0;         
+            this.BETS = 0;
+            this.GraddedDate = "";
         }
     }
 }

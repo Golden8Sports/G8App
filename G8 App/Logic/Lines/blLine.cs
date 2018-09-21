@@ -58,7 +58,7 @@ namespace G8_App.Logic.Lines
                     foreach (System.Data.DataRow fila in dataset.Tables[0].Rows)
                     {
                         line = new csLine();
-                        line.Date = Convert.ToDateTime(fila["PlacedDate"]);
+                        DateTime dt = Convert.ToDateTime(fila["PlacedDate"]);
                         line.Juice = Convert.ToInt32(fila["Odds"]);
                         line.Line = Convert.ToDouble(fila["Points"]);
                         line.IdWager = Convert.ToInt32(fila["IdWager"]);
@@ -67,9 +67,9 @@ namespace G8_App.Logic.Lines
                         line.WagerPlay = fila["WagerPlay"].ToString().ToUpper();                       
                         line.Risk = Convert.ToDouble(fila["RiskAmount"]); 
                         line.WagerType = fila["WAGERTYPE"].ToString();                      
-                        line.Time = CastTime(line.Date);
+                        line.Time = CastTime(dt);
                         if (line.WagerPlay.Contains("TOTAL")) line.Line = Math.Abs(Convert.ToInt32(line.Line));
-                        line = CastDate(line);
+                        line = CastDate(line,dt);
                         data.Add(line);
                     }
 
@@ -135,13 +135,13 @@ namespace G8_App.Logic.Lines
                         line.Casino = -1;
                         line.WagerPlay = fila["WagerPlay"].ToString().ToUpper();
                         if (line.WagerPlay.Contains("TOTAL")) line.Line = Math.Abs(Convert.ToInt32(line.Line));
-                        line.Date = Convert.ToDateTime(fila["PlacedDate"]);
-                        line = CastDate(line);
-                        line.Time = CastTime(line.Date);
+                        DateTime dt = Convert.ToDateTime(fila["PlacedDate"]);
+                        line = CastDate(line,dt);
+                        line.Time = CastTime(dt);
 
                         if (userplay.ToUpper() == line.WagerPlay && line.WagerPlay.Contains(side) &&
                            line.WagerPlay.Contains(type))
-                        data.Add(line);
+                           data.Add(line);
                     }
                 }
             }
@@ -177,9 +177,13 @@ namespace G8_App.Logic.Lines
                     {
                         line = new csLine();
                         line.Casino = Convert.ToInt32(fila["sportsbook"]);
-                        line.Date = Convert.ToDateTime(fila["timeReceived"]);
-                        line = CastDate(line);
-                        line.Time = CastTime(line.Date);
+                        DateTime dt = Convert.ToDateTime(fila["timeReceived"]);
+                        line = CastDate(line, dt);
+                        line.Time = CastTime(dt);
+                        line.WagerPlay = "";
+                        line.WagerType = "";
+                        line.Risk = 0;
+                        line.Player = "";
 
                         if (side == "V")
                         {
@@ -193,7 +197,7 @@ namespace G8_App.Logic.Lines
                         }
                     }
 
-                    if(player != "")
+                    if (player != "")
                     {
                         var list = GetBetPlayer(idwager, player, userplay, side, "MONEY");
                         if (list != null && list.Count > 0)
@@ -203,7 +207,8 @@ namespace G8_App.Logic.Lines
                                 data.Add(i);
                             }
                         }
-                    }else
+                    }
+                    else
                     {
                         var list = BetByGame(idGame, idPeriod, side, "MONEY");
                         if (list != null && list.Count > 0)
@@ -253,14 +258,14 @@ namespace G8_App.Logic.Lines
                         line = new csLine();
                         line.Casino = Convert.ToInt32(fila["sportsbook"]);
                         line.Juice = Convert.ToInt32(fila["draw_price"]);
-                        line.Date = Convert.ToDateTime(fila["timeReceived"]);
-                        line = CastDate(line);
-                        line.Time = CastTime(line.Date);
+                        DateTime dt = Convert.ToDateTime(fila["timeReceived"]);
+                        line = CastDate(line,dt);
+                        line.Time = CastTime(dt);
                         data.Add(line);
                     }
 
 
-                    if(player != "")
+                    if (player != "")
                     {
                         var list = GetBetPlayer(idwager, player, userplay, "DRAW", "DRAW");
                         if (list != null && list.Count > 0)
@@ -320,9 +325,9 @@ namespace G8_App.Logic.Lines
                     {
                         line = new csLine();
                         line.Casino = Convert.ToInt32(fila["sportsbook"]);
-                        line.Date = Convert.ToDateTime(fila["timeReceived"]);
-                        line = CastDate(line);
-                        line.Time = CastTime(line.Date);
+                        DateTime dt = Convert.ToDateTime(fila["timeReceived"]);
+                        line = CastDate(line, dt);
+                        line.Time = CastTime(dt);
 
 
                         if (side == "V") //over
@@ -331,17 +336,17 @@ namespace G8_App.Logic.Lines
                             line.Juice = Convert.ToInt32(fila["over_price"]);
                             data.Add(line);
                         }
-                        else if(side == "H")
+                        else if (side == "H")
                         {
                             line.Line = Math.Abs(Convert.ToDouble(fila["total"]));
                             line.Juice = Convert.ToInt32(fila["under_price"]);
                             data.Add(line);
                         }
 
-                        
+
                     }
 
-                    if(player != "")
+                    if (player != "")
                     {
                         var list = GetBetPlayer(idwager, player, userplay, side, "TOTAL");
                         if (list != null && list.Count > 0)
@@ -397,11 +402,11 @@ namespace G8_App.Logic.Lines
                 {
                     foreach (System.Data.DataRow fila in dataset.Tables[0].Rows)
                     {
-                        line = new csLine(); 
+                        line = new csLine();
                         line.Casino = Convert.ToInt32(fila["sportsbook"]);
-                        line.Date = Convert.ToDateTime(fila["timeReceived"]);
-                        line = CastDate(line);
-                        line.Time = CastTime(line.Date);
+                        DateTime dt = Convert.ToDateTime(fila["timeReceived"]);
+                        line = CastDate(line,dt);
+                        line.Time = CastTime(dt);
 
                         if (side == "H")
                         {
@@ -414,10 +419,10 @@ namespace G8_App.Logic.Lines
                             line.Juice = Convert.ToInt32(fila["ps_away_price"]);
                             line.Line = Convert.ToDouble(fila["ps_away_spread"]);
                             data.Add(line);
-                        }                      
+                        }
                     }
 
-                    if(player != "")
+                    if (player != "")
                     {
                         var list = GetBetPlayer(idwager, player, userplay, side, "SPREAD");
                         if (list != null && list.Count > 0)
@@ -456,14 +461,14 @@ namespace G8_App.Logic.Lines
 
 
 
-        private csLine CastDate(csLine l)
+        private csLine CastDate(csLine l, DateTime dt)
         {
-            l.Year = l.Date.Year;
-            l.Month = (l.Date.Month - 1);
-            l.Day = l.Date.Day;
-            l.Hour = l.Date.Hour;
-            l.Minute = l.Date.Minute;
-            l.Second = l.Date.Second;
+            l.Year = dt.Year;
+            l.Month = (dt.Month - 1);
+            l.Day = dt.Day;
+            l.Hour = dt.Hour;
+            l.Minute = dt.Minute;
+            l.Second = dt.Second;
             return l;
         }
 

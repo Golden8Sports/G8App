@@ -3,13 +3,12 @@
 
 <asp:Content runat="server" ContentPlaceHolderID="head1" ID="headASP">
 
-
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="text/javascript">
                 
-            function ActionAjax(idgame,period, event, idPeriod, eventId)
+            function ActionAjax(idgame,period, event, idPeriod, eventId,gradded)
             {
                 $("#idGame").text(idgame);
                 $("#idPeriod").text(period);
@@ -17,6 +16,7 @@
                 $("#idPeriodShow").text("Period: " + period);
                 $("#idPeriodId").text(idPeriod);
                 $("#idEventID").text(eventId);
+                $("#idGradded").text(gradded);
                 DrawChart();
             }
 
@@ -30,19 +30,18 @@
 
        var interval;
        var lineType = "line";
+       var isGradded = 1;
 
        function Hide(t)
        {
            obj = document.getElementById(t);
            obj.style.display = 'none';
        }
-
        function Show(t)
        {
            obj = document.getElementById(t);
            obj.style.display = 'block';
        }
-
 
        function DrawChart() {
           Pause();
@@ -50,7 +49,9 @@
           var ToolPlayer;
           var Wager = document.getElementById("inType").value;
 
-                if (document.getElementById("inBy").value == "PT") {
+          isGradded = (document.getElementById("idGradded").innerHTML == "NO") ? 0 : 1;          
+         
+          if (document.getElementById("inBy").value == "PT") {
                     if (Wager == "DR" || Wager == "ML") {
                         Tool = "<strong>{name}</strong> </br>  {t}</br> <strong>{y}</strong>";
                         ToolPlayer = "<strong>{w}</strong> </br>   {t}</br> {r}</br> <strong>{y}</strong>";
@@ -60,16 +61,16 @@
                     }
 
                 } else {
-                    if (Wager == "DR" || Wager == "ML") {
+             if (Wager == "DR" || Wager == "ML") {
                         Tool = "<strong>{name}</strong> </br> {t}</br> <strong>{y}</strong>";
                         ToolPlayer = "<strong>{w}</strong> </br>  {t}</br> <strong>{y}</strong>";
                     } else {
                         Tool = "<strong>{name}</strong> </br>  {t}</br> <strong>{y}</strong> </br> {z[0]}";
                         ToolPlayer = "<strong>{w}</strong> </br>  {t}</br> <strong>{y}</strong> </br> {z[0]}";
                     }
-                }
+          }
 
-                var chart = new CanvasJS.Chart("divChart", {
+          var chart = new CanvasJS.Chart("divChart", {
                     animationEnabled: true,
                     zoomEnabled: true,
                     exportEnabled: true,
@@ -102,7 +103,7 @@
                     data: [{   //pinnacle
                         type: lineType,
                         name: "Pinnacle",
-                        color: "#b84cdf",
+                        color: "#C900FF",
                         markerSize: 4,
                         showInLegend: true,
                         toolTipContent: Tool,
@@ -111,7 +112,7 @@
                     {
                         type: lineType, //Jaz
                         name: "Jazz",
-                        color: "#C24642",
+                        color: "#7E4721",
                         markerSize: 4,
                         showInLegend: true,
                         toolTipContent: Tool,
@@ -129,7 +130,7 @@
                     {
                         type: lineType, //Cris
                         name: "Cris",
-                        color: "#FF1A72",
+                        color: "#FF0000",
                         markerSize: 4,
                         showInLegend: true,
                         toolTipContent: Tool,
@@ -138,7 +139,7 @@
                     {
                         type: lineType, //Grande
                         name: "Grande",
-                        color: "#FFE638",
+                        color: "#FFF400",
                         markerSize: 4,
                         showInLegend: true,
                         toolTipContent: Tool,
@@ -166,15 +167,14 @@
                         dataPoints: []
                     }]  //pinnacle
                 });
-                var flag = true;
+          var flag = true;
 
-                //sleep(100);
-                updateChart();
+          updateChart();
 
-                function updateChart() {
+           function updateChart()
+           {
                     var bet = 0;
                     var risk = 0;
-
                     if (flag == true) {
                         var obj;
                         var index = 0;
@@ -190,6 +190,7 @@
                             contentType: 'application/json; charset=utf-8',
                             async: true,
                             success: function (response) {
+                                //alert(response.d);
                                 Show('divChart');
                                 obj = JSON.parse(response.d);
                                 index = obj.length;
@@ -332,12 +333,13 @@
                             }
                         });
                     }
-                }
+           }
 
-                interval = setInterval(updateChart, 4000);
-
-            }
-
+           if (isGradded == 0)
+           {
+               interval = setInterval(updateChart, 4000);
+           }       
+       }
 
        function toggleDataSeries(e) {
 	       if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
@@ -348,7 +350,7 @@
                e.chart.data.visible = true;
 	       }
 	       e.chart.render();
-        }
+       }
 
        function changeLine(txt)
        {
@@ -366,8 +368,6 @@
            document.getElementById("modal2Title").innerHTML = event;
            document.getElementById("h4Score").innerHTML = "Score: " + score;
            document.getElementById("h4Period").innerHTML = "Period: " + period;
-           //alert("H");
-
 
                var parameter = { 'idgame': id };
                $.ajax({
@@ -387,8 +387,7 @@
                });
        }
 
-
-        
+   
         function DrawStatsChart(info)
         {
            var data = new google.visualization.DataTable();
@@ -438,6 +437,7 @@
           <h4 id="idWager" style="display:none;">Game</h4>
           <h4 id="idPeriodId" style="display:none;">Game</h4>
           <h4 id="idEventID" style="display:none;"></h4>
+          <h4 id="idGradded" style="display:none;"></h4>
           <h5 id="idBets">Bets</h5>
         </div>
           <div class="form-group" style="margin-top:20px;">            
@@ -633,7 +633,7 @@
                                             <td ><%# Eval("GamePeriod") %></td>
                                             <td ><%# Eval("BETS") %></td>
                                             <td ><%# Eval("RISK") %></td>
-                                            <td ><button class="btn btn-block btn-primary fa fa-line-chart" data-toggle="modal" data-target="#myModal"  onclick="ActionAjax('<%# Eval("IdGame") %>','<%# Eval("GamePeriod") %>','<%# Eval("EventName") %>','<%# Eval("Period") %>','<%# Eval("EventId") %>');"></button></td>
+                                            <td ><button class="btn btn-block btn-primary fa fa-line-chart" data-toggle="modal" data-target="#myModal"  onclick="ActionAjax('<%# Eval("IdGame") %>','<%# Eval("GamePeriod") %>','<%# Eval("EventName") %>','<%# Eval("Period") %>','<%# Eval("EventId") %>','<%# Eval("GraddedDate") %>');"></button></td>
                                             <td><button class="btn btn-block btn-danger fa fa-bar-chart" data-toggle="modal" data-target="#myModal2" onclick="GameStatsJava('<%# Eval("EventName") %>', '<%# Eval("IdGame") %>','<%# Eval("Score") %>','<%# Eval("GamePeriod") %>');"></button></td>
                                           </tr>
                                     </ItemTemplate>

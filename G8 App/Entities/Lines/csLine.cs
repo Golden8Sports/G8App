@@ -7,7 +7,7 @@ namespace G8_App.Entities.Lines
 {
     public class csLine
     {
-        public DateTime Date { get; set; }
+        private DateTime Date { get; set; }
         public int Casino { get; set; }
         public string DateString { get; set; }
         public string WagerPlay { get; set; }

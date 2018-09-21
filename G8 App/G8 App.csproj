@@ -334,6 +334,7 @@
     <Content Include="Views\NCAAFStats.aspx" />
     <Content Include="Views\NFLStats.aspx" />
     <Content Include="Views\nhlRanges.aspx" />
+    <Content Include="Views\PlayerModule.aspx" />
     <Content Include="Views\ProfilingPlayer.aspx" />
     <Content Include="Views\RangesReport.aspx" />
     <Content Include="Views\Scraping.aspx" />
@@ -547,6 +548,13 @@
     <Compile Include="Views\nhlRanges.aspx.designer.cs">
       <DependentUpon>nhlRanges.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Views\PlayerModule.aspx.cs">
+      <DependentUpon>PlayerModule.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\PlayerModule.aspx.designer.cs">
+      <DependentUpon>PlayerModule.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Views\ProfilingPlayer.aspx.cs">
       <DependentUpon>ProfilingPlayer.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -604,7 +612,9 @@
       <DependentUpon>UpdateScores.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="js\Bootstrap\" />
+  </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">
       <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>

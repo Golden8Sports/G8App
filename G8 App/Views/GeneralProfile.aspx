@@ -1388,7 +1388,8 @@
                         <div class="form-group">
                           <label class="col-sm-1 control-label">Start Date:</label>
                             <div class="col-sm-3">
-                              <div class="input-group">
+
+                              <div class="input-group date">
                                 <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="startDate" runat="server" name="startDate" required="required" autocomplete="off" />
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                               </div>
