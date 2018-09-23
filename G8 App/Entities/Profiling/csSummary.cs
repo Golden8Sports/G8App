@@ -103,7 +103,7 @@ namespace G8_App.Entities.Profiling
             decimal holdP = (decimal)(a1 / riskAmount);
             double hold = Convert.ToDouble(holdP);
             this.HoldPercentaje = Math.Round(hold, 2, MidpointRounding.AwayFromZero); 
-            this.Date = dt.Date.ToString("dd/MM/yyyy");
+            this.Date = dt.Date.ToString("yyyy/MM/dd");
             this.Players = players;
         }
 

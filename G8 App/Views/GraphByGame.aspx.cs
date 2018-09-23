@@ -43,6 +43,7 @@ namespace G8_App.Views
                 {
                     LoadSport(sender, e);
                     AddInt();
+                    DateInput();
                 }
             }
             else Response.Redirect("Login.aspx");
@@ -107,6 +108,13 @@ namespace G8_App.Views
             dt2 = dt2.AddDays(1);
             endD = dt2.Year + "-" + dt2.Month + "-" + dt2.Day;
             return endD;
+        }
+
+        public void DateInput()
+        {
+            DateTime dt = DateTime.Now;
+            startDate.Value = dt.Month + "/" + dt.Day + "/" + dt.Year;
+            endDate.Value = dt.Month + "/" + dt.Day + "/" + dt.Year;
         }
 
 

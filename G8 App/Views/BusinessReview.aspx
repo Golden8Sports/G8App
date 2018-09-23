@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Views/menu.Master" CodeBehind="BusinesReview.aspx.cs" Inherits="G8_App.Views.BusinesReview" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Views/menu.Master" CodeBehind="BusinessReview.aspx.cs" Inherits="G8_App.Views.BusinessReview" %>
 
 <asp:Content ID="head" ContentPlaceHolderID="head1" runat="server">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -12,7 +12,7 @@
             var parameter = { 'player': player }
             $.ajax({                    
                 type: 'POST',
-                url: 'BusinesReview.aspx/GetBreakDownPlayer',
+                url: 'BusinessReview.aspx/GetBreakDownPlayer',
                 data: JSON.stringify(parameter),
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
@@ -35,7 +35,7 @@
             var parameter = { 'sport': sport }
             $.ajax({                    
                 type: 'POST',
-                url: 'BusinesReview.aspx/GetBreakDownSport',
+                url: 'BusinessReview.aspx/GetBreakDownSport',
                 data: JSON.stringify(parameter),
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
@@ -105,8 +105,7 @@
         }
 
         function DrawChartSport(info)
-        {
-            
+        {         
            var data = new google.visualization.DataTable();
            data.addColumn('string', 'Date');
            data.addColumn('number', 'Risk');
@@ -291,7 +290,7 @@
 </div>
 
         <div class="tab-content">      
-         <div id="menu1" class="tab-pane fade">
+         <div id="menu1" class="tab-pane active">
                             <div class="row">
                 <div class="panel panel-default">
                  <div class="panel-heading">

@@ -18,7 +18,7 @@ namespace G8_App
         protected void Session_Start(object sender, EventArgs e)
         {
             Session["Login"] = null;
-            Session.Timeout = 60;
+            Session.Timeout = 1800;           
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
@@ -38,7 +38,7 @@ namespace G8_App
 
         protected void Session_End(object sender, EventArgs e)
         {
-
+            //Response.AddHeader("Refresh", Session.Timeout + ";URL=Login.aspx");
         }
 
         protected void Application_End(object sender, EventArgs e)

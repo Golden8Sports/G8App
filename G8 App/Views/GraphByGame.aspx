@@ -169,7 +169,10 @@
                 });
           var flag = true;
 
-          updateChart();
+          setTimeout(function () {
+            updateChart();
+          }, 250);
+          
 
            function updateChart()
            {
@@ -479,7 +482,7 @@
               <button onclick="changeLine('stepLine');" class="btn btn-white fa fa-tasks" data-toggle="tooltip" title="Step Chart"></button>
           </div>
         <div class="scrollable">
-            <div id="divChart" style="height:600px; width:100%; margin-top:50px;"></div>
+            <div id="divChart" style="height:650px; width:100%; margin-top:50px;"></div>
         </div>                    
         <div class="modal-footer form-group">
           <button type="button" class="btn btn-default" onclick="Pause();" data-dismiss="modal">Close</button>
@@ -565,7 +568,7 @@
                           <label class="col-sm-2 control-label">Start Date:</label>
                             <div class="col-sm-3">
                               <div class="input-group">
-                                <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="startDate" runat="server" name="startDate" required="required" autocomplete="off" />
+                                <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="startDate" runat="server" value="MM. dd. yyyy" name="startDate" required="required" autocomplete="off" />
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                               </div>
                             </div>
@@ -573,8 +576,8 @@
                             <label class="col-sm-2 control-label">End Date:</label>
                             <div class="col-sm-3">
                               <div class="input-group">
-                                  <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="endDate" runat="server" name="endDate" required="required" autocomplete="off" />
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                 <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="endDate" runat="server" value="MM. dd. yyyy." name="endDate" required="required" autocomplete="off" />
+                                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                               </div>
                             </div>
                         </div>
@@ -607,7 +610,7 @@
                 <div class="panel-body">
                           
                          <div class="table-responsive" style="overflow-x:auto;">
-                           <table class="table" id="table1" style="overflow:auto;">
+                           <table class="table table-hover" id="table1" style="overflow:auto;">
                                      <thead style="margin:auto;">
                                          <tr>
                                              <th>Event</th>

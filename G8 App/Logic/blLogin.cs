@@ -30,7 +30,8 @@ namespace G8_App.Logic
                     }
                 }
 
-                return (dataset.Tables[0].Rows.Count > 0) ? "TRUE" : "FALSE";
+                return (dataset != null && dataset.Tables[0].Rows.Count == 1) ? "TRUE" : "FALSE";
+
             }
             catch (Exception ex)
             {

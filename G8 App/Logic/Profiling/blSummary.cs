@@ -157,7 +157,7 @@ namespace G8_App.Logic.Profiling
                 parameters.Clear();
             }
 
-            return new ObservableCollection<csSummary>(data.Reverse());
+            return (data == null) ? null : new ObservableCollection<csSummary>(data.Reverse());
         }
 
 
@@ -168,7 +168,7 @@ namespace G8_App.Logic.Profiling
         public ObservableCollection<csSummary> OverAll(string dt1, string dt2, int idAgent, string IdSport)
         {
             ObservableCollection<csSummary> data = new ObservableCollection<csSummary>();
-
+            int m = 0;
             try
             {
                parameters.Clear();
@@ -183,12 +183,17 @@ namespace G8_App.Logic.Profiling
                 {
                     foreach (DataRow fila in dataset.Tables[0].Rows)
                     {
-                        csSummary u = new csSummary(
-                        Convert.ToInt32(fila["RISK"]),
-                        Convert.ToInt32(fila["NET"]),
-                        Convert.ToDateTime(fila["DAYY"]),
-                        Convert.ToInt32(fila["PLAYERS"]));
-                        data.Add(u);
+                        if (!String.IsNullOrWhiteSpace(fila["NET"].ToString()) &&
+                            !String.IsNullOrWhiteSpace(fila["RISK"].ToString()))
+                        {
+                            csSummary u = new csSummary(
+                            Convert.ToInt32(fila["RISK"]),
+                            Convert.ToInt32(fila["NET"]),
+                            Convert.ToDateTime(fila["DAYY"]),
+                            Convert.ToInt32(fila["PLAYERS"]));
+                            data.Add(u);
+                        }
+
                     }
                 }
 
@@ -200,17 +205,22 @@ namespace G8_App.Logic.Profiling
                 parameters.Add("@pCase", 0);
                 parameters.Add("@pIdSport", IdSport);
                 dataset = csG8Apps.ExecutePA("[dbo].[web_reviewByDay]", parameters);
-
+                
 
                 if (dataset.Tables[0].Rows.Count > 0)
                 {
                     foreach (DataRow fila in dataset.Tables[0].Rows)
-                    {
-                        csSummary u = new csSummary(
-                        Convert.ToInt32(fila["NET"]),
-                        Convert.ToInt32(fila["RISK"]),
-                        Convert.ToInt32(fila["PLAYERS"]));
-                        data.Add(u);
+                    {    
+                        if(!String.IsNullOrWhiteSpace(fila["NET"].ToString()) &&
+                           !String.IsNullOrWhiteSpace(fila["RISK"].ToString()))
+                        {
+                            csSummary u = new csSummary(
+                            Convert.ToInt32(fila["NET"]),
+                            Convert.ToInt32(fila["RISK"]),
+                            Convert.ToInt32(fila["PLAYERS"]));
+                            data.Add(u);
+                        }
+                        
                     }
                 }
 
@@ -275,7 +285,7 @@ namespace G8_App.Logic.Profiling
                 parameters.Clear();
             }
 
-            return new ObservableCollection<csSummary>(data.Reverse());
+            return (data == null) ? null : new ObservableCollection<csSummary>(data.Reverse());
         }
 
 

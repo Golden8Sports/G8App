@@ -776,8 +776,9 @@ namespace G8_App.Logic.Profiling
                             p.Net = Convert.ToInt32(fila["WinLost"]);
                             p.HoldPercentaje = Math.Round(Convert.ToDouble((p.Net * 100) / p.RiskAmount), 2, MidpointRounding.AwayFromZero);
 
-                            if (p.WagerType.ToUpper().Contains(wagerType.ToUpper()))
-                            data.Add(p);
+                            if (p.WagerType.ToUpper().Contains(wagerType.ToUpper()) &&
+                                p.Sport.ToUpper().Contains(sport.Trim().ToUpper()))
+                                data.Add(p);
                         }                  
                     }
 

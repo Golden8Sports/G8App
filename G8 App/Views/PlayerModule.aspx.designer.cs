@@ -22,15 +22,6 @@ namespace G8_App.Views {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl userName;
         
         /// <summary>
-        /// hola control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl hola;
-        
-        /// <summary>
         /// txtLeans control.
         /// </summary>
         /// <remarks>
@@ -47,5 +38,23 @@ namespace G8_App.Views {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor txtWith;
+        
+        /// <summary>
+        /// inSport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlSelect inSport;
+        
+        /// <summary>
+        /// inBetType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlSelect inBetType;
     }
 }

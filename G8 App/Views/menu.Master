@@ -1,8 +1,5 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="menu.master.cs" Inherits="G8_App.Views.menu" %>
 
-
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
     
@@ -16,19 +13,18 @@
     <link href="../css/datatables.min.css" rel="stylesheet"/>
     <link href="../css/tables.css" rel="stylesheet" />
     <link href="../css/loading.css" rel="stylesheet" />
-
+    <link href="../css/DashBoard.css" rel="stylesheet" />
 
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/resources/demos/style.css">
-
+    <link rel="stylesheet" href="../css/bootstrap-datepicker.css"/>
 
       <asp:contentplaceholder id="head1" runat="server">
            <!-- Page-specific content will go here... -->
       </asp:contentplaceholder>
 
-   
 </head>
 
  
@@ -55,7 +51,6 @@
                 <div class="media-body">
                 </div>
      </div>
-
         <h5 class="sidebartitle actitle">Account</h5>
         <ul class="nav nav-pills nav-stacked nav-bracket mb30">
             <li><a href="#"><i class="fa fa-user"></i> <span>Profile</span></a></li>
@@ -70,7 +65,7 @@
         <li class=""><a href="dashboard.aspx"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
         
            <li class="nav-parent">
-            <a href="#"><i class="fa fa-briefcase"></i> <span>Modules</span></a>
+            <a href="#"><i class="fa fa-dashboard"></i> <span>Modules</span></a>
             <ul class="children">
                 <li><a href="PlayerModule.aspx"><i class="fa fa-caret-right"></i>Player Module</a></li>         
             </ul>
@@ -81,7 +76,7 @@
             <a href="#"><i class="fa fa-briefcase"></i> <span>Profile Tools</span></a>
             <ul class="children">
                 <li><a href="BusinessIntelligence.aspx"><i class="fa fa-caret-right"></i> Business Intelligence </a></li>
-                <li><a href="BusinesReview.aspx"><i class="fa fa-caret-right"></i> Business Review </a></li>
+                <li><a href="BusinessReview.aspx"><i class="fa fa-caret-right"></i> Business Review </a></li>
                 <li><a href="TopPlayers.aspx"><i class="fa fa-caret-right"></i> Top Players </a></li>            
                 <li><a href="GraphByGame.aspx"><i class="fa fa-caret-right"></i> Graph by Game </a></li>
                 <li><a href="GeneralProfile.aspx"><i class="fa fa-caret-right"></i> Profiling </a></li>
@@ -90,7 +85,7 @@
         </li>
 
        <li class="nav-parent">
-            <a href="#"><i class="fa fa-file-excel-o"></i> <span>Reports</span></a>
+            <a href="#"><i class="fa fa-book"></i> <span>Reports</span></a>
             <ul class="children">
                 <li><a href="nhlRanges.aspx"><i class="fa fa-caret-right"></i> NHL Ranges</a></li>
                 <li><a href="leansReport.aspx"><i class="fa fa-caret-right"></i> Leans Report </a></li>
@@ -120,7 +115,6 @@
                 <li><a href="UpdateScores.aspx"><i class="fa fa-caret-right"></i> Update Scores </a></li>
             </ul>
         </li>
-
         <li class=""><a href="Login.aspx" runat="server"><i class="fa fa-sign-out"></i><span>LogOut</span></a></li>
     </ul>
 
@@ -133,10 +127,8 @@
                   <!-- Page-specific content will go here... -->
                 </asp:contentplaceholder>
             </div>
-  
 </section>
-
-    
+  
 <script src="../js/jquery-1.10.2.min.js"></script>
 <script src="../js/jquery-migrate-1.2.1.min.js"></script>
 <script src="../js/jquery-ui-1.10.3.min.js"></script>
@@ -155,27 +147,36 @@
 <script src="../js/summernote.min.js"></script> 
 <script src="../js/toggles.min.js"></script>
 <script src="../js/datatables.min.js"></script>
-
-<script src="../Scripts/fusioncharts.js"></script>
-<script src="../Scripts/fusioncharts.charts.js"></script>
-
-
-
+<script src="../js/Bootstrap/bootstrap-datepicker.js"></script>
+<script src="../js/Bootstrap/bootstrap-datepicker.min.js"></script>
 
   <script>
 
       $(function () {
 
-          $('#MainContent_startDate').datepicker();
-          $('#MainContent_endDate').datepicker();
-
-          $(".form-control chosen-select").datepicker();
+          $('#MainContent_startDate').datepicker({
+              maxViewMode: 2,
+              autoclose: true,
+              todayHighlight: true
+          });
+          $('#MainContent_endDate').datepicker({
+              maxViewMode: 2,
+              autoclose: true,
+              todayHighlight: true
+          });
+          $(".form-control chosen-select").datepicker({
+              maxViewMode: 2,
+              autoclose: true,
+              todayHighlight: true
+          });
           $(".chosen-select").chosen({ 'width': '100%', 'white-space': 'nowrap' });
+
+          $(".chosen-select2").chosen({'width': '100%'});
 
           $('#table1').dataTable({
               "sPaginationType": "full_numbers",
-              "iDisplayLength": 25,
-              "bLengthChange": false,
+              "bLengthChange": true,
+              "pageLength": 25,
               "bSort": true,
               fixedHeader: true,
               responsive: true,
@@ -183,72 +184,55 @@
               buttons: ['csv'],
               "order": [[ 1, "asc" ]]
           });
-
-
           $('#table2').dataTable({
               "sPaginationType": "full_numbers",
-              "iDisplayLength": 25,
-              "bLengthChange": false,
+              "pageLength": 25,
+              "bLengthChange": true,
               "bSort": true,
               fixedHeader: true,
               responsive: true,
               dom: 'Bfrtip',
               buttons: ['csv']
           });
-
-
-
-           $('#table3').dataTable({
+          $('#table3').dataTable({
               "sPaginationType": "full_numbers",
-              "iDisplayLength": 25,
-              "bLengthChange": false,
+              "bLengthChange": true,
+              "pageLength": 25,
               "bSort": true,
               fixedHeader: true,
               responsive: true,
               dom: 'Bfrtip',
               buttons: ['csv']
           });
-
-
-
-             $('.tables').dataTable({
+          $('.tables').dataTable({
               "sPaginationType": "full_numbers",
-              "iDisplayLength": 25,
-              "bLengthChange": false,
+              "pageLength": 25,
+              "bLengthChange": true,
               "bSort": true,
               fixedHeader: true,
               responsive: false,
               dom: 'Bfrtip',
               buttons: ['csv']
           });
-
-
-
           $('.customTable').dataTable({
               "sPaginationType": "full_numbers",
-              "iDisplayLength": 25,
-              "bLengthChange": false,
+              "pageLength": 25,
+              "bLengthChange": true,
               "bSort": true,
               fixedHeader: true,
               responsive: true,
               dom: 'Bfrtip',
               buttons: ['csv'],
-              "order": [[3, 'desc']]             
+              "order": [[3, 'desc']],
+             
           });
-
-
-
       });
 
       $(document).ready(function () {
           $('[data-toggle="tooltip"]').tooltip();
       });
  
-
   </script>
 
 </body>
 </html>
-
-
-

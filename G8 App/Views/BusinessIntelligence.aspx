@@ -26,7 +26,6 @@
         function ShowChartAJX()
         {
             var parameter = { 'idgame': $("#idGame").text(), 'user': $("#idUSer").text(), 'type': $("#inType").val(), 'by': $("#inBy").val(), 'period': $("#idPeriod").text(), 'side': $("#inSide").val(),'wager': $("#idWager").text(), 'userplay': $("#idModal").text()};
-
               $.ajax({                    
                 type: 'POST',
                 url: 'BusinessIntelligence.aspx/GetLines',
@@ -36,7 +35,10 @@
                 success: function (data)
                 {
                     Show('divChart');
-                    DrawChart(data.d);                  
+                    setTimeout(function () {
+                        DrawChart(data.d);
+                    }, 250);
+                                      
                 },
                 error: function (data)
                 {
@@ -439,7 +441,7 @@
               <button onclick="changeLine('line');" class="btn btn-white fa fa-line-chart" data-toggle="tooltip" title="Line Chart"></button>
               <button onclick="changeLine('stepLine');" class="btn btn-white fa fa-tasks" data-toggle="tooltip" title="Step Chart"></button>
           </div>
-           <div id="divChart" style="height:600px; width:100%; margin-top:50px;"></div>              
+           <div id="divChart" style="height:650px; width:100%; margin-top:50px;"></div>              
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>

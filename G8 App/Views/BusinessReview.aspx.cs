@@ -14,7 +14,7 @@ using System.Web.UI.WebControls;
 
 namespace G8_App.Views
 {
-    public partial class BusinesReview : System.Web.UI.Page
+    public partial class BusinessReview : System.Web.UI.Page
     {
         private static blProfile profileDB = new blProfile();
         private blAgent agentDB = new blAgent();
@@ -55,7 +55,7 @@ namespace G8_App.Views
                 EndDate = GetPlusDate(EndDate);
                 int IdAgent = (Convert.ToInt32(Agent) == 0) ? -1 : Convert.ToInt32(Agent);
                 Sport = inSport.Items[inSport.SelectedIndex].Value;
-                if(Sport == "ALL")
+                if (Sport == "ALL")
                 {
                     Sport = "";
                 }
@@ -113,7 +113,7 @@ namespace G8_App.Views
                 EndDate = GetPlusDate(EndDate);
                 IdAgent = (Convert.ToInt32(Agent) == 0) ? -1 : Convert.ToInt32(Agent);
 
-                rptSport.DataSource = sumaDB.BusinessBySport(StartDate, EndDate, IdAgent,Sport);
+                rptSport.DataSource = sumaDB.BusinessBySport(StartDate, EndDate, IdAgent, Sport);
                 rptSport.DataBind();
             }
             catch (Exception ex)
@@ -164,7 +164,7 @@ namespace G8_App.Views
         [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
         public static object GetBreakDownPlayer(string player)
         {
-            return Json.Encode(profileDB.BreakDownPlayer(StartDate, EndDate, "", "-1", player, "", ""));
+            return Json.Encode(profileDB.BreakDownPlayer(StartDate, EndDate, Sport, "-1", player, "", ""));
         }
 
 

@@ -10,7 +10,7 @@
 namespace G8_App.Views {
     
     
-    public partial class BusinesReview {
+    public partial class BusinessReview {
         
         /// <summary>
         /// userName control.

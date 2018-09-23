@@ -187,7 +187,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\jquery-1.8.0.intellisense.js" />
+    <Content Include="css\bootstrap-datepicker.css" />
+    <Content Include="css\DashBoard.css" />
     <Content Include="css\loading.css" />
+    <Content Include="js\Bootstrap\bootstrap-datepicker.js" />
+    <Content Include="js\Bootstrap\bootstrap-datepicker.min.js" />
     <Content Include="js\canvas.js" />
     <Content Include="js\GoogleCharts.js" />
     <Content Include="js\loading.js" />
@@ -276,8 +280,8 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Views\BusinesReview.aspx" />
     <Content Include="Views\BusinessIntelligence.aspx" />
+    <Content Include="Views\BusinessReview.aspx" />
     <Content Include="Views\CheckScores.aspx" />
     <Content Include="Views\Games.aspx" />
     <Content Include="Views\GeneralProfile.aspx" />
@@ -436,19 +440,19 @@
     <Compile Include="Logic\Profiling\blSummary.cs" />
     <Compile Include="Logic\Scraping\Covers\blCovers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\BusinesReview.aspx.cs">
-      <DependentUpon>BusinesReview.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\BusinesReview.aspx.designer.cs">
-      <DependentUpon>BusinesReview.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Views\BusinessIntelligence.aspx.cs">
       <DependentUpon>BusinessIntelligence.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Views\BusinessIntelligence.aspx.designer.cs">
       <DependentUpon>BusinessIntelligence.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BusinessReview.aspx.cs">
+      <DependentUpon>BusinessReview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\BusinessReview.aspx.designer.cs">
+      <DependentUpon>BusinessReview.aspx</DependentUpon>
     </Compile>
     <Compile Include="Views\CheckScores.aspx.cs">
       <DependentUpon>CheckScores.aspx</DependentUpon>
@@ -612,9 +616,7 @@
       <DependentUpon>UpdateScores.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="js\Bootstrap\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">
       <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>

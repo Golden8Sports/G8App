@@ -107,7 +107,7 @@
 </div>
 
         <div class="tab-content">      
-         <div id="menu1" class="tab-pane fade">
+         <div id="menu1" class="tab-pane active">
                      <div class="panel-body">	  
                        <div class="table-responsive" style="overflow-x:auto;">
                            <table class="table tables" style="overflow:auto;">
