@@ -52,8 +52,29 @@ namespace G8_App.Entities.Profiling
         public string EventDateString { get; set; }
         public double Points { get; set; }
         public double Odds { get; set; }
+        public string Week { get; set; }
 
-        public csSummary(){}
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        public string Name { get; set; }
+        public string DateRange { get; set; }
+
+        public int ParlayNet { get; set; }
+        public int TeaserNet { get; set; }
+        public int StraightNet { get; set; }
+        public DateTime DateRangeGraph { get; set; }
+
+
+        public csSummary()
+        {
+            this.Net = 0;
+            this.HoldPercentaje = 0;
+            this.WinPercentaje = 0;
+            this.RiskAmount = 0;
+            this.ParlayNet = 0;
+            this.StraightNet = 0;
+            this.TeaserNet = 0;
+        }
 
         public csSummary(string player, int riskAmount, int winAmount, int net, int bets, int wins, int draw, int lost, int winPercentaje, double holdPercentaje, int scalpingPPH, int scalpingJazz, int scalpingPinni, int scalping5Dimes, int scalpingCris, int moveLine, int beatLine, int syndicate)
         {
@@ -92,6 +113,19 @@ namespace G8_App.Entities.Profiling
             this.WinPercentaje = Math.Round(winP,2,MidpointRounding.AwayFromZero);
             this.HoldPercentaje = Math.Round(holdP, 2, MidpointRounding.AwayFromZero);
         }
+
+
+
+        public csSummary(DateTime dt, int riskAmount, int net)
+        {
+            this.DateRangeGraph = dt;
+            this.RiskAmount = riskAmount;
+            this.Net = net;
+            double holdP = Convert.ToDouble(((net * 100) / riskAmount));
+            this.HoldPercentaje = Math.Round(holdP, 2, MidpointRounding.AwayFromZero);
+        }
+
+
 
 
 

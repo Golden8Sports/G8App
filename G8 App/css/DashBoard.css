@@ -8,7 +8,37 @@
     margin:0px;
 }
 
+.blanco {
+    background-color: white;
+}
+
 .border {
     /*border-bottom: 0.1mm groove;*/
+}
+
+.negri{
+    font-weight:bold;
+}
+
+
+.autotext {
+    width: 200px;
+    resize: none;
+    overflow: hidden;
+    font-size: 18px;
+    height: 1.1em;
+    padding: 2px;
+    overflow-y: auto;
+    height: 80px;
+}
+
+
+.centerVer {
+    text-align: center;
+    position: relative;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
 }
 

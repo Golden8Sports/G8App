@@ -194,6 +194,7 @@
     <Content Include="js\Bootstrap\bootstrap-datepicker.min.js" />
     <Content Include="js\canvas.js" />
     <Content Include="js\GoogleCharts.js" />
+    <Content Include="js\jquery-loader.js" />
     <Content Include="js\loading.js" />
     <Content Include="Scripts\jquery-1.8.0.js" />
     <Content Include="Scripts\jquery-1.8.0.min.js" />
@@ -338,6 +339,7 @@
     <Content Include="Views\NCAAFStats.aspx" />
     <Content Include="Views\NFLStats.aspx" />
     <Content Include="Views\nhlRanges.aspx" />
+    <Content Include="Views\PlayerMod.aspx" />
     <Content Include="Views\PlayerModule.aspx" />
     <Content Include="Views\ProfilingPlayer.aspx" />
     <Content Include="Views\RangesReport.aspx" />
@@ -357,6 +359,7 @@
     <Compile Include="Entities\Bet\csBets.cs" />
     <Compile Include="Entities\Business Intelligence\csAgent.cs" />
     <Compile Include="Entities\Business Intelligence\csBet.cs" />
+    <Compile Include="Entities\Dashboard\csSeason.cs" />
     <Compile Include="Entities\Games\csGame.cs" />
     <Compile Include="Entities\Games\csGameStats.cs" />
     <Compile Include="Entities\Leans\csSum.cs" />
@@ -387,6 +390,7 @@
     <Compile Include="Logic\Bet\blBets.cs" />
     <Compile Include="Logic\Business Intelligence\blAgent.cs" />
     <Compile Include="Logic\Business Intelligence\blBet.cs" />
+    <Compile Include="Logic\Dashboard\blSeason.cs" />
     <Compile Include="Logic\Games\blGame.cs" />
     <Compile Include="Logic\Lines\blLine.cs" />
     <Compile Include="Logic\Lines\blLineType.cs" />
@@ -551,6 +555,13 @@
     </Compile>
     <Compile Include="Views\nhlRanges.aspx.designer.cs">
       <DependentUpon>nhlRanges.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PlayerMod.aspx.cs">
+      <DependentUpon>PlayerMod.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\PlayerMod.aspx.designer.cs">
+      <DependentUpon>PlayerMod.aspx</DependentUpon>
     </Compile>
     <Compile Include="Views\PlayerModule.aspx.cs">
       <DependentUpon>PlayerModule.aspx</DependentUpon>

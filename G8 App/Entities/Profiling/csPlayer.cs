@@ -21,12 +21,21 @@ namespace G8_App.Entities.Profiling
             get { return this._idplayer; }
         }
 
+
+        public string Agent { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        public string Name { get; set; }
+
         public csPlayer(string player, string idplayer)
         {
             _player = player ?? throw new ArgumentNullException(nameof(player));
             _idplayer = idplayer ?? throw new ArgumentNullException(nameof(idplayer));
         }
 
-        public csPlayer(){}
+        public csPlayer()
+        {
+
+        }
     }
 }

@@ -95,5 +95,43 @@ namespace G8_App.Logic.Profiling
 
             return data;
         }
+
+
+
+        public csPlayer GetPlayerInfo(string p)
+        {
+            var player = new csPlayer();
+
+            try
+            {
+                parameters.Clear();
+                parameters.Add("@pPlayer", p);
+                dataset = csConnection.ExecutePA("[dbo].[web_playerInfo]", parameters);
+                if (dataset.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow fila in dataset.Tables[0].Rows)
+                    {                        
+                        player.Name = Convert.ToString(fila["Name"]);
+                        player.Agent = Convert.ToString(fila["Agent"]);
+                        player.Phone = Convert.ToString(fila["Phone"]);
+                        player.Email = Convert.ToString(fila["Email"]);
+                    }
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            finally
+            {
+                parameters.Clear();
+            }
+
+            return player;
+        }
+
+
+
     }
 }

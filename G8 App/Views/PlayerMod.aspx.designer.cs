@@ -10,7 +10,7 @@
 namespace G8_App.Views {
     
     
-    public partial class PlayerModule {
+    public partial class PlayerMod {
         
         /// <summary>
         /// userName control.
@@ -22,15 +22,6 @@ namespace G8_App.Views {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl userName;
         
         /// <summary>
-        /// inSolutionCategory control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlSelect inSolutionCategory;
-        
-        /// <summary>
         /// inPlayer control.
         /// </summary>
         /// <remarks>
@@ -40,49 +31,13 @@ namespace G8_App.Views {
         protected global::System.Web.UI.HtmlControls.HtmlSelect inPlayer;
         
         /// <summary>
-        /// idCategory control.
+        /// Text3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl idCategory;
-        
-        /// <summary>
-        /// inAgent control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl inAgent;
-        
-        /// <summary>
-        /// inRegDate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText inRegDate;
-        
-        /// <summary>
-        /// inphone control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl inphone;
-        
-        /// <summary>
-        /// inEmail control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl inEmail;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText Text3;
         
         /// <summary>
         /// inThisWeek control.
@@ -94,40 +49,40 @@ namespace G8_App.Views {
         protected global::System.Web.UI.HtmlControls.HtmlInputText inThisWeek;
         
         /// <summary>
-        /// inWagerTypeFinancial control.
+        /// Select2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlSelect inWagerTypeFinancial;
+        protected global::System.Web.UI.HtmlControls.HtmlSelect Select2;
         
         /// <summary>
-        /// inLastWeek control.
+        /// Text1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText inLastWeek;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText Text1;
         
         /// <summary>
-        /// inSportFinancial control.
+        /// Select1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlSelect inSportFinancial;
+        protected global::System.Web.UI.HtmlControls.HtmlSelect Select1;
         
         /// <summary>
-        /// inSportBets control.
+        /// Select3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlSelect inSportBets;
+        protected global::System.Web.UI.HtmlControls.HtmlSelect Select3;
         
         /// <summary>
         /// Select4 control.
@@ -148,13 +103,31 @@ namespace G8_App.Views {
         protected global::System.Web.UI.HtmlControls.HtmlSelect Select5;
         
         /// <summary>
-        /// inSPortToday control.
+        /// Select6 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlSelect inSPortToday;
+        protected global::System.Web.UI.HtmlControls.HtmlSelect Select6;
+        
+        /// <summary>
+        /// Text2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTextArea Text2;
+        
+        /// <summary>
+        /// Select8 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlSelect Select8;
         
         /// <summary>
         /// Select9 control.
@@ -184,12 +157,12 @@ namespace G8_App.Views {
         protected global::System.Web.UI.HtmlControls.HtmlInputText endDate;
         
         /// <summary>
-        /// inSportLeans control.
+        /// Select7 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlSelect inSportLeans;
+        protected global::System.Web.UI.HtmlControls.HtmlSelect Select7;
     }
 }

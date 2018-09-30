@@ -289,5 +289,144 @@ namespace G8_App.Logic.Profiling
         }
 
 
+
+        public csSummary InfoBySeasons(string dt1, string dt2, string idSport, string Player, string wagerType)
+        {
+            var data = new csSummary();
+
+            try
+            {
+                parameters.Clear();
+                parameters.Add("@pStartDate", dt1);
+                parameters.Add("@pEndDate", dt2);
+                parameters.Add("@pIdSport", idSport);
+                parameters.Add("@pIdLeague", "-1");
+                parameters.Add("@pPlayer", Player);
+                parameters.Add("@pWagerType", wagerType.ToUpper());
+                parameters.Add("@pWagerPlay", "");
+                dataset = csG8Apps.ExecutePA("[dbo].[web_topPlayers]", parameters);
+
+                if (dataset.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow fila in dataset.Tables[0].Rows)
+                    {
+                        data = new csSummary(
+                        Convert.ToString(fila["PLAYER"]),
+                        Convert.ToString(fila["AGENT"]),
+                        Convert.ToInt32(fila["RISK"]),
+                        Convert.ToInt32(fila["NET"]),
+                        Convert.ToInt32(fila["BETS"]),
+                        Convert.ToInt32(fila["WINS"]));
+
+
+                        data = TotalWagerType(dt1,dt2,idSport,Player,"STRAIGHT",data);
+                        data = TotalWagerType(dt1, dt2, idSport, Player, "PARLAY", data);
+                        data = TotalWagerType(dt1, dt2, idSport, Player, "TEASER", data);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                data = null;
+                throw new Exception("Error: " + ex.Message);
+            }
+            finally
+            {
+                parameters.Clear();
+            }
+            return data;
+        }
+
+
+
+        private csSummary TotalWagerType(string dt1, string dt2, string idSport, string Player, string wagerType, csSummary data)
+        {
+            try
+            {
+                parameters.Clear();
+                parameters.Add("@pStartDate", dt1);
+                parameters.Add("@pEndDate", dt2);
+                parameters.Add("@pIdSport", idSport);
+                parameters.Add("@pIdLeague", "-1");
+                parameters.Add("@pPlayer", Player);
+                parameters.Add("@pWagerType", wagerType.ToUpper());
+                parameters.Add("@pWagerPlay", "");
+                dataset = csG8Apps.ExecutePA("[dbo].[web_topPlayers]", parameters);
+
+                if (dataset.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow fila in dataset.Tables[0].Rows)
+                    {
+                        if (wagerType.ToUpper().Contains("STRAIGHT")) data.StraightNet = Convert.ToInt32(fila["NET"]);
+                        else if (wagerType.ToUpper().Contains("PARLAY")) data.ParlayNet = Convert.ToInt32(fila["NET"]);
+                        else if (wagerType.ToUpper().Contains("TEASER")) data.TeaserNet = Convert.ToInt32(fila["NET"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                data = null;
+                throw new Exception("Error: " + ex.Message);
+            }
+            finally
+            {
+                parameters.Clear();
+            }
+            return data;
+        }
+
+
+
+
+
+        public Object SumRangeDate(string dt1, string dt2, string idSport, string Player, string wagerType,int caso)
+        {
+            var data = new ObservableCollection<csSummary>();
+
+            try
+            {
+                parameters.Clear();
+                parameters.Add("@pStartDate", dt1);
+                parameters.Add("@pEndDate", dt2);
+                parameters.Add("@pIdSport", (idSport == "ALL") ? "" : idSport);
+                parameters.Add("@pPlayer", Player);
+                parameters.Add("@pCase", caso);
+                parameters.Add("@pWagerType", wagerType.ToUpper());
+                dataset = csG8Apps.ExecutePA("[dbo].[web_SummaryByRange]", parameters);
+
+                if (dataset.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow fila in dataset.Tables[0].Rows)
+                    {
+                        var s = new csSummary(
+                        Convert.ToDateTime(fila["DAYY"]),
+                        Convert.ToInt32(fila["RISK"]),
+                        Convert.ToInt32(fila["NET"]));
+
+                        data.Add(s);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                data = null;
+                throw new Exception("Error: " + ex.Message);
+            }
+            finally
+            {
+                parameters.Clear();
+            }
+
+            return data;
+        }
+
+
+
+
+
+
+
+
+
     }
 }

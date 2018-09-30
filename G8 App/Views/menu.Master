@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
     
-<head runat="server">
+<head runat="server" lang="en">
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title>G8 Web Apps</title>
@@ -18,7 +18,6 @@
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/resources/demos/style.css">
     <link rel="stylesheet" href="../css/bootstrap-datepicker.css"/>
 
       <asp:contentplaceholder id="head1" runat="server">
@@ -28,7 +27,7 @@
 </head>
 
  
-<body>
+<body lang="en">
 
 
 <div id="preloader">
@@ -138,10 +137,6 @@
 <script src="../js/modernizr.min.js"></script>
 <script src="../js/retina.min.js"></script>
 <script src="../js/custom.js"></script>
-<script src="../js/flot/flot.min.js"></script>
-<script src="../js/flot/flot.resize.min.js"></script>
-<script src="../js/flot/flot.categories.min.js"></script>
-<script src="../js/Chart.bundle.js"></script>
 <script src="../js/raphael-2.1.0.min.js"></script>
 <script src="../js/chosen.jquery.min.js"></script>
 <script src="../js/summernote.min.js"></script> 
@@ -226,11 +221,29 @@
               "order": [[3, 'desc']],
              
           });
+
+
+
+          $('.tablin').dataTable({
+              "sPaginationType": "full_numbers",
+              "bLengthChange": true,
+              "bSort": false,
+              fixedHeader: false,
+              responsive: true,
+              dom: 'Bfrtip',
+              "bPaginate": false,
+              "bFilter": false,
+              "bInfo": false,
+              "bSort": false,
+          });
+
+
       });
 
       $(document).ready(function () {
           $('[data-toggle="tooltip"]').tooltip();
       });
+
  
   </script>
 

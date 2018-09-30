@@ -25,7 +25,7 @@ namespace HouseReport_BL.Logic
                 dataset = csConnection.ExecutePA("[dbo].[Sport_GetList]", parameters);
                 if (dataset.Tables[0].Rows.Count > 0)
                 {
-                    sportList.Add(new csSport("ALL", "ALL", "ALL"));
+                    sportList.Add(new csSport("ALL", "All Sports", "ALL"));
 
                     foreach (DataRow fila in dataset.Tables[0].Rows)
                     {

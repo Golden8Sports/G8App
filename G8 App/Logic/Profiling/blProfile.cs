@@ -798,6 +798,58 @@ namespace G8_App.Logic.Profiling
 
 
 
+        public csProfile CurrentWeek(string d1, string d2, string sport, string player, string wagerType)
+        {
+            csProfile p = null;
+
+            try
+            {
+                parameters.Clear();
+                parameters.Add("@LogIdUser", 74);
+                parameters.Add("@prmStartDate", d1);
+                parameters.Add("@prmEndDate", d2);
+                parameters.Add("@prmBook", "");
+                parameters.Add("@prmOffice", "");
+                parameters.Add("@prmPlayer", player);
+                parameters.Add("@prmLeague", "");
+                parameters.Add("@prmGroupby", 0);
+                parameters.Add("@prmOrderby", 0);
+                dataset = csConnection.ExecutePA("[dbo].[Report_Game_Statistic]", parameters);
+                p = new csProfile();
+
+                if (dataset.Tables[0].Rows.Count > 0)
+                {                   
+                    foreach (DataRow fila in dataset.Tables[0].Rows)
+                    {
+                        //p.HoldPercentaje = Math.Round(Convert.ToDouble((p.Net * 100) / p.RiskAmount), 2, MidpointRounding.AwayFromZero);
+                        p.Sport = fila["Group1"].ToString();
+                        p.WagerType = fila["Group2"].ToString();
+
+                        if (p.WagerType.ToUpper().Contains(wagerType.ToUpper()) &&
+                            p.Sport.ToUpper().Contains(sport.Trim().ToUpper()))
+                        {
+                            p.Net += Convert.ToInt32(fila["WinLost"]);
+                            p.RiskAmount += Convert.ToInt32(fila["Amount"]);
+                        }
+                            
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            finally
+            {
+                parameters.Clear();
+            }
+
+            return p;
+        }
+
+
+
 
 
 

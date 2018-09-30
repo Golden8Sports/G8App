@@ -279,7 +279,7 @@
         </div>
       </div>
 
-   <div class="row" id="hola" runat="server">
+   <div class="row" runat="server">
     <div class="col-xs-12">
        <ul class="nav nav-tabs nav-justified">
         <li class="nav-item active"><a data-toggle="tab" href="#menu1">Daily Summary</a></li>
@@ -291,7 +291,7 @@
 
         <div class="tab-content">      
          <div id="menu1" class="tab-pane active">
-                            <div class="row">
+              <div class="row">
                 <div class="panel panel-default">
                  <div class="panel-heading">
                   <div class="panel-btns">

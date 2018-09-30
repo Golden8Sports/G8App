@@ -1,134 +1,12 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Views/menu.Master" CodeBehind="PlayerModule.aspx.cs" Inherits="G8_App.Views.PlayerModule" %>
-
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="PlayerMod.aspx.cs" MasterPageFile="~/Views/menu.Master" Inherits="G8_App.Views.PlayerMod" %>
 
 <asp:Content runat="server" ID="head" ContentPlaceHolderID="head1">
-  
-
-<%--<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="../js/jquery-loader.js" type="text/javascript"></script>
-<script type="text/javascript">
-    
-
-         	$data = {
-                autoCheck: 32,
-                size: 32, 
-                bgColor: "#FFF",
-                bgOpacity: "0.7",   
-                fontColor: "#000",
-                title: "", 
-                isOnly: false
-            };
-
-     function Spinner(caso)
-     {      
-		    //if(caso == 1) $.loader.open($data);
-      //      else $.loader.close(true);
-     }
-
-</script>--%>
-
-
-
-
-    <style>
-
-        table.dataTable thead th {
-          border-bottom: 0;
-          border-bottom:groove;
-        }
-
-        table.dataTable tbody td{
-          border-top: 0;      
-        }
-
-        .table
-        {
-            border:none;
-        }
-
-    </style>
-    
+  <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
   <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
   <script>
-    var obj;
-    var obj2;
-    var typeFinancial;
-
-
-      function FinancialAJX()
-      {
-          LastThisWeekAJX();
-          RangeSummaryAJX();
-      }
-
-    function LastThisWeekAJX()
-    {
-        
-        //Spinner(1);
-        var sport = $("#MainContent_inSportFinancial").val();
-        var wagerType = $("#MainContent_inWagerTypeFinancial").val();
-        var player = $("#MainContent_inPlayer").val();        
-
-        var parameter = { 'player': player, 'wagertype': wagerType, 'sport' : sport }
-        $.ajax({                    
-           type: 'POST',
-           url: 'PlayerModule.aspx/LastWeeks',
-           data: JSON.stringify(parameter),
-           contentType: 'application/json; charset=utf-8',
-           dataType: 'json',
-           success: function (data)
-           {
-              ThisLastWeekJava(data.d);
-               DrawChart2();
-               DrawChart1();
-               //Spinner(2);
-           },
-           error: function (data)
-           {
-              $("#MainContent_inThisWeek").val('$ 0');
-              $("#MainContent_inLastWeek").val('$ 0');
-              alert('No Data' + data.statusText);
-           }
-        });
-    }
-
-
-
-
-    function RangeSummaryAJX()
-    {       
-        //Spinner(1);
-        var sport = $("#MainContent_inSportFinancial").val();
-        var wagerType = $("#MainContent_inWagerTypeFinancial").val();
-        var player = $("#MainContent_inPlayer").val();
-        var range = $("#inDateRangeFinancial").val();
-
-        var parameter = { 'range': range,  'player': player, 'wagertype': wagerType, 'sport': sport }
-        $.ajax({                    
-           type: 'POST',
-           url: 'PlayerModule.aspx/SumDateRange',
-           data: JSON.stringify(parameter),
-           contentType: 'application/json; charset=utf-8',
-           dataType: 'json',
-           success: function (data)
-           {
-              //ThisLastWeekJava(data.d);
-               //DrawChart2();
-               //DrawChart1();
-               //Spinner(2);
-           },
-           error: function (data)
-           {
-              alert('No Data' + data.statusText);
-           }
-        });
-    }
-
-
-
 
     function DrawChart1()
-    {      
+        {
          var chart = new CanvasJS.Chart("chart1", {
 	        theme: "light2", // "light1", "light2", "dark1", "dark2"
 	        animationEnabled: true,
@@ -144,47 +22,18 @@
 		        legendText: "{label}",
 		        indexLabelFontSize: 16,
 		        indexLabel: "{label} - ${y}",
-		        dataPoints: []
+		        dataPoints: [
+			        { y: 51000, label: "Straight" },
+			        { y: 47000, label: "Parlay" },
+                    { y: 20000, label: "Teaser" },
+                    { y: 10000, label: "Other" }
+		        ]
 	        }]
         });
-
-        var betTypeFinancial = $("#inBetTypeFinancial").val();
-
-        var dataPoints = [];
-
-        if (obj.length > 1)
-        {
-            if (betTypeFinancial == "TW") {
-                dataPoints.push({ y: obj[0]["StraightNet"], label: "Straight Bet" },
-                                { y: obj[0]["ParlayNet"], label: "Parlay" },
-                                { y: obj[0]["TeaserNet"], label: "Teaser" });
-            } else if (betTypeFinancial == "LW")
-            {
-                dataPoints.push({ y: obj[1]["StraightNet"], label: "Straight Bet" },
-                                { y: obj[1]["ParlayNet"], label: "Parlay" },
-                                { y: obj[1]["TeaserNet"], label: "Teaser" });
-
-            }else if (betTypeFinancial == "TS")
-            {
-                dataPoints.push({ y: obj[3]["StraightNet"], label: "Straight Bet" },
-                                { y: obj[3]["ParlayNet"], label: "Parlay" },
-                                { y: obj[3]["TeaserNet"], label: "Teaser" });
-
-            }else if (betTypeFinancial == "LS")
-            {
-                dataPoints.push({ y: obj[4]["StraightNet"], label: "Straight Bet" },
-                                { y: obj[4]["ParlayNet"], label: "Parlay" },
-                                { y: obj[4]["TeaserNet"], label: "Teaser" });
-            }
-        }
-
-        chart.options.data[0].dataPoints = dataPoints;
         chart.render();
-    }
-   
+        }
     function DrawChart2()
     {
-        typeFinancial = $("#inFinancialStats").val();
          var chart = new CanvasJS.Chart("chart2", {
 	        animationEnabled: true,
 	        theme: "light2", // "light1", "light2", "dark1", "dark2"
@@ -193,8 +42,8 @@
                 fontSize: 20,
 	        },
 	        axisY: {
-		        title: "Amount",
-		        //prefix: "$",
+		        title: "Net",
+		        prefix: "$",
                 includeZero: false,
                 fontSize: 5,
 	        },
@@ -202,38 +51,17 @@
 	        },
 	        data: [{
 		        type: "column",
-                yValueFormatString: "#,##0.0#",
-                dataPoints: []
+		        yValueFormatString: "$#,##0.0#",
+		        dataPoints: [
+			        { label: "Current Week", y: 40000 },	
+			        { label: "Last Month", y: 35000 },	
+                    { label: "Current Season", y: 30000 },
+                    { label: "Last Season", y: 25000 }
+		        ]
 	        }]
-        });
-      
-        var dataPoints = [];
-        for (var i = 0; i < obj.length; i++)
-        {
-           if (i != 1)
-           {
-               if (typeFinancial == "BET")
-               {
-                  dataPoints.push({ label: obj[i]["DateRange"], y: obj[i]["Bets"] })
-
-               } else if (typeFinancial == "NET")
-               {
-                  dataPoints.push({ label: obj[i]["DateRange"], y: obj[i]["Net"] })
-
-               }else if (typeFinancial == "HOLD")
-               {
-                  dataPoints.push({ label: obj[i]["DateRange"], y: obj[i]["HoldPercentaje"] })
-
-               }else if (typeFinancial == "RISK")
-               {
-                  dataPoints.push({ label: obj[i]["DateRange"], y: obj[i]["RiskAmount"] })
-               }
-           }
-        }
-
-        chart.options.data[0].dataPoints = dataPoints;
-        chart.render();
-    }
+         });
+         chart.render();
+      }
     function DrawChart3()
     {
          var chart = new CanvasJS.Chart("betChart", {
@@ -244,7 +72,7 @@
                 fontSize: 20,
 	        },
 	        axisY: {
-		        title: "Values",
+		        title: "Amount",
 		        preffix: "$",
                 includeZero: false,
                 fontSize: 14,
@@ -412,7 +240,7 @@
       }
     function DrawChart7() 
     {
-      var chart = new CanvasJS.Chart("finHistory", {
+      var chart = new CanvasJS.Chart("leansChart", {
 	    animationEnabled: true,
 	    theme: "light2", // "light1", "light2", "dark1", "dark2"
 	    exportEnabled: true,
@@ -480,8 +308,8 @@
     function LoadChartsFinancial()
     {
         setTimeout(function () {
-         // DrawChart1();
-          //DrawChart2();
+          DrawChart1();
+          DrawChart2();
 
           setTimeout(function () {
               DrawChart7();   
@@ -511,73 +339,20 @@
         $("#btnSection").mouseup(function () {
             LoadCharts();
         });
-
-        FinancialAJX();
     }
 
-      function LoadCharts() {
+    function LoadCharts()
+      {
           setTimeout(function () {
-              //DrawChart1();
-              //DrawChart2();
+              DrawChart1();
+              DrawChart2();
               DrawChart3();
               DrawChart4();
               DrawChart5();
               DrawChart6();
               DrawChart7();
-          }, 15);
+          }, 10);
       }
-
-
-
-      function ThisLastWeekJava(info)
-      {
-         obj = JSON.parse(info);
-         typeFinancial = $("#inFinancialStats").val();
-
-          $("#groupTable").DataTable().clear();
-
-         for (i = 0; i < obj.length; i++)
-         {                        
-             if (i == 0) {
-                 $("#MainContent_inThisWeek").val('$ ' + obj[i]["Net"]);
-                 $("#MainContent_inAgent").text(obj[i]["Agent"]);
-                 $("#MainContent_inphone").text(obj[i]["Phone"]);
-                 $("#MainContent_inEmail").text(obj[i]["Email"]);
-
-                 if (obj[i]["Net"] < 0) {
-                     $("#MainContent_inThisWeek").css("color", "#FF3333");
-                 } else {
-                     $("#MainContent_inThisWeek").css("color", "#3DBE98");
-                 }
-             }
-             else if (i == 1)
-             {
-                 $("#MainContent_inLastWeek").val('$ ' + obj[i]["Net"]);
-
-                 if (obj[i]["Net"] < 0) {
-                     $("#MainContent_inLastWeek").css("color", "#FF3333");
-                 } else
-                 {
-                     $("#MainContent_inLastWeek").css("color", "#3DBE98");
-                 }
-             }
-
-              
-             if (i != 1)
-             {
-               $('#groupTable').dataTable().fnAddData( [
-                    obj[i]["DateRange"],
-                    obj[i]["Bets"],
-                    "$" + obj[i]["RiskAmount"],
-                    "$" + obj[i]["Net"],
-                    obj[i]["HoldPercentaje"] + "%"
-               ]);
-             }
-         }
-      }
-
-
-
 
   </script>
 
@@ -600,51 +375,6 @@
         </ol>
       </div>      
     </div>
-
-
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Solution Config
-        </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-
-           <div class="form-group">
-            <label class="col-sm-2 control-label">Solution:</label>
-                    <div class="col-sm-4">
-                         <select class="form-control chosen-select" name="inputSide" id="inSolutionCategory" runat="server">
-                           <option value="">Solution 1</option>
-                           <option value="">Solution 2</option>
-                           <option value="">Solution 3</option>
-                   </select>
-               </div>
-          </div>
-
-          <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Name:</label>
-            <input type="text" class="form-control" id="recipient-name">
-          </div>
-          
-          <div class="form-group">
-            <label for="message-text" class="col-form-label">Comments:</label>
-            <textarea class="form-control" style="resize:none; height:140px;" id="message-text"></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save</button>
-      </div>
-    </div>
-  </div>
-</div>
     
 
  <div class="contentpanel">  
@@ -659,14 +389,14 @@
                   <h3 class="panel-title">Information</h3>
                 </div>
 
-         <div class="panel-body">
-          <div class="row">
-           <div class="col-xs-12">	
-             <form runat="server">
-              <div class="form-group whites">           
+                <div class="panel-body">
+            <div class="row">
+            <div class="col-xs-12">			  
+              <div class="form-group whites">
                     <label class="col-sm-1 control-label" style="font-weight:bold;">Player:</label>
                     <div class="col-sm-2">
-                      <select id="inPlayer" runat="server"  class="form-control chosen-select" onchange="FinancialAJX();">
+                      <select id="inPlayer" runat="server"  class="form-control chosen-select">
+                        <option selected="selected" value="">TM005</option>
                       </select>
                     </div>
                   
@@ -674,7 +404,7 @@
                     <label class="col-sm-1 control-label" style="font-weight:bold;">Category:</label>
                     <div class="col-sm-1">
                       <div class="input-group">
-                          <label class="col-sm-6 control-label" id="idCategory" runat="server">....</label>
+                          <label class="col-sm-6 control-label">WiseGuy</label>
                      </div>
                    </div>
               </div>
@@ -684,18 +414,16 @@
                   <label class="col-sm-1 control-label" style="font-weight:bold;">Agent:</label>
                     <div class="col-sm-2">
                       <div class="input-group">
-                          <label class="col-sm-6 control-label" runat="server" id="inAgent">VTML</label>
+                          <label class="col-sm-6 control-label">VTML</label>
                      </div>
                    </div>
                   
-                  <label class="col-sm-3 control-label"></label>
-                  <label class="col-sm-1 control-label" style="font-weight:bold;">Reg Date:</label>
-                  <div class="col-sm-2">
-                      <div class="input-group">
-                        <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="inRegDate" runat="server" autocomplete="off" />
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                      </div>
-                  </div>
+                    <div class="col-sm-2">
+                       <div class="input-group">
+                        <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="Text3" runat="server" name="startDate" required="required" autocomplete="off" />
+                         <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                         </div>
+                     </div>
               </div>  
 
                  <%--  --%>
@@ -703,20 +431,18 @@
                   <label class="col-sm-1 control-label" style="font-weight:bold;">Phone:</label>
                     <div class="col-sm-2">
                       <div class="input-group">
-                          <label class="col-sm-6 control-label" runat="server" id="inphone">506873266743</label>
+                          <label class="col-sm-6 control-label">506873266743</label>
                      </div>
                    </div>
                   
                    <label class="col-sm-3 control-label"></label>
                    <label class="col-sm-1 control-label" style="font-weight:bold;">Email:</label>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                       <div class="input-group">
-                          <label class="col-sm-6 control-label" runat="server" id="inEmail">player123@gmail.com</label>
+                          <label class="col-sm-6 control-label">player123@gmail.com</label>
                      </div>
                    </div>
-
-              </div>   
-            </form>                              
+              </div>                                 
              </div>
            </div>
           </div>
@@ -735,59 +461,17 @@
 
       <div class="tab-content">  
         <div id="financial" class="tab-pane active">
-        <div class="row">
-           <div class="lef_col" role="main">           
-              <div class="col-md-6 col-sm-6 col-xs-12 boxes" style="height:100%;">
-                <div class="x_panel h-10 d-inline-block p-2">
-                  <div class="x_title" style="margin-bottom:20px;">
-                    <h3>Balance</h3>
-                  </div>
-                   <div class="x_content" style="height:195px; width:100%; overflow:auto;">
-                     <div id="medio" class="centerVer" style="overflow:auto;">
-                       <div class="form-group" style="border-bottom:groove;">
-                        <label class="col-sm-2 control-label">This Week:</label>
-                         <div class="col-sm-4">
-                           <div class="input-group">
-                            <input type="text" class="form-control" style="background-color:white; font-weight:bold;" placeholder="$0" value="$0" id="inThisWeek" runat="server" required="required" autocomplete="off" readonly="readonly" />
-                           </div>
-                        </div>
 
-                        <label class="col-sm-2 control-label">Bet Type:</label>
-                        <div class="col-sm-4">
-                          <select ID="inWagerTypeFinancial" runat="server" class="form-control" onchange="FinancialAJX();">
-                            <option Selected="selected" Value="">All</option>
-                            <option Value="STRAIGHT">Straight Bet</option>
-                            <option Value="TEASER">Teaser</option>
-                            <option Value="Parlay">Parlay</option>
-                          </select>
-                       </div> 
-                     </div>
-                        <div class="form-group" style="border-bottom:groove; margin-top:20px; margin-bottom:20px;">
-                             <label class="col-sm-2 control-label">Last Week:</label>
-                             <div class="col-sm-4">
-                               <div class="input-group">
-                                <input type="text" class="form-control" style="background-color:white; font-weight:bold;" placeholder="$0" id="inLastWeek" value="$2500" runat="server" required="required" autocomplete="off" readonly="readonly" />
-                               </div>
-                            </div>
-    
-                           <label class="col-sm-2 control-label">Sport:</label>
-                           <div class="col-sm-4">
-                              <select ID="inSportFinancial" runat="server"  class="form-control" onchange="FinancialAJX();">
-                              </select>
-                           </div>
-                        </div>
-                     </div>
-                   </div>
-                </div>
-              </div>
-
+           <div class="right_col" role="main">
+            <div class="row">
               <div class="col-md-6 col-sm-6 col-xs-12 boxes">
-                <div class="x_panel" style="height:241px;">
+                <div class="x_panel">
                       <div class="x_title">
                         <h3>Grouped</h3>
                       </div>
-                  <div class="x_content" style="overflow:auto;">
-                    <table class="table table-responsive table-hover tablin" id="groupTable" style="width:100%; border:none;">
+                  <div class="x_content" style="overflow-x:auto;">
+
+                    <table class="table table-responsive table-hover" style="overflow-x:auto;">
                       <thead>
                         <tr>
                           <th>Date Range</th>
@@ -797,55 +481,113 @@
                           <th>Hold%</th>
                         </tr>
                       </thead>
+                      <tbody>
+                        <tr>
+                          <th>Current Week</th>
+                          <td>15</td>
+                          <td>$1500</td>
+                          <td>$1100</td>
+                          <td>73.33%</td>
+                        </tr>
+                        <tr>
+                          <th>Last Month</th>
+                          <td>30</td>
+                          <td>$15.000</td>
+                          <td>$11.100</td>
+                          <td>74%</td>
+                        </tr>
+                        <tr>
+                          <th>Current Season</th>
+                          <td>60</td>
+                          <td>$150.000</td>
+                          <td>$110.100</td>
+                          <td>74%</td>
+                        </tr>
+                         <tr>
+                          <th>Last Season</th>
+                          <td>65</td>
+                          <td>$150.000</td>
+                          <td>$110.100</td>
+                          <td>74%</td>
+                        </tr>
+                      </tbody>
                     </table>
                   </div>
                 </div>
               </div>
+                 <div class="col-md-6 col-sm-6 col-xs-12 boxes" style="height:100%;">
+                <div class="x_panel h-10 d-inline-block p-2">
+                  <div class="x_title">
+                    <h3>Balance</h3>
+                  </div>
+                   <div class="x_content" style="height:100%; width:100%; margin-right:10px; margin-bottom:10px;">
+                     <div id="medio">
+                       <div class="form-group" style="margin-top:43px; border-bottom:groove;">
+                        <label class="col-sm-2 control-label">This Week:</label>
+                         <div class="col-sm-4">
+                           <div class="input-group">
+                            <input type="text" class="form-control" style="background-color:white; font-weight:bold;" placeholder="$0" value="$1500" id="inThisWeek" runat="server" required="required" autocomplete="off" readonly="readonly" />
+                           </div>
+                        </div>
+
+                        <label class="col-sm-2 control-label">Bet Type:</label>
+                        <div class="col-sm-4">
+                          <select ID="Select2" runat="server" class="form-control">
+                            <option Selected="selected" Value="">All</option>
+                            <option Value="STRAIGHT">Straight Bet</option>
+                            <option Value="TEASER">Teaser</option>
+                            <option Value="Parlay">Parlay</option>
+                          </select>
+                       </div> 
+                     </div>
+                        <div class="form-group" style="margin-top:30px; margin-bottom:40px; border-bottom:groove;">
+                             <label class="col-sm-2 control-label">Last Week:</label>
+                             <div class="col-sm-4">
+                               <div class="input-group">
+                                <input type="text" class="form-control" style="background-color:white; font-weight:bold;" placeholder="$0" id="Text1" value="$2500" runat="server" required="required" autocomplete="off" readonly="readonly" />
+                               </div>
+                            </div>
+    
+                           <label class="col-sm-2 control-label">Sport:</label>
+                           <div class="col-sm-4">
+                              <select ID="Select1" runat="server"  class="form-control">
+                                <option Selected="selected" Value="">All</option>
+                                <option Value="S0C">SOC</option>
+                                <option Value="NFL">NFL</option>
+                                <option Value="CFB">CFB</option>
+                                <option Value="MLB">MLB</option>
+                                <option Value="NBA">NBA</option>
+                              </select>
+                           </div>
+                        </div>
+                     </div>
+                   </div>
+                </div>
+              </div>
             </div>
         </div>
-
 
       <div style="margin-top:20px;">      
         <div class="right_col" role="main">
             <div class="row">
               <div class="col-md-6 col-sm-6 col-xs-12 boxes" style="height:100%;">
                 <div class="x_panel">
-                  <div class="form-group">
-                      <div class="x_title">
-                        <h3>Bet Type Stats</h3>
-                      </div>
-                    <div class="col-sm-3" style="right:0; top:0; position:absolute; margin-top:5px;">
-                      <select class="form-control" id="inBetTypeFinancial" onchange="DrawChart1();">
-                          <option selected="selected" value="TW">This Week</option>
-                          <option value="LW">Last Week</option>
-                          <option value="TS">This Season</option>
-                          <option value="LS">Last Season</option>
-                      </select>
-                    </div>
+                  <div class="x_title">
+                    <h3>Financial Stats</h3>
                   </div>
                   <div class="x_content" style="height:100%; margin-bottom:10px;">
-                      <div style="height:430px; width:100%;" id="chart1"></div>
+                      <div style="height:425px; width:100%;" id="chart1"></div>
                   </div>
                 </div>
               </div>
 
               <div class="col-md-6 col-sm-6 col-xs-12 boxes" style="height:100%;">
                 <div class="x_panel h-10 d-inline-block p-2">
-                  <div class="form-group">
-                      <div class="x_title">
-                        <h3>Financial Stats</h3>
-                      </div>
-                    <div class="col-sm-3" style="right:0; top:0; position:absolute; margin-top:5px;">
-                      <select class="form-control" onchange="DrawChart2();" id="inFinancialStats">
-                         <option Selected="selected" Value="BET">Bets</option>
-                         <option Value="RISK">Risk</option>
-                         <option Value="NET">Net</option>
-                         <option Value="HOLD">Hold%</option>
-                      </select>
-                    </div>
+                  <div class="x_title">
+                    <h3>Type Stats</h3>
                   </div>
                   <div class="x_content" style="height:100%; width:100%; margin-right:10px; margin-bottom:10px;">
-                      <div style="height:430px; width:100%;" id="chart2"></div>
+                      <div style="height:425px; width:100%;" id="chart2"></div>
                   </div>
                 </div>
               </div>
@@ -856,20 +598,11 @@
         <div class="row">
                 <div class="col-md-12 col-sm-6 col-xs-12 boxes" style="height:100%; width:100%; margin-top:10px;">
                   <div class="x_panel">
-                   <div class="form-group">
-                       <div class="x_title">
-                          <h3>Chart</h3>
-                        </div>
-                     <div class="col-sm-2" style="right:0; top:0; position:absolute; margin-top:10px;">
-                       <select class="form-control" onchange="DrawChart7();" id="inDateRangeFinancial">
-                           <option selected="selected" value="MMMM YYYY">Month</option>
-                           <option selected="selected" value="DD MMMM">Week</option>
-                           <option selected="selected" value="DD MMMM YYYY">Day</option>
-                       </select>
-                    </div>
-                   </div>
+                   <div class="x_title">
+                  <h3>Chart</h3>
+                  </div>
                   <div class="x_content">
-                     <div style="height:350px; width:100%; margin-bottom:10px; margin-right:10px;" id="finHistory"></div>
+                     <div style="height:350px; width:100%; margin-bottom:10px; margin-right:10px;" id="leansChart"></div>
                  </div>
              </div>
            </div>
@@ -879,9 +612,14 @@
        </div>
         <div id="menu2" class="tab-pane fade" style="width:100%;">
            <div class="form-group">
-
                <div class="col-sm-2">
-                 <select ID="inSportBets" runat="server" class="form-control chosen-select">
+                 <select ID="Select3" runat="server" class="form-control chosen-select">
+                     <option Selected="selected" Value="">All Sports</option>
+                        <option Value="S0C">SOC</option>
+                        <option Value="NFL">NFL</option>
+                        <option Value="CFB">CFB</option>
+                        <option Value="MLB">MLB</option>
+                        <option Value="NBA">NBA</option>
                   </select>
               </div>
 
@@ -901,176 +639,10 @@
             <div class="row">
               <div class="col-md-6 col-sm-6 col-xs-12 boxes" style="height:100%;">
                 <div class="x_panel h-10 d-inline-block p-2">
-                  <div class="form-group">
-                      <div class="x_title">
-                        <h4>Bet Stats</h4>
-                      </div>
-
-                      <div class="col-sm-3" style="right:0; top:0; position:absolute; margin-top:5px;">
-                      <select class="form-control" onchange="DrawChart1();">
-                          <option selected="selected" value="">Today</option>
-                          <option value="">Yesterday</option>
-                          <option value="">This Week</option>
-                          <option value="">Last Week</option>
-                          <option value="">This Season</option>
-                          <option value="">Last Season</option>
-                      </select>
-                    </div>
-                  </div>
-
-                 
-                  <div class="x_content" style="height:100%; overflow-x:auto;">
-                   <table class="table table-responsive table-hover" style="overflow-x:auto;">
-                      <thead>
-                        <tr>
-                          <th>Action</th>
-                          <th>Percentage</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <th>Move Line</th>
-                          <td>12</td>
-                        </tr>
-                        <tr>
-                          <th>Time Pattern</th>
-                          <td>Curve</td>
-                        </tr>
-                        <tr>
-                          <th>Beat the Line</th>
-                          <td>15</td>
-                        </tr>
-                        <tr>
-                          <th>Scalp Cris</th>
-                          <td>40%</td>
-                        </tr>
-                        <tr>
-                          <th>Scalp Pinni</th>
-                          <td>65%</td>
-                        </tr>
-                        <tr>
-                          <th>Scalp 5Dimes</th>
-                          <td>34%</td>
-                        </tr>
-                        <tr>
-                          <th>Scalp PPH</th>
-                          <td>78%</td>
-                        </tr>
-                        <tr>
-                          <th>Scalp Jazz</th>
-                          <td>18%</td>
-                        </tr>
-                        <tr>
-                          <th>Over all Scalp</th>
-                          <td>68%</td>
-                        </tr>
-                         <tr>
-                          <th>Syndicate</th>
-                          <td>Yes</td>
-                        </tr>
-                          <tr>
-                          <th>Adjusted</th>
-                          <td>75%</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-6 col-sm-6 col-xs-12 boxes" style="height:100%;">
-                <div class="x_panel h-10 d-inline-block p-2">
-                <div class="form-group">
-              
-                 <h4>Stats</h4>
-
-                <div class="col-sm-3" style="float:right; position:absolute;top:0;right:0; margin-top:5px; margin-bottom:5px;">
-                 <select ID="Select5" runat="server" class="form-control" onchange="DrawChart3();">
-                     <option Selected="selected" Value="">Bets</option>
-                     <option Value="">Risk</option>
-                     <option Value="">Net</option>
-                     <option Value="">Hold%</option>
-                     <option Value="">Win%</option>
-                  </select>
-                </div>
-
-                </div>            
-                  <div class="x_content" style="height:100%; width:100%; margin-right:10px; margin-bottom:10px;">
-                      <div style="height:462px; width:100%;" id="betChart"></div>
-                  </div>
-                </div>
-              </div>
-
-                <%-- section --%>
-
-              <div class="col-md-6 col-sm-6 col-xs-12 boxes" style="margin-top:10px;">
-                <div class="x_panel">
-                    <div class="form-group">
-                      <div class="x_title">
-                        <h4>Parlay/Teaser</h4>
-                      </div>
-
-                    <div class="col-sm-3" style="right:0; top:0; position:absolute; margin-top:5px; margin-bottom:0">
-                      <select class="form-control" style="height:35px;">
-                          <option selected="selected" value="">Today</option>
-                          <option value="">Yesterday</option>
-                          <option value="">This Week</option>
-                          <option value="">Last Week</option>
-                          <option value="">This Season</option>
-                          <option value="">Last Season</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="x_content" style="overflow-x:auto;">
-                    <table class="table table-responsive table-hover" style="overflow-x:auto;">
-                      <thead>
-                        <tr>
-                          <th>Wager Type</th>
-                          <th>Bets</th>
-                          <th>Risk</th>
-                          <th>Net</th>
-                          <th>Hold%</th>
-                          <th>Win%</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <th>Parlay</th>
-                          <td>15</td>
-                          <td>$1500</td>
-                          <td>$1100</td>
-                          <td>73.33%</td>
-                          <td>43.33%</td>
-                        </tr>
-                        <tr>
-                          <th>Teaser</th>
-                          <td>30</td>
-                          <td>$15.000</td>
-                          <td>$11.100</td>
-                          <td>74%</td>
-                          <td>33.33%</td>
-                        </tr>
-                         <tr>
-                          <th>Overall</th>
-                          <td>45</td>
-                          <td>$16.500</td>
-                          <td>$12.100</td>
-                          <td>67%</td>
-                          <td>73.33%</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-
-
-              <div class="col-md-6 col-sm-6 col-xs-12 boxes" style="height:100%; margin-top:10px;">
-                <div class="x_panel h-10 d-inline-block p-2">
                   <div class="x_title">
                     <h4>Bet Stats</h4>
                   </div>
-                  <div class="x_content" style="height:100%; overflow-x:auto; overflow-y:auto; margin-bottom:5px;">
+                  <div class="x_content" style="height:100%; overflow-x:auto;">
                    <table class="table table-responsive table-hover" style="overflow-x:auto;">
                       <thead>
                         <tr>
@@ -1109,60 +681,133 @@
                         </tr>
                       </tbody>
                     </table> 
-                  </div>
-                </div>
-              </div>
-
-
-
-
-
-             <div class="col-md-12 col-sm-6 col-xs-12 boxes" style="height:100%; margin-top:10px;">
-                <div class="x_panel h-10 d-inline-block p-2">
-                  <div class="x_title">
-                    <h4>Solutions</h4>
-                  </div>
-                   <div class="x_content" style="height:100%; width:100%; margin-right:10px; margin-bottom:10px;">                
-
-                     <table class="table table-responsive table-hover" style="overflow-x:auto;">
+                   <h4>Pro Play</h4>
+                   <table class="table table-responsive table-hover" style="overflow-x:auto;">
                       <thead>
                         <tr>
-                          <th>#</th>
-                          <th>Solution</th>
-                          <th>Comments</th>
-                          <th>Edit</th>
-                          <th>Remove</th>
+                          <th>Action</th>
+                          <th>Percentage</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
-                          <th>1</th>
-                          <td>Solution Name</td>
-                          <td>comments...</td>                         
-                          <td><button class="btn btn-warning glyphicon glyphicon-pencil"></button></td>
-                          <td><button class="btn btn-danger glyphicon glyphicon-trash"></button></td>
+                          <th>Move Line</th>
+                          <td>12</td>
                         </tr>
                         <tr>
-                          <th>2</th>
-                          <td>Solution Name</td>
-                          <td>comments...</td>                         
-                          <td><button class="btn btn-warning glyphicon glyphicon-pencil"></button></td>
-                          <td><button class="btn btn-danger glyphicon glyphicon-trash"></button></td>
+                          <th>Time Pattern</th>
+                          <td>Curve</td>
+                        </tr>
+                        <tr>
+                          <th>Beat the Line</th>
+                          <td>15</td>
+                        </tr>
+                        <tr>
+                          <th>Over all Scalp</th>
+                          <td>60%</td>
+                        </tr>
+                         <tr>
+                          <th>Syndicate</th>
+                          <td>Yes</td>
+                        </tr>
+                          <tr>
+                          <th>Adjusted</th>
+                          <td>75%</td>
                         </tr>
                       </tbody>
                     </table>
+                  </div>
+                </div>
+              </div>
 
-                    <div class="form-group">
-                      <div class="col-sm-1" style="float:right;">
-                          <button class="btn btn-block btn-success glyphicon glyphicon-plus" data-toggle="modal" data-target="#exampleModal" data-placement="top" title="add new solution"></button>
-                      </div>                    
-                    </div>
+              <div class="col-md-6 col-sm-6 col-xs-12 boxes" style="height:100%;">
+                <div class="x_panel h-10 d-inline-block p-2">
+                <div class="form-group">
+              
+                    <h4>Stats</h4>
 
-                   </div>
+                <div class="col-sm-3" style="float:right; position:absolute;top:0;right:0; margin-top:5px; margin-bottom:5px;">
+                 <select ID="Select5" runat="server" class="form-control">
+                     <option Selected="selected" Value="">Bets</option>
+                  </select>
+                </div>
+
+                </div>
+            
+                  <div class="x_content" style="height:100%; width:100%; margin-right:10px; margin-bottom:10px;">
+                      <div style="height:482px; width:100%;" id="betChart"></div>
+                  </div>
                 </div>
               </div>
 
 
+
+              <div class="col-md-6 col-sm-6 col-xs-12 boxes">
+                <div class="x_panel">
+                      <div class="x_title">
+                        <h4>Parlay/Teaser</h4>
+                      </div>
+                  <div class="x_content" style="overflow-x:auto;">
+                    <table class="table table-responsive table-hover" style="overflow-x:auto;">
+                      <thead>
+                        <tr>
+                          <th>Wager Type</th>
+                          <th>Bets</th>
+                          <th>Risk</th>
+                          <th>Net</th>
+                          <th>Hold%</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th>Parlay</th>
+                          <td>15</td>
+                          <td>$1500</td>
+                          <td>$1100</td>
+                          <td>73.33%</td>
+                        </tr>
+                        <tr>
+                          <th>Teaser</th>
+                          <td>30</td>
+                          <td>$15.000</td>
+                          <td>$11.100</td>
+                          <td>74%</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+
+                 <div class="col-md-6 col-sm-6 col-xs-12 boxes" style="height:100%;">
+                <div class="x_panel h-10 d-inline-block p-2">
+                  <div class="x_title">
+                    <h4 class="negri">Solutions</h4>
+                  </div>
+                   <div class="x_content" style="height:100%; width:100%; margin-right:10px; margin-bottom:10px;">                
+                     <div class="form-group">
+                         <label class="col-sm-2 control-label">Solution:</label>
+                         <div class="col-sm-4">
+                           <select ID="Select6" runat="server" class="form-control">
+                               <option Selected="selected" Value="">Item 1</option>
+                               <option Value="">Item 2</option>
+                               <option Value="">Item 3</option>
+                               <option Value="">Item 4</option>
+                           </select>
+                        </div>
+                     </div>
+
+                       <label class="col-sm-2 control-label">Notes:</label>
+                       <div class="col-sm-9">
+                           <div class="input-group" style="width:100%; margin-bottom:10px;">
+                            <textarea class="form-control" style="background-color:white; resize:none; overflow-y:auto; height:75px;" id="Text2" runat="server"></textarea>
+                           </div>
+                       </div>
+
+                   </div>
+                </div>
+              </div>
 
             </div>
         </div>
@@ -1171,7 +816,13 @@
 
              <div class="form-group">
                <div class="col-sm-2">
-                 <select ID="inSPortToday" runat="server" class="form-control chosen-select">
+                 <select ID="Select8" runat="server" class="form-control chosen-select">
+                     <option Selected="selected" Value="">All Sports</option>
+                        <option Value="S0C">SOC</option>
+                        <option Value="NFL">NFL</option>
+                        <option Value="CFB">CFB</option>
+                        <option Value="MLB">MLB</option>
+                        <option Value="NBA">NBA</option>
                   </select>
               </div>
 
@@ -1274,7 +925,13 @@
 
 
                <div class="col-sm-2">
-                 <select ID="inSportLeans" runat="server" class="form-control chosen-select">
+                 <select ID="Select7" runat="server" class="form-control chosen-select">
+                     <option Selected="selected" Value="">All Sports</option>
+                        <option Value="S0C">SOC</option>
+                        <option Value="NFL">NFL</option>
+                        <option Value="CFB">CFB</option>
+                        <option Value="MLB">MLB</option>
+                        <option Value="NBA">NBA</option>
                   </select>
               </div>
 
