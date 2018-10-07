@@ -236,8 +236,6 @@
               "bInfo": false,
               "bSort": false,
           });
-
-
       });
 
       $(document).ready(function () {

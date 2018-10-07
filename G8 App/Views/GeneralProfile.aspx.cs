@@ -218,7 +218,7 @@ namespace G8_App.Views
             if(profList != null)
             {
                 ObservableCollection<csSummary> data = new ObservableCollection<csSummary>();
-                int hold,minNet, bets, lineMov, scalpCris, scalpPPH, scalpPinni, scalpJaz, scalp5Dimes, maxNet,beatLine;
+                double hold,minNet, bets, lineMov, scalpCris, scalpPPH, scalpPinni, scalpJaz, scalp5Dimes, maxNet,beatLine;
                 double winP;
 
                 foreach (var i in profList)

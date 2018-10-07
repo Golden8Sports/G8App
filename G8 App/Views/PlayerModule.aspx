@@ -27,25 +27,10 @@
 
 </script>--%>
 
-
-
-
     <style>
-
-        table.dataTable thead th {
-          border-bottom: 0;
-          border-bottom:groove;
-        }
-
-        table.dataTable tbody td{
-          border-top: 0;      
-        }
-
-        .table
-        {
-            border:none;
-        }
-
+        table.dataTable thead th {border-bottom: 0; border-bottom:2px groove; background-color:white;}
+        table.dataTable tbody td{border-top: 0;}
+        .table{border:none;}
     </style>
     
   <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
@@ -53,14 +38,313 @@
     var obj;
     var obj2;
     var typeFinancial;
+    var page = 1;
 
+    //Bets
+    var objB;
+    var objPT;
+    var objBetStats;
 
-      function FinancialAJX()
+   //Today
+     var objT;
+     var objTP;
+    
+    function NavigationMain()
+      {
+          if (page == 1) {
+              FinancialAJX();
+              BetsAJX();
+              TodayAJX();
+          } else if (page == 2) {
+              BetsAJX();
+              FinancialAJX();
+              TodayAJX();
+          } else if (page == 4)
+          {
+              TodayAJX();
+              BetsAJX();
+              FinancialAJX();
+          }
+      }
+
+    function FinancialAJX()
       {
           LastThisWeekAJX();
           RangeSummaryAJX();
       }
 
+    function BetsAJX()
+     {
+          ProPlayAJX();
+          ChartBetsAJX();
+          ParlayTeaserAJX();
+          BetStatsAJX();        
+    }
+
+    function TodayAJX()
+    {
+        TodayChartPlayAJX();
+        TodayChartAJX();      
+        TableTodayAJX();      
+    }
+
+    function ProPlayAJX()
+    {       
+        var sport = $("#MainContent_inSportBets").val();
+        var range = $("#inProPlay").val();
+        var player = $("#MainContent_inPlayer").val();
+
+        var parameter = { 'range': range,'player': player, 'sport': sport }
+        $.ajax({                    
+           type: 'POST',
+           url: 'PlayerModule.aspx/ProPlay',
+           data: JSON.stringify(parameter),
+           contentType: 'application/json; charset=utf-8',
+           dataType: 'json',
+           success: function (data)
+           {
+               $("#tableProPlay").DataTable().clear();
+               var ob = JSON.parse(data.d);
+               for (var i = 0; i < ob.length; i++)
+               {
+                   $('#tableProPlay').dataTable().fnAddData([ // moveline
+                       "Move Line",
+                       ob[i]["MoveLine"] + "% " + ob[i]["ContMoveLine"] + "/" + ob[i]["Bets"]                     
+                    ]);
+
+                    $('#tableProPlay').dataTable().fnAddData( [ //time pattern
+                        "Time Pattern",
+                        "Curve"                     
+                    ]);
+
+                   $('#tableProPlay').dataTable().fnAddData( [  //beat line
+                        "Beat Line",
+                        ob[i]["BeatLine"] + "% " + ob[i]["ContBeatLine"] + "/" + ob[i]["Bets"]                     
+                   ]);
+
+                   $('#tableProPlay').dataTable().fnAddData( [
+                        "Scalp Cris",
+                        ob[i]["ScalpingCris"]  + "% " + ob[i]["ContCris"] + "/" + ob[i]["Bets"]                    
+                   ]);
+
+                   $('#tableProPlay').dataTable().fnAddData( [
+                        "Scalp 5Dimes",
+                        ob[i]["Scalping5Dimes"] + "% " + ob[i]["Cont5Dimes"] + "/" + ob[i]["Bets"]                     
+                   ]);
+
+                   $('#tableProPlay').dataTable().fnAddData( [
+                        "Scalp Pinni",
+                        ob[i]["ScalpingPinni"] + "% " + ob[i]["ContPinni"] + "/" + ob[i]["Bets"]                    
+                   ]);
+
+                   $('#tableProPlay').dataTable().fnAddData( [
+                        "Scalp Jazz",
+                         ob[i]["ScalpingJazz"] + "% " + ob[i]["ContJazz"] + "/" + ob[i]["Bets"]                     
+                   ]);
+
+                   $('#tableProPlay').dataTable().fnAddData([
+                       "Scalp PPH",
+                        ob[i]["ScalpingPPH"] + "% " + ob[i]["ContPPH"] + "/" + ob[i]["Bets"]                   
+                   ]);
+
+                   $('#tableProPlay').dataTable().fnAddData( [
+                        "Overall Scalp",
+                        ob[i]["OverallScalp"] + "%"                     
+                   ]);
+
+
+                   $('#tableProPlay').dataTable().fnAddData( [
+                        "Syndicate",
+                        "No"                     
+                   ]);
+
+
+                   $('#tableProPlay').dataTable().fnAddData( [
+                        "Adjusted",
+                        "0%"                     
+                   ]);
+
+               }
+
+               document.getElementById("tableProPlay_length").style.display = "none";
+               document.getElementById("tableProPlay_filter").style.display = "none";
+               document.getElementById("tableProPlay_info").style.display = "none";
+               document.getElementById("tableProPlay_paginate").style.display = "none";
+           },
+           error: function (data)
+           {
+              alert('No Data' + data.statusText);
+           }
+        });
+    }
+    function TableTodayAJX()
+    {       
+        var sport = $("#MainContent_inSportBets").val();
+        var player = $("#MainContent_inPlayer").val();
+
+        var parameter = { 'player': player, 'sport': sport }
+        $.ajax({                    
+           type: 'POST',
+           url: 'PlayerModule.aspx/TodayTable',
+           data: JSON.stringify(parameter),
+           contentType: 'application/json; charset=utf-8',
+           dataType: 'json',
+           success: function (data)
+           {
+               $("#tableToday").DataTable().clear();
+               var ob = JSON.parse(data.d);
+               for (var i = 0; i < ob.length; i++)
+               {
+                   $('#tableToday').dataTable().fnAddData([ // moveline
+                       ob[0]["Player"],
+                       ob[0]["RiskAmount"],
+                       ob[0]["Bets"],
+                       ob[0]["MoveLine"],
+                       ob[0]["BeatLine"],
+                       ob[0]["OverallScalp"],
+                       "0",
+                   ]);
+               }
+               document.getElementById("tableToday_length").style.display = "none";
+               document.getElementById("tableToday_filter").style.display = "none";
+               document.getElementById("tableToday_info").style.display = "none";
+               document.getElementById("tableToday_paginate").style.display = "none";
+           },
+           error: function (data)
+           {
+              alert('No Data' + data.statusText);
+           }
+        });
+    }
+    function TodayChartAJX()
+    {
+        var sport = $("#MainContent_inSPortToday").val();
+        var player = $("#MainContent_inPlayer").val();
+        var parameter = { 'player': player, 'sport': sport }
+        $.ajax({                    
+           type: 'POST',
+           url: 'PlayerModule.aspx/TodayChart',
+           data: JSON.stringify(parameter),
+           contentType: 'application/json; charset=utf-8',
+           dataType: 'json',
+           success: function (data)
+           {
+               objT = JSON.parse(data.d);
+               DrawChart6();
+           },
+           error: function (data)
+           {
+              alert('No Data: ' + data.statusText);
+           }
+        });
+    }
+    function BetStatsAJX()
+    { 
+        var sport = $("#MainContent_inSportBets").val();
+        var wagerType = $("#MainContent_inWagerTypeBets").val();
+        var player = $("#MainContent_inPlayer").val();
+
+        var parameter = { 'player': player, 'wagerType': wagerType, 'sport': sport }
+        $.ajax({                    
+           type: 'POST',
+           url: 'PlayerModule.aspx/BetStats',
+           data: JSON.stringify(parameter),
+           contentType: 'application/json; charset=utf-8',
+           dataType: 'json',
+           success: function (data)
+           {     
+               $("#talbeBetStats").DataTable().clear();
+               objBetStats = JSON.parse(data.d);
+               for (var i = 0; i < objBetStats.length; i++)
+               {
+                    $('#talbeBetStats').dataTable().fnAddData( [
+                        objBetStats[i]["DateRange"],
+                        objBetStats[i]["WagerPlay"],
+                        objBetStats[i]["Bets"],
+                        "$" + objBetStats[i]["RiskAmount"],
+                        "$" + objBetStats[i]["Net"],
+                        objBetStats[i]["HoldPercentaje"] + "%",
+                        objBetStats[i]["WinPercentaje"] + "%"                       
+                    ]);
+               }
+
+               document.getElementById("talbeBetStats_length").style.display = "none";
+               document.getElementById("talbeBetStats_filter").style.display = "none";
+               document.getElementById("talbeBetStats_paginate").style.display = "none";
+               document.getElementById("talbeBetStats_info").style.display = "none";
+           },
+           error: function (data)
+           {
+              alert('No Data' + data.statusText);
+           }
+        });
+      }
+    function ParlayTeaserAJX()
+    {       
+        var sport = $("#MainContent_inSportBets").val();
+        var range = $("#inParlayTeaser").val();
+        var player = $("#MainContent_inPlayer").val();
+
+        var parameter = { 'player': player, 'range': range, 'sport': sport }
+        $.ajax({                    
+           type: 'POST',
+           url: 'PlayerModule.aspx/ParlayTeaser',
+           data: JSON.stringify(parameter),
+           contentType: 'application/json; charset=utf-8',
+           dataType: 'json',
+           success: function (data)
+           {
+               $("#ParTeaTable").DataTable().clear();
+               objPT = JSON.parse(data.d);
+               for (var i = 0; i < objPT.length; i++)
+               {
+                    $('#ParTeaTable').dataTable().fnAddData( [
+                        objPT[i]["WagerType"],
+                        objPT[i]["Bets"],
+                        "$" + objPT[i]["RiskAmount"],
+                        "$" + objPT[i]["Net"],
+                        objPT[i]["HoldPercentaje"] + "%",
+                        objPT[i]["WinPercentaje"] + "%"                       
+                    ]);
+               }
+
+               document.getElementById("ParTeaTable_length").style.display = "none";
+               document.getElementById("ParTeaTable_filter").style.display = "none";
+               document.getElementById("ParTeaTable_info").style.display = "none";
+               document.getElementById("ParTeaTable_paginate").style.display = "none";
+
+               DrawChart9();
+           },
+           error: function (data)
+           {
+              alert('No Data' + data.statusText);
+           }
+        });
+    }
+    function ChartBetsAJX()
+    {       
+        var sport = $("#MainContent_inSportBets").val();
+        var wagerType = $("#MainContent_inWagerTypeBets").val();
+        var player = $("#MainContent_inPlayer").val();
+
+        var parameter = { 'player': player, 'wagertype': wagerType, 'sport': sport }
+        $.ajax({                    
+           type: 'POST',
+           url: 'PlayerModule.aspx/BetInfo',
+           data: JSON.stringify(parameter),
+           contentType: 'application/json; charset=utf-8',
+           dataType: 'json',
+           success: function (data)
+           {
+               objB = JSON.parse(data.d);
+               DrawChart3();
+           },
+           error: function (data)
+           {
+              alert('No Data' + data.statusText);
+           }
+        });
+      }
     function LastThisWeekAJX()
     {
         
@@ -91,10 +375,6 @@
            }
         });
     }
-
-
-
-
     function RangeSummaryAJX()
     {       
         //Spinner(1);
@@ -112,23 +392,41 @@
            dataType: 'json',
            success: function (data)
            {
-              //ThisLastWeekJava(data.d);
-               //DrawChart2();
-               //DrawChart1();
-               //Spinner(2);
+               obj2 = JSON.parse(data.d);
+               DrawChart4();
            },
            error: function (data)
            {
               alert('No Data' + data.statusText);
            }
         });
+      }
+    function TodayChartPlayAJX()
+    {
+        var sport = $("#MainContent_inSPortToday").val();
+        var player = $("#MainContent_inPlayer").val();
+        var type = $("#MainContent_inTypeToday").val();
+
+        var parameter = { 'player': player, 'sport': sport, 'wagerType': type }
+        $.ajax({                    
+           type: 'POST',
+           url: 'PlayerModule.aspx/TodayPlay',
+           data: JSON.stringify(parameter),
+           contentType: 'application/json; charset=utf-8',
+           dataType: 'json',
+           success: function (data)
+           {
+               objTP = JSON.parse(data.d);
+               DrawChart5();
+           },
+           error: function (data)
+           {
+              alert('No Data: ' + data.statusText);
+           }
+        });
     }
-
-
-
-
     function DrawChart1()
-    {      
+    {
          var chart = new CanvasJS.Chart("chart1", {
 	        theme: "light2", // "light1", "light2", "dark1", "dark2"
 	        animationEnabled: true,
@@ -180,8 +478,7 @@
 
         chart.options.data[0].dataPoints = dataPoints;
         chart.render();
-    }
-   
+    }   
     function DrawChart2()
     {
         typeFinancial = $("#inFinancialStats").val();
@@ -193,7 +490,7 @@
                 fontSize: 20,
 	        },
 	        axisY: {
-		        title: "Amount",
+		        title:typeFinancial,
 		        //prefix: "$",
                 includeZero: false,
                 fontSize: 5,
@@ -212,7 +509,7 @@
         {
            if (i != 1)
            {
-               if (typeFinancial == "BET")
+               if (typeFinancial == "BETS")
                {
                   dataPoints.push({ label: obj[i]["DateRange"], y: obj[i]["Bets"] })
 
@@ -228,6 +525,10 @@
                {
                   dataPoints.push({ label: obj[i]["DateRange"], y: obj[i]["RiskAmount"] })
                }
+               else if (typeFinancial == "WIN")
+               {
+                  dataPoints.push({ label: obj[i]["DateRange"], y: obj[i]["WinPercentaje"] });
+               }
            }
         }
 
@@ -236,6 +537,8 @@
     }
     function DrawChart3()
     {
+        var typeBet = $("#MainContent_inBetsChartFilter").val();
+
          var chart = new CanvasJS.Chart("betChart", {
 	        animationEnabled: true,
 	        theme: "light2", // "light1", "light2", "dark1", "dark2"
@@ -244,7 +547,7 @@
                 fontSize: 20,
 	        },
 	        axisY: {
-		        title: "Values",
+		        title: typeBet,
 		        preffix: "$",
                 includeZero: false,
                 fontSize: 14,
@@ -255,92 +558,109 @@
 	        },
 	        data: [{
 		        type: "column",
-		        yValueFormatString: "$#,##0.0#",
-		        dataPoints: [
-                    { label: "Current Week", y: 40000 },	
-			        { label: "Current Season", y: 35000},	
-                    { label: "Over All", y: 30000},
-		        ]
+                yValueFormatString: "#,##0.0#",
+                dataPoints: []
 	        }]
-         });
-         chart.render();
+        });
+
+
+        var dataPoints = [];
+        for (var i = 0; i < objB.length; i++)
+        {
+            if (typeBet == "BETS")
+            {
+               dataPoints.push({ label: objB[i]["DateRange"], y: objB[i]["Bets"] })
+
+            } else if (typeBet == "NET")
+            {
+                dataPoints.push({ label: objB[i]["DateRange"], y: objB[i]["Net"] })
+
+             }else if (typeBet == "HOLD")
+             {
+                dataPoints.push({ label: objB[i]["DateRange"], y: objB[i]["HoldPercentaje"] })
+
+             }else if (typeBet == "RISK")
+             {
+                dataPoints.push({ label: objB[i]["DateRange"], y: objB[i]["RiskAmount"] })
+
+             }else if (typeBet == "WIN")
+             {
+                dataPoints.push({ label: objB[i]["DateRange"], y: objB[i]["WinPercentaje"] })
+             }
+        }
+
+        chart.options.data[0].dataPoints = dataPoints;
+        chart.render();
       }
     function DrawChart4() 
     {
-        var chart = new CanvasJS.Chart("lineChart", {
+        var chart = new CanvasJS.Chart("finHistory", {
 	        animationEnabled: true,
-	        theme: "light2",
+            theme: "light2",
+            zoomEnabled:true,
 	        title:{
-                text: "Player's Stats Between Date Range",
-                fontSize: 20,
+                text: "Player's History",
+                fontSize: 18,
 	        },
 	        axisX:{
-		        valueFormatString: "DD MMM",
+		        valueFormatString: $("#inDateRangeFinancial").val(),
 		        crosshair: {
 			        enabled: true,
-		        }
+                },
+                fontSize: 8,
 	        },
 	        axisY: {
                 title: "Values",
                 fontSize: 16,
 		        crosshair: {
 			        enabled: true
-		        }
+                },
+                includeZero: false
 	        },  
 	        legend:{
 		        cursor:"pointer",
 		        verticalAlign: "bottom",
 		        horizontalAlign: "center",
 		        dockInsidePlotArea: true,
-		        itemclick: toogleDataSeries
+                itemclick: toogleDataSeries,
+                fontSize: 20,
 	        },
 	        data: [{
 		        type: "line",
 		        showInLegend: true,
-		        name: "Net",
+                name: "Net",
+                toolTipContent: "<strong>{x}</strong> </br> {name}:  ${y}</br> Hold:  {z}%",
 		        markerType: "square",
-		        xValueFormatString: "DD MMM, YYYY",
-		        color: "#F08080",
-		        dataPoints: [
-			        { x: new Date(2017, 0, 3), y: 650 },
-			        { x: new Date(2017, 0, 4), y: 700 },
-			        { x: new Date(2017, 0, 5), y: 710 },
-			        { x: new Date(2017, 0, 6), y: 658 },
-			        { x: new Date(2017, 0, 7), y: 734 },
-			        { x: new Date(2017, 0, 8), y: 963 },
-			        { x: new Date(2017, 0, 9), y: 847 },
-			        { x: new Date(2017, 0, 10), y: 853 },
-			        { x: new Date(2017, 0, 11), y: 869 },
-			        { x: new Date(2017, 0, 12), y: 943 },
-			        { x: new Date(2017, 0, 13), y: 970 },
-			        { x: new Date(2017, 0, 14), y: 869 },
-			        { x: new Date(2017, 0, 15), y: 890 },
-			        { x: new Date(2017, 0, 16), y: 930 }
-		        ]
+		        xValueFormatString: $("#inDateRangeFinancial").val(),
+                color: "#F08080",
+                lineDashType: "dash",
+		        dataPoints: []
 	        },
 	        {
 		        type: "line",
 		        showInLegend: true,
-		        name: "Amount",
-		        lineDashType: "dash",
-		        dataPoints: [
-			        { x: new Date(2017, 0, 3), y: 510 },
-			        { x: new Date(2017, 0, 4), y: 560 },
-			        { x: new Date(2017, 0, 5), y: 540 },
-			        { x: new Date(2017, 0, 6), y: 558 },
-			        { x: new Date(2017, 0, 7), y: 544 },
-			        { x: new Date(2017, 0, 8), y: 693 },
-			        { x: new Date(2017, 0, 9), y: 657 },
-			        { x: new Date(2017, 0, 10), y: 663 },
-			        { x: new Date(2017, 0, 11), y: 639 },
-			        { x: new Date(2017, 0, 12), y: 673 },
-			        { x: new Date(2017, 0, 13), y: 660 },
-			        { x: new Date(2017, 0, 14), y: 562 },
-			        { x: new Date(2017, 0, 15), y: 643 },
-			        { x: new Date(2017, 0, 16), y: 570 }
-		        ]
+                name: "Risk",
+                toolTipContent: "<strong>{x}</strong> </br> {name}:  ${y}",
+                lineDashType: "dash",
+                xValueFormatString: $("#inDateRangeFinancial").val(),
+		        dataPoints: []
 	        }]
         });
+
+
+        var dataPoints1 = [];
+        var dataPoints2 = [];
+
+
+        for (var i = 0; i < obj2.length; i++)
+        {
+            dataPoints1.push({ x: new Date(obj2[i]["Y"], obj2[i]["M"], obj2[i]["D"]), y: obj2[i]["Net"], z: obj2[i]["HoldPercentaje"] });
+            dataPoints2.push({ x: new Date(obj2[i]["Y"], obj2[i]["M"], obj2[i]["D"]), y: obj2[i]["RiskAmount"] });
+        }
+
+        chart.options.data[0].dataPoints = dataPoints1;
+        chart.options.data[1].dataPoints = dataPoints2;
+
         chart.render();
 
         function toogleDataSeries(e){
@@ -354,11 +674,118 @@
     }
     function DrawChart5()
     {
+        var type = $("#inPlayToday").val().trim();
+        //alert(type);
+        var tool = (type == "BETS") ? "<b>{label}</b>: {y} bets" : "<b>{label}</b>: ${y}";
+        var tool2 = (type == "BETS") ? "{label}: {y} bets" : "{label}: ${y}";
+
+        if (type != "BETS")
+        {
+            tool = (type == "HOLD" || type == "WIN") ? "<b>{label}</b>: {y}%" : "<b>{label}</b>: ${y}";
+            tool2 = (type == "HOLD" || type == "WIN") ? "{label}: {y}%" : "{label}: ${y}";
+        }
+         
+
          var chart = new CanvasJS.Chart("todayChart", {
 	        theme: "light2", // "light1", "light2", "dark1", "dark2"
 	        animationEnabled: true,
 	        title: {
                 text: "Actions",
+                fontSize: 20,
+	        },
+	        data: [{
+		        type: "pie",
+		        startAngle: 25,
+		        toolTipContent: tool,
+		        showInLegend: "true",
+		        legendText: "{label}",
+		        indexLabelFontSize: 16,
+		        indexLabel: tool2,
+		        dataPoints: []
+	        }]
+        });
+
+        
+        var dataPoints = [];
+        for (var i = 0; i < objTP.length; i++)
+        {
+            if (type == "BETS") {
+                dataPoints.push({ y: objTP[i]["Bets"], label: objTP[i]["WagerPlay"] });
+            } else if(type == "RISK")
+            {
+                dataPoints.push({ y: objTP[i]["RiskAmount"], label: objTP[i]["WagerPlay"] });
+            }else if(type == "NET")
+            {
+                dataPoints.push({ y: objTP[i]["Net"], label: objTP[i]["WagerPlay"] });
+            }else if(type == "HOLD")
+            {
+                dataPoints.push({ y: objTP[i]["HoldPercentaje"], label: objTP[i]["WagerPlay"] });
+            }else if(type == "WIN")
+            {
+                dataPoints.push({ y: objTP[i]["WinPercentaje"], label: objTP[i]["WagerPlay"] });
+            }
+        }
+            
+        chart.options.data[0].dataPoints = dataPoints;
+        chart.render();
+    }
+    function DrawChart6() //Today Chart
+    {
+         var chart = new CanvasJS.Chart("scalpingChart", {
+	        animationEnabled: true,
+	        theme: "light2", // "light1", "light2", "dark1", "dark2"
+	        title: {
+                text: "Bet Type",
+                fontSize: 20,
+	        },
+	        axisY: {
+		        title: $("#inTypeTodayChart").val(),
+		        preffix: "$",
+                includeZero: false,
+                fontSize: 10,
+	        },
+	        axisX: {
+                title: "Type",
+                fontSize: 12
+	        },
+	        data: [{
+		        type: "column",
+		        yValueFormatString: "#,##0.0#",
+		        dataPoints: []
+	        }]
+        });
+
+        var type = $("#inTypeTodayChart").val();
+        var dataPoints = [];
+        for (var i = 0; i < objT.length; i++)
+        {
+            if (type == "BETS") {
+                dataPoints.push({ label: objT[i]["WagerType"], y: objT[i]["Bets"] });
+            } else if (type == "RISK")
+            {
+                dataPoints.push({ label: objT[i]["WagerType"], y: objT[i]["RiskAmount"] });
+            }else if (type == "NET")
+            {
+                dataPoints.push({ label: objT[i]["WagerType"], y: objT[i]["Net"] });
+            }else if (type == "HOLD")
+            {
+                dataPoints.push({ label: objT[i]["WagerType"], y: objT[i]["HoldPercentaje"] });
+            }else if (type == "WIN")
+            {
+                dataPoints.push({ label: objT[i]["WagerType"], y: objT[i]["WinPercentaje"] });
+            }
+        }
+            
+        chart.options.data[0].dataPoints = dataPoints;
+        chart.render();
+    }
+    function DrawChart7() 
+    {
+         var chart = new CanvasJS.Chart("chart1", {
+	        theme: "light2", // "light1", "light2", "dark1", "dark2"
+	        animationEnabled: true,
+	        title: {
+                text: "Bet Type",
                 fontSize: 20,
 	        },
 	        data: [{
@@ -376,160 +803,151 @@
 		        ]
 	        }]
         });
+
         chart.render();
-        }
-    function DrawChart6()
-    {
-         var chart = new CanvasJS.Chart("scalpingChart", {
-	        animationEnabled: true,
-	        theme: "light2", // "light1", "light2", "dark1", "dark2"
-	        title: {
-                text: "Bet Type",
-                fontSize: 20,
-	        },
-	        axisY: {
-		        title: "Amount",
-		        preffix: "$",
-                includeZero: false,
-                fontSize: 14,
-	        },
-	        axisX: {
-                title: "Type",
-                fontSize: 14
-	        },
-	        data: [{
-		        type: "column",
-		        yValueFormatString: "$#,##0.0#",
-		        dataPoints: [
-			        { label: "Straight", y: 4000 },	
-			        { label: "Parlay", y: 3500 },	
-                    { label: "Teaser", y: 3000 },
-                    { label: "Other", y: 2500 }
-		        ]
-	        }]
-         });
-         chart.render();
       }
-    function DrawChart7() 
+    function DrawChart8()
     {
-      var chart = new CanvasJS.Chart("finHistory", {
+        var chart = new CanvasJS.Chart("leansChart", {
 	    animationEnabled: true,
-	    theme: "light2", // "light1", "light2", "dark1", "dark2"
-	    exportEnabled: true,
-	    title:{
-            text: "Information by Date",
-             fontSize: 20,
+	    title: {
+            text: "Leans Info",
+            fontSize: 20
 	    },
 	    axisX: {
-		    valueFormatString: "MMM"
+		    interval: 1
 	    },
 	    axisY: {
-		    includeZero:false, 
-		    prefix: "$",
-		    title: "Values"
-	    },
-	    legend: {
-		    cursor: "pointer",
-		    itemclick: toogleDataSeries
+            title: "Values",
+            fontSize: 10,
+		    scaleBreaks: {
+			    type: "wavy",
+			    customBreaks: [{
+				    startValue: 80,
+				    endValue: 210
+				    },
+				    {
+					    startValue: 230,
+					    endValue: 600
+				    }
+		    ]}
 	    },
 	    data: [{
-		    type: "candlestick",
-		    showInLegend: true,
-		    name: "Straight",
-		    yValueFormatString: "$###0.00",
-            xValueFormatString: "MMMM YY",
-            color: "#0079CF",
+		    type: "bar",
+		    toolTipContent: "<img src=\"https://canvasjs.com/wp-content/uploads/images/gallery/javascript-column-bar-charts/\"{url}\"\" style=\"width:40px; height:20px;\"> <b>{label}</b><br>Budget: ${y}bn<br>{gdp}% of GDP",
 		    dataPoints: [
-			    { x: new Date(2016, 00, 01), y: [34.080002, 36.060001, 33.410000, 36.060001] },
-			    { x: new Date(2016, 01, 01), y: [36.040001, 37.500000, 35.790001, 36.950001] },
-			    { x: new Date(2016, 02, 01), y: [37.099998, 39.720001, 37.060001, 39.169998] },
-			    { x: new Date(2016, 03, 01), y: [38.669998, 39.360001, 37.730000, 38.820000] },
-			    { x: new Date(2016, 04, 01), y: [38.869999, 39.669998, 37.770000, 39.150002] },
-			    { x: new Date(2016, 05, 01), y: [39.099998, 43.419998, 38.580002, 43.209999] },
-			    { x: new Date(2016, 06, 01), y: [43.209999, 43.889999, 41.700001, 43.290001] },
-			    { x: new Date(2016, 07, 01), y: [43.250000, 43.500000, 40.549999, 40.880001] },
-			    { x: new Date(2016, 08, 01), y: [40.849998, 41.700001, 39.549999, 40.610001] },
-			    { x: new Date(2016, 09, 01), y: [40.619999, 41.040001, 36.270000, 36.790001] },
-			    { x: new Date(2016, 10, 01), y: [36.970001, 39.669998, 36.099998, 38.630001] },
-                { x: new Date(2016, 11, 01), y: [38.630001, 42.840000, 38.160000, 40.380001] },
-                { x: new Date(2017, 00, 01), y: [48.630001, 46.840000, 32.160000, 42.380001] },
-                { x: new Date(2017, 01, 01), y: [58.630001, 43.840000, 35.160000, 43.380001] },
-                { x: new Date(2017, 02, 01), y: [38.630001, 49.840000, 37.160000, 48.380001] },
-                { x: new Date(2017, 03, 01), y: [48.630001, 38.840000, 32.160000, 45.380001] },
-                { x: new Date(2017, 04, 01), y: [38.630001, 32.840000, 33.160000, 44.380001] },
-                { x: new Date(2017, 05, 01), y: [35.630001, 44.840000, 35.160000, 40.380001] },
-                { x: new Date(2017, 06, 01), y: [38.630001, 40.840000, 36.160000, 44.380001] },
-                { x: new Date(2017, 07, 01), y: [32.630001, 38.840000, 39.160000, 38.380001] },
-                { x: new Date(2017, 08, 01), y: [31.630001, 42.840000, 31.160000, 45.380001] }
-
+			    { label: "NFL", y: 25, gdp: 5.8, url: "israel.png" },
+			    { label: "SOC", y: 30, gdp: 5.7, url: "uae.png" },
+			    { label: "MLB", y: 35, gdp: 1.3, url: "brazil.png"},
+			    { label: "Overall", y: 40, gdp: 2.0, url: "australia.png" }
 		    ]
 	    }]
-      });
-      chart.render();
+    });
+    chart.render();
+      }
+    function DrawChart9() 
+    {       
+        var chart = new CanvasJS.Chart("donutChart", {
+	        animationEnabled: true,
+	        theme: "light2",
+	        title: {
+		        text: ""
+	        },
+	        subtitles: [{
+		        backgroundColor: "#2eacd1",
+		        fontSize: 16,
+		        fontColor: "white",
+		        padding: 5
+	        }],
+	        data: [{
+		        explodeOnClick: false,
+		        innerRadius: "75%",
+		        legendMarkerType: "square",
+		        name: "",
+		        radius: "100%",
+		        showInLegend: true,
+		        startAngle: 90,
+		        type: "doughnut",
+		        dataPoints: [],
+	        }]
+        });
 
-        function toogleDataSeries(e) {
-	        if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-		        e.dataSeries.visible = false;
-	        } else {
-		        e.dataSeries.visible = true;
-	        }
-	        e.chart.render();
+        var datapoints = [];
+        for (var i = 0; i < objPT.length; i++)
+        {
+            if (objPT[i]["WagerType"] != "Overall")
+            {
+                datapoints.push({ y: objPT[i]["Bets"], name: objPT[i]["WagerType"] });
+            }
         }
+        
+        chart.options.data[0].dataPoints = datapoints;
+        chart.render();
+
     }
 
     function LoadChartsFinancial()
     {
+        page = 1;
         setTimeout(function () {
-         // DrawChart1();
-          //DrawChart2();
+          DrawChart1();
+          DrawChart2();
 
           setTimeout(function () {
-              DrawChart7();   
-          }, 700);
+              DrawChart4();   
+          }, 50);
 
         }, 1);
     }
     function LoadChartsBets()
     {
+        page = 2;
         setTimeout(function () {
           DrawChart3();
           DrawChart4();
+          DrawChart9();
         }, 10);
     }
     function LoadChartsToday()
     {
+        page = 4;
         setTimeout(function () {
           DrawChart5();
           DrawChart6();
-          DrawChart7();
+          DrawChart4();
         }, 1);
     }
-    
+    function LoadChartLeans()
+    {
+       page = 3;
+        setTimeout(function () {
+            DrawChart8();
+        }, 1);
+    }
+
     window.onload = function ()
     {
-        LoadChartsFinancial();
         $("#btnSection").mouseup(function () {
             LoadCharts();
         });
 
-        FinancialAJX();
+        NavigationMain();
     }
 
       function LoadCharts() {
           setTimeout(function () {
-              //DrawChart1();
-              //DrawChart2();
+              DrawChart1();
+              DrawChart2();
               DrawChart3();
               DrawChart4();
               DrawChart5();
               DrawChart6();
-              DrawChart7();
+              DrawChart8();
+              DrawChart9();
           }, 15);
       }
 
-
-
-      function ThisLastWeekJava(info)
+     function ThisLastWeekJava(info)
       {
          obj = JSON.parse(info);
          typeFinancial = $("#inFinancialStats").val();
@@ -576,9 +994,6 @@
          }
       }
 
-
-
-
   </script>
 
 </asp:Content>
@@ -618,23 +1033,33 @@
 
            <div class="form-group">
             <label class="col-sm-2 control-label">Solution:</label>
-                    <div class="col-sm-4">
+                    <div class="col-sm-7">
                          <select class="form-control chosen-select" name="inputSide" id="inSolutionCategory" runat="server">
-                           <option value="">Solution 1</option>
-                           <option value="">Solution 2</option>
-                           <option value="">Solution 3</option>
+                           <option value="">A New Solution 1</option>
+                           <option value="">A New Solution 2</option>
+                           <option value="">A New Solution 3</option>
                    </select>
                </div>
           </div>
 
-          <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Name:</label>
-            <input type="text" class="form-control" id="recipient-name">
+
+           <div class="form-group">
+            <label class="col-sm-2 control-label">Tigger:</label>
+                    <div class="col-sm-7">
+                         <select class="form-control chosen-select" name="inputSide" id="inTrigger" runat="server">
+                           <option selected="selected"  value="none">None</option>
+                           <option value="">Trigger 1</option>
+                           <option value="">Trigger 2</option>
+                   </select>
+               </div>
           </div>
-          
+
+
           <div class="form-group">
-            <label for="message-text" class="col-form-label">Comments:</label>
-            <textarea class="form-control" style="resize:none; height:140px;" id="message-text"></textarea>
+            <label class="col-sm-2 control-label">Comments:</label>
+              <div class="col-sm-9">
+                 <textarea class="form-control" style="resize:none; height:160px;" id="message-text"></textarea>   
+             </div>
           </div>
         </form>
       </div>
@@ -666,7 +1091,7 @@
               <div class="form-group whites">           
                     <label class="col-sm-1 control-label" style="font-weight:bold;">Player:</label>
                     <div class="col-sm-2">
-                      <select id="inPlayer" runat="server"  class="form-control chosen-select" onchange="FinancialAJX();">
+                      <select id="inPlayer" runat="server"  class="form-control chosen-select" onchange="NavigationMain();">
                       </select>
                     </div>
                   
@@ -727,7 +1152,7 @@
        <ul class="nav nav-tabs nav-justified">
         <li class="nav-item active"><a data-toggle="tab" onclick="LoadChartsFinancial();" href="#financial">Financial</a></li>
         <li ><a data-toggle="tab" href="#menu2" onclick="LoadChartsBets();" runat="server">Bets</a></li>
-        <li><a data-toggle="tab" href="#leans" onclick="LoadChartsToday();" runat="server">Leans</a></li>
+        <li><a data-toggle="tab" href="#leans" onclick="LoadChartLeans();" runat="server">Leans</a></li>
         <li><a data-toggle="tab" href="#menu3" onclick="LoadChartsToday();" runat="server">Today's  Action</a></li>
        </ul>
     </div>
@@ -837,10 +1262,11 @@
                       </div>
                     <div class="col-sm-3" style="right:0; top:0; position:absolute; margin-top:5px;">
                       <select class="form-control" onchange="DrawChart2();" id="inFinancialStats">
-                         <option Selected="selected" Value="BET">Bets</option>
+                         <option Selected="selected" Value="BETS">Bets</option>
                          <option Value="RISK">Risk</option>
                          <option Value="NET">Net</option>
                          <option Value="HOLD">Hold%</option>
+                         <option Value="WIN">Win%</option>
                       </select>
                     </div>
                   </div>
@@ -858,10 +1284,10 @@
                   <div class="x_panel">
                    <div class="form-group">
                        <div class="x_title">
-                          <h3>Chart</h3>
+                          <h3>Player History Stats</h3>
                         </div>
                      <div class="col-sm-2" style="right:0; top:0; position:absolute; margin-top:10px;">
-                       <select class="form-control" onchange="DrawChart7();" id="inDateRangeFinancial">
+                       <select class="form-control" onchange="RangeSummaryAJX();" id="inDateRangeFinancial">
                            <option selected="selected" value="MMMM YYYY">Month</option>
                            <option selected="selected" value="DD MMMM">Week</option>
                            <option selected="selected" value="DD MMMM YYYY">Day</option>
@@ -886,7 +1312,7 @@
               </div>
 
                <div class="col-sm-2" style="float:left;">
-                 <select ID="Select4" runat="server" class="form-control chosen-select">
+                 <select ID="inWagerTypeBets" runat="server" class="form-control chosen-select">
                      <option Selected="selected" Value="">All Types</option>
                      <option Value="STRAIGHT">Straight Bet</option>
                      <option Value="TEASER">Teaser</option>
@@ -894,7 +1320,7 @@
                   </select>
               </div>
 
-               <button class="btn btn-success">Go</button>
+               <button class="btn btn-success" onclick="BetsAJX();">Go</button>
 
            </div>
            <div class="right_col" role="main">
@@ -903,76 +1329,30 @@
                 <div class="x_panel h-10 d-inline-block p-2">
                   <div class="form-group">
                       <div class="x_title">
-                        <h4>Bet Stats</h4>
+                        <h4>Pro Play</h4>
                       </div>
 
                       <div class="col-sm-3" style="right:0; top:0; position:absolute; margin-top:5px;">
-                      <select class="form-control" onchange="DrawChart1();">
-                          <option selected="selected" value="">Today</option>
-                          <option value="">Yesterday</option>
-                          <option value="">This Week</option>
-                          <option value="">Last Week</option>
-                          <option value="">This Season</option>
-                          <option value="">Last Season</option>
+                      <select class="form-control" id="inProPlay" onchange="ProPlayAJX();">
+                          <option selected="selected" value="T">Today</option>
+                          <option value="Y">Yesterday</option>
+                          <option value="TW">This Week</option>
+                          <option value="LW">Last Week</option>
+                          <option value="TS">This Season</option>
+                          <option value="LS">Last Season</option>
                       </select>
                     </div>
                   </div>
 
                  
-                  <div class="x_content" style="height:100%; overflow-x:auto;">
-                   <table class="table table-responsive table-hover" style="overflow-x:auto;">
+                  <div class="x_content" style="height:100%; overflow-x:auto; margin-bottom:10px;">
+                   <table class="table table-responsive table-hover  tablin" id="tableProPlay" style="width:100%; border:none;">
                       <thead>
                         <tr>
                           <th>Action</th>
-                          <th>Percentage</th>
+                          <th>Value</th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr>
-                          <th>Move Line</th>
-                          <td>12</td>
-                        </tr>
-                        <tr>
-                          <th>Time Pattern</th>
-                          <td>Curve</td>
-                        </tr>
-                        <tr>
-                          <th>Beat the Line</th>
-                          <td>15</td>
-                        </tr>
-                        <tr>
-                          <th>Scalp Cris</th>
-                          <td>40%</td>
-                        </tr>
-                        <tr>
-                          <th>Scalp Pinni</th>
-                          <td>65%</td>
-                        </tr>
-                        <tr>
-                          <th>Scalp 5Dimes</th>
-                          <td>34%</td>
-                        </tr>
-                        <tr>
-                          <th>Scalp PPH</th>
-                          <td>78%</td>
-                        </tr>
-                        <tr>
-                          <th>Scalp Jazz</th>
-                          <td>18%</td>
-                        </tr>
-                        <tr>
-                          <th>Over all Scalp</th>
-                          <td>68%</td>
-                        </tr>
-                         <tr>
-                          <th>Syndicate</th>
-                          <td>Yes</td>
-                        </tr>
-                          <tr>
-                          <th>Adjusted</th>
-                          <td>75%</td>
-                        </tr>
-                      </tbody>
                     </table>
                   </div>
                 </div>
@@ -985,18 +1365,18 @@
                  <h4>Stats</h4>
 
                 <div class="col-sm-3" style="float:right; position:absolute;top:0;right:0; margin-top:5px; margin-bottom:5px;">
-                 <select ID="Select5" runat="server" class="form-control" onchange="DrawChart3();">
-                     <option Selected="selected" Value="">Bets</option>
-                     <option Value="">Risk</option>
-                     <option Value="">Net</option>
-                     <option Value="">Hold%</option>
-                     <option Value="">Win%</option>
+                 <select ID="inBetsChartFilter" runat="server" class="form-control" onchange="DrawChart3();">
+                     <option Selected="selected" Value="BETS">Bets</option>
+                     <option Value="RISK">Risk</option>
+                     <option Value="NET">Net</option>
+                     <option Value="HOLD">Hold%</option>
+                     <option Value="WIN">Win%</option>
                   </select>
                 </div>
 
                 </div>            
                   <div class="x_content" style="height:100%; width:100%; margin-right:10px; margin-bottom:10px;">
-                      <div style="height:462px; width:100%;" id="betChart"></div>
+                      <div style="height:402px; width:100%;" id="betChart"></div>
                   </div>
                 </div>
               </div>
@@ -1011,18 +1391,18 @@
                       </div>
 
                     <div class="col-sm-3" style="right:0; top:0; position:absolute; margin-top:5px; margin-bottom:0">
-                      <select class="form-control" style="height:35px;">
-                          <option selected="selected" value="">Today</option>
-                          <option value="">Yesterday</option>
-                          <option value="">This Week</option>
-                          <option value="">Last Week</option>
-                          <option value="">This Season</option>
-                          <option value="">Last Season</option>
+                      <select class="form-control" style="height:35px;" id="inParlayTeaser" onchange="ParlayTeaserAJX();">
+                          <option selected="selected" value="T">Today</option>
+                          <option value="Y">Yesterday</option>
+                          <option value="TW">This Week</option>
+                          <option value="LW">Last Week</option>
+                          <option value="TS">This Season</option>
+                          <option value="LS">Last Season</option>
                       </select>
                     </div>
                   </div>
-                  <div class="x_content" style="overflow-x:auto;">
-                    <table class="table table-responsive table-hover" style="overflow-x:auto;">
+                  <div class="x_content" style="overflow-x:auto; margin-bottom:10px;">
+                    <table class="table table-responsive tablin" id="ParTeaTable" style="width:100%; border:none;">
                       <thead>
                         <tr>
                           <th>Wager Type</th>
@@ -1033,48 +1413,38 @@
                           <th>Win%</th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr>
-                          <th>Parlay</th>
-                          <td>15</td>
-                          <td>$1500</td>
-                          <td>$1100</td>
-                          <td>73.33%</td>
-                          <td>43.33%</td>
-                        </tr>
-                        <tr>
-                          <th>Teaser</th>
-                          <td>30</td>
-                          <td>$15.000</td>
-                          <td>$11.100</td>
-                          <td>74%</td>
-                          <td>33.33%</td>
-                        </tr>
-                         <tr>
-                          <th>Overall</th>
-                          <td>45</td>
-                          <td>$16.500</td>
-                          <td>$12.100</td>
-                          <td>67%</td>
-                          <td>73.33%</td>
-                        </tr>
-                      </tbody>
                     </table>
                   </div>
                 </div>
               </div>
 
 
-              <div class="col-md-6 col-sm-6 col-xs-12 boxes" style="height:100%; margin-top:10px;">
+               <div class="col-md-6 col-sm-6 col-xs-12 boxes" style="margin-top:10px;">
+                <div class="x_panel h-10 d-inline-block p-2">
+                      <div class="x_title">
+                        <h4>Parlay/Teaser Chart</h4>
+                      </div>
+                  <div class="x_content" style="height:100%; width:100%; margin-right:10px; margin-bottom:10px;">
+                      <div style="height:155px; width:100%;" id="donutChart"></div>
+                  </div>
+                </div>
+              </div>
+
+
+
+<%-- BET STATS  --%>
+
+              <div class="col-md-12 col-sm-6 col-xs-12 boxes" style="height:100%; margin-top:10px;">
                 <div class="x_panel h-10 d-inline-block p-2">
                   <div class="x_title">
                     <h4>Bet Stats</h4>
                   </div>
                   <div class="x_content" style="height:100%; overflow-x:auto; overflow-y:auto; margin-bottom:5px;">
-                   <table class="table table-responsive table-hover" style="overflow-x:auto;">
+                   <table class="table table-responsive table-hover tablin" id="talbeBetStats" style="width:100%; border:none;">
                       <thead>
                         <tr>
                           <th>Date Range</th>
+                          <th>Type</th>
                           <th>Bets</th>
                           <th>Risk</th>
                           <th>Net</th>
@@ -1082,53 +1452,36 @@
                           <th>Win%</th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr>
-                          <th>Current Week</th>
-                          <td>15</td>
-                          <td>$1500</td>
-                          <td>$1100</td>
-                          <td>73.33%</td>
-                          <td>73.33%</td>
-                        </tr>
-                        <tr>
-                          <th>Current Season</th>
-                          <td>30</td>
-                          <td>$15.000</td>
-                          <td>$11.100</td>
-                          <td>74%</td>
-                          <td>74%</td>
-                        </tr>
-                        <tr>
-                          <th>Over All</th>
-                          <td>45</td>
-                          <td>$150.000</td>
-                          <td>$110.100</td>
-                          <td>74%</td>
-                          <td>74%</td>
-                        </tr>
-                      </tbody>
                     </table> 
                   </div>
                 </div>
               </div>
+<%--  --%>
 
 
 
+                <%-- SOLUTIONS --%>
 
-
-             <div class="col-md-12 col-sm-6 col-xs-12 boxes" style="height:100%; margin-top:10px;">
+               <div class="col-md-12 col-sm-6 col-xs-12 boxes" style="height:auto; margin-top:10px;">
                 <div class="x_panel h-10 d-inline-block p-2">
                   <div class="x_title">
-                    <h4>Solutions</h4>
-                  </div>
-                   <div class="x_content" style="height:100%; width:100%; margin-right:10px; margin-bottom:10px;">                
 
-                     <table class="table table-responsive table-hover" style="overflow-x:auto;">
+                    <div class="form-group">
+                       <h4>Solutions</h4>
+                       <div class="col-sm-1" style="right:0; top:0; position:absolute; margin-top:5px;">
+                          <button class="btn btn-block btn-success glyphicon glyphicon-plus" data-toggle="modal" data-target="#exampleModal" data-placement="top" title="add new solution"></button>
+                      </div>
+                    </div>
+                    
+                  </div>
+                   <div class="x_content" style="height:100%; width:100%; overflow:auto; margin-right:10px; margin-bottom:10px;">                
+
+                     <table class="table table-responsive table-hover" style="overflow:auto;">
                       <thead>
                         <tr>
                           <th>#</th>
                           <th>Solution</th>
+                          <th>Trigger</th>
                           <th>Comments</th>
                           <th>Edit</th>
                           <th>Remove</th>
@@ -1138,6 +1491,7 @@
                         <tr>
                           <th>1</th>
                           <td>Solution Name</td>
+                          <td>Trigger Name</td>
                           <td>comments...</td>                         
                           <td><button class="btn btn-warning glyphicon glyphicon-pencil"></button></td>
                           <td><button class="btn btn-danger glyphicon glyphicon-trash"></button></td>
@@ -1145,19 +1499,14 @@
                         <tr>
                           <th>2</th>
                           <td>Solution Name</td>
+                          <td>Trigger Name</td>
                           <td>comments...</td>                         
                           <td><button class="btn btn-warning glyphicon glyphicon-pencil"></button></td>
-                          <td><button class="btn btn-danger glyphicon glyphicon-trash"></button></td>
+                          <td><button class="btn btn-danger glyphicon glyphicon-trash" ></button></td>
                         </tr>
                       </tbody>
                     </table>
-
-                    <div class="form-group">
-                      <div class="col-sm-1" style="float:right;">
-                          <button class="btn btn-block btn-success glyphicon glyphicon-plus" data-toggle="modal" data-target="#exampleModal" data-placement="top" title="add new solution"></button>
-                      </div>                    
-                    </div>
-
+              
                    </div>
                 </div>
               </div>
@@ -1176,16 +1525,14 @@
               </div>
 
                <div class="col-sm-2" style="float:left;">
-                 <select ID="Select9" runat="server" class="form-control chosen-select">
+                 <select ID="inTypeToday" runat="server" class="form-control chosen-select">
                      <option Selected="selected" Value="">All Types</option>
                      <option Value="STRAIGHT">Straight Bet</option>
                      <option Value="TEASER">Teaser</option>
                      <option Value="Parlay">Parlay</option>
                   </select>
               </div>
-
-               <button class="btn btn-success">Go</button>
-
+               <button class="btn btn-success" onclick="TodayAJX();">Go</button>
            </div>
 
 
@@ -1193,8 +1540,20 @@
             <div class="row">
               <div class="col-md-6 col-sm-6 col-xs-12 boxes" style="height:100%;">
                 <div class="x_panel h-10 d-inline-block p-2">
-                  <div class="x_title">
-                    <h4>Action Stats</h4>
+                     <div class="form-group">
+                      <div class="x_title">
+                        <h4>Action Stats</h4>
+                      </div>
+
+                    <div class="col-sm-3" style="right:0; top:0; position:absolute; margin-top:5px; margin-bottom:0">
+                      <select class="form-control" style="height:35px;" id="inPlayToday" onchange="DrawChart5();">
+                          <option selected="selected" value="BETS">Bets</option>
+                          <option value="RISK">Risk</option>
+                          <option value="NET">Net</option>
+                          <option value="HOLD">Hold%</option>
+                          <option value="WIN">Win%</option>
+                      </select>
+                    </div>
                   </div>
                     <div class="x_content" style="height:100%; width:100%; margin-right:10px; margin-bottom:10px;">
                       <div style="height:416px; width:100%;" id="todayChart"></div>
@@ -1204,8 +1563,20 @@
 
               <div class="col-md-6 col-sm-6 col-xs-12 boxes" style="height:100%;">
                 <div class="x_panel h-10 d-inline-block p-2">
-                  <div class="x_title">
-                    <h4>Type Stats</h4>
+                  <div class="form-group">
+                      <div class="x_title">
+                        <h4>Type Stats</h4>
+                      </div>
+
+                    <div class="col-sm-3" style="right:0; top:0; position:absolute; margin-top:5px; margin-bottom:0">
+                      <select class="form-control" style="height:35px;" id="inTypeTodayChart" onchange="DrawChart6();">
+                          <option selected="selected" value="BETS">Bets</option>
+                          <option value="RISK">Risk</option>
+                          <option value="NET">Net</option>
+                          <option value="HOLD">Hold%</option>
+                          <option value="WIN">Win%</option>
+                      </select>
+                    </div>
                   </div>
                   <div class="x_content" style="height:100%; width:100%; margin-right:10px; margin-bottom:10px;">
                       <div style="height:416px; width:100%;" id="scalpingChart"></div>
@@ -1222,29 +1593,18 @@
                   </div>
                     
                     <div class="x_content" style="height:100%; width:100%; margin-right:10px; margin-bottom:10px; overflow-x:auto;">                
-                    <table class="table table-responsive table-hover" style="overflow-x:auto;">
+                    <table class="table table-responsive table-hover tablin" id="tableToday" style="width:100%; border:none;">
                       <thead>
                         <tr>
                           <th>Player</th>
                           <th>Risk Amount</th>
                           <th>Bets</th>
-                          <th>Move the Line</th>
-                          <th>Beat The Line</th>
-                          <th>Scalping %</th>
-                          <th>Adjusted %</th>
+                          <th>Move Line%</th>
+                          <th>Beat Line%</th>
+                          <th>Scalping%</th>
+                          <th>Adjusted%</th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr>
-                          <td>TM005</td>
-                          <td>$1000</td>
-                          <td>10</td>
-                          <td>2</td>
-                          <td>4</td>
-                          <td>17%</td>
-                          <td>28%</td>
-                        </tr>
-                      </tbody>
                     </table>
                   </div>
                  </div>
@@ -1281,7 +1641,7 @@
                   <button class="btn btn-success">Go</button>
            </div>
 
-                <div class="col-md-12 col-sm-6 col-xs-12 boxes" style="height:100%; margin-top:10px;">
+                <div class="col-md-6 col-sm-6 col-xs-12 boxes" style="height:100%; margin-top:10px;">
                 <div class="x_panel h-10 d-inline-block p-2">
                   <div class="x_title">
                     <h3>Leans</h3>
@@ -1291,51 +1651,55 @@
                     <table class="table table-responsive table-hover" style="overflow-x:auto;">
                       <thead>
                         <tr>
-                          <th>Action</th>
-                          <th>Net</th>
-                          <th>Lines Played</th>
-                          <th>Current Line</th>
-                          <th>Negative Lines</th>
-                          <th>Positive Lines Win</th>
-                          <th>Result</th>
+                          <th>Values</th>
+                          <th>Overall w/adj</th>
+                          <th>Overall w/adj</th>
+                          <th>Sport w/adj</th>
+                          <th>Sport w/o adj </th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
-                          <td>Overall w/adjustment</td>
-                          <td>$1000</td>
+                          <td>Net</td>
+                          <td>15</td>
                           <td>10</td>
                           <td>17</td>
                           <td>43</td>
-                          <td>23</td>
-                          <td>44</td>
                         </tr>
                         <tr>
-                          <td>Overall w/o adjustment</td>
-                          <td>$1500</td>
+                          <td>Lines Played</td>
+                          <td>23</td>
                           <td>25</td>
                           <td>67</td>
                           <td>43</td>
-                          <td>23</td>
-                          <td>44</td>
                         </tr>
                         <tr>
-                          <td>Sport w/adjustment</td>
-                          <td>$2000</td>
+                          <td>Current Line</td>
+                          <td>10</td>
                           <td>35</td>
                           <td>27</td>
                           <td>74</td>
-                          <td>23</td>
-                          <td>44</td>
                         </tr>
                          <tr>
-                          <td>Sport w/o adjustment</td>
-                          <td>$2500</td>
+                          <td>Negative Line</td>
+                          <td>50</td>
                           <td>12</td>
                           <td>18</td>
                           <td>25</td>
-                          <td>23</td>
-                          <td>44</td>
+                        </tr>
+                        <tr>
+                          <td>Positive Line</td>
+                          <td>25</td>
+                          <td>12</td>
+                          <td>18</td>
+                          <td>25</td>
+                        </tr>
+                        <tr>
+                          <td>Result</td>
+                          <td>20</td>
+                          <td>12</td>
+                          <td>18</td>
+                          <td>25</td>
                         </tr>
                       </tbody>
                     </table>
@@ -1343,6 +1707,35 @@
                   </div>
                 </div>
               </div>
+
+
+            <%-- leans graph --%>
+
+               <div class="col-md-6 col-sm-6 col-xs-12 boxes" style="height:100%; margin-top:10px;">
+                <div class="x_panel h-10 d-inline-block p-2">
+                  <div class="x_title">
+                  <div class="form-group">
+              
+               <h4>Leans Chart</h4>
+               <div class="col-sm-3" style="float:right; position:absolute;top:0;right:0; margin-top:5px; margin-bottom:5px;">
+                 <select ID="inLeansChart" runat="server" class="form-control" onchange="DrawChart8();">
+                     <option Selected="selected" Value="BET">Bets</option>
+                     <option Value="RISK">Risk</option>
+                     <option Value="NET">Net</option>
+                     <option Value="HOLD">Hold%</option>
+                     <option Value="WIN">Win%</option>
+                  </select>
+                </div>
+
+                </div>  
+                  </div>
+                  <div class="x_content" style="height:100%; width:100%; margin-right:10px; margin-bottom:10px;">
+                      <div style="height:294px; width:100%;" id="leansChart"></div>
+                  </div>
+                </div>
+              </div>
+
+            <%-- end leans grapgh --%>
 
 
         </div>

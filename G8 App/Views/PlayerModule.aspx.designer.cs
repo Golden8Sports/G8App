@@ -31,6 +31,15 @@ namespace G8_App.Views {
         protected global::System.Web.UI.HtmlControls.HtmlSelect inSolutionCategory;
         
         /// <summary>
+        /// inTrigger control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlSelect inTrigger;
+        
+        /// <summary>
         /// inPlayer control.
         /// </summary>
         /// <remarks>
@@ -130,22 +139,22 @@ namespace G8_App.Views {
         protected global::System.Web.UI.HtmlControls.HtmlSelect inSportBets;
         
         /// <summary>
-        /// Select4 control.
+        /// inWagerTypeBets control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlSelect Select4;
+        protected global::System.Web.UI.HtmlControls.HtmlSelect inWagerTypeBets;
         
         /// <summary>
-        /// Select5 control.
+        /// inBetsChartFilter control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlSelect Select5;
+        protected global::System.Web.UI.HtmlControls.HtmlSelect inBetsChartFilter;
         
         /// <summary>
         /// inSPortToday control.
@@ -157,13 +166,13 @@ namespace G8_App.Views {
         protected global::System.Web.UI.HtmlControls.HtmlSelect inSPortToday;
         
         /// <summary>
-        /// Select9 control.
+        /// inTypeToday control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlSelect Select9;
+        protected global::System.Web.UI.HtmlControls.HtmlSelect inTypeToday;
         
         /// <summary>
         /// startDate control.
@@ -191,5 +200,14 @@ namespace G8_App.Views {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlSelect inSportLeans;
+        
+        /// <summary>
+        /// inLeansChart control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlSelect inLeansChart;
     }
 }

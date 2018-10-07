@@ -12,7 +12,7 @@ namespace G8_App.Logic.Profiling
 {
     public class blSummary : csComponentsConnection
     {
-        public ObservableCollection<csSummary> SummaryProfile(string dt1,string dt2, string idSport, string idLeague, int idAgent, string Player)
+        public ObservableCollection<csSummary> SummaryProfile(string dt1,string dt2, string idSport, string idLeague, int idAgent, string Player, bool flag = false)
         {
             ObservableCollection<csSummary> data = new ObservableCollection<csSummary>();
 
@@ -55,15 +55,15 @@ namespace G8_App.Logic.Profiling
                         Convert.ToInt32(fila["WINS"]),
                         Convert.ToInt32(fila["DRAW"]),
                         Convert.ToInt32(fila["LOST"]),
-                        Convert.ToInt32(fila["WIN_PER"]),
+                        Math.Round(Convert.ToDouble(fila["WIN_PER"]), 2, MidpointRounding.AwayFromZero),
                         Math.Round(Convert.ToDouble(fila["HOLD_PER"]),2,MidpointRounding.AwayFromZero),
-                        Convert.ToInt32(fila["SCALPINGPPH"]),
-                        Convert.ToInt32(fila["SCALPINGJAZZ"]),
-                        Convert.ToInt32(fila["SCALPINGPINNI"]),
-                        Convert.ToInt32(fila["SCALPING5DIMES"]),
-                        Convert.ToInt32(fila["SCALPINGCRIS"]),
-                        Convert.ToInt32(fila["MOVELINE"]),
-                        Convert.ToInt32(fila["BEATLINE"]),
+                        Math.Round(Convert.ToDouble(fila["SCALPINGPPH"]), 2, MidpointRounding.AwayFromZero),
+                        Math.Round(Convert.ToDouble(fila["SCALPINGJAZZ"]), 2, MidpointRounding.AwayFromZero),
+                        Math.Round(Convert.ToDouble(fila["SCALPINGPINNI"]), 2, MidpointRounding.AwayFromZero),
+                        Math.Round(Convert.ToDouble(fila["SCALPING5DIMES"]), 2, MidpointRounding.AwayFromZero),
+                        Math.Round(Convert.ToDouble(fila["SCALPINGCRIS"]), 2, MidpointRounding.AwayFromZero),
+                        Math.Round(Convert.ToDouble(fila["MOVELINE"]), 2, MidpointRounding.AwayFromZero),
+                        Math.Round(Convert.ToDouble(fila["BEATLINE"]), 2, MidpointRounding.AwayFromZero),
                         Convert.ToInt32(fila["SYNDICATE"]));
                         data.Add(u);
                     }
@@ -71,7 +71,32 @@ namespace G8_App.Logic.Profiling
                 }
                 else
                 {
-                    data = null;
+                    if(flag)
+                    {
+                        csSummary u = new csSummary(Player,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0);
+                        data.Add(u);
+                    }
+                    else
+                    {
+                        data = null;
+                    }                   
                 }
 
             }
@@ -336,6 +361,56 @@ namespace G8_App.Logic.Profiling
             }
             return data;
         }
+
+
+
+
+        public csSummary InfoByBets(string dt1, string dt2, string idSport, string Player, string wagerType, string wagerPlay = "", string range = "")
+        {
+            var data = new csSummary(wagerPlay,range);
+
+            try
+            {
+                parameters.Clear();
+                parameters.Add("@pStartDate", dt1);
+                parameters.Add("@pEndDate", dt2);
+                parameters.Add("@pIdSport", idSport);
+                parameters.Add("@pIdLeague", "-1");
+                parameters.Add("@pPlayer", Player);
+                parameters.Add("@pWagerType", wagerType.ToUpper());
+                parameters.Add("@pWagerPlay", wagerPlay);
+                dataset = csG8Apps.ExecutePA("[dbo].[web_topPlayers]", parameters);
+
+                if (dataset.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow fila in dataset.Tables[0].Rows)
+                    {
+                        data = new csSummary(
+                        Convert.ToString(fila["PLAYER"]),
+                        Convert.ToString(fila["AGENT"]),
+                        Convert.ToInt32(fila["RISK"]),
+                        Convert.ToInt32(fila["NET"]),
+                        Convert.ToInt32(fila["BETS"]),
+                        Convert.ToInt32(fila["WINS"]),
+                        range,
+                        wagerPlay);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                data = null;
+                throw new Exception("Error: " + ex.Message);
+            }
+            finally
+            {
+                parameters.Clear();
+            }
+            return data;
+        }
+
+
+
 
 
 
