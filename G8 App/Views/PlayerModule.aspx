@@ -74,11 +74,11 @@
       }
 
     function BetsAJX()
-     {
-          ProPlayAJX();
-          ChartBetsAJX();
-          ParlayTeaserAJX();
-          BetStatsAJX();        
+    {
+       ProPlayAJX();
+       ChartBetsAJX();
+       ParlayTeaserAJX();
+       BetStatsAJX();        
     }
 
     function TodayAJX()
@@ -87,7 +87,6 @@
         TodayChartAJX();      
         TableTodayAJX();      
     }
-
     function ProPlayAJX()
     {       
         var sport = $("#MainContent_inSportBets").val();
@@ -268,6 +267,21 @@
                     ]);
                }
 
+
+              $("#talbeBetStats td").each(function () {
+
+                 var n = $(this).text().includes("%");
+                 if (n == "true" || n == true)
+                 {
+                     var d = $(this).text().replace("%", "");
+
+                     if (d >= 80) $(this).css('color', 'yellow');
+                     else if (d < 80 && d >= 0) $(this).css('color', 'green');
+                     else $(this).css('color', 'red');
+                 }
+                
+             });
+
                document.getElementById("talbeBetStats_length").style.display = "none";
                document.getElementById("talbeBetStats_filter").style.display = "none";
                document.getElementById("talbeBetStats_paginate").style.display = "none";
@@ -307,6 +321,21 @@
                         objPT[i]["WinPercentaje"] + "%"                       
                     ]);
                }
+
+
+             $("#ParTeaTable td").each(function () {
+
+                 var n = $(this).text().includes("%");
+                 if (n == "true" || n == true)
+                 {
+                     var d = $(this).text().replace("%", "");
+
+                     if (d >= 80) $(this).css('color', 'yellow');
+                     else if (d < 80 && d >= 0) $(this).css('color', 'green');
+                     else $(this).css('color', 'red');
+                 }
+                
+             });
 
                document.getElementById("ParTeaTable_length").style.display = "none";
                document.getElementById("ParTeaTable_filter").style.display = "none";
@@ -424,7 +453,8 @@
               alert('No Data: ' + data.statusText);
            }
         });
-    }
+      }
+
     function DrawChart1()
     {
          var chart = new CanvasJS.Chart("chart1", {
@@ -948,9 +978,10 @@
       }
 
      function ThisLastWeekJava(info)
-      {
+     {
          obj = JSON.parse(info);
          typeFinancial = $("#inFinancialStats").val();
+         var table;
 
           $("#groupTable").DataTable().clear();
 
@@ -980,10 +1011,10 @@
                  }
              }
 
-              
+             
              if (i != 1)
              {
-               $('#groupTable').dataTable().fnAddData( [
+                table = $('#groupTable').dataTable().fnAddData( [
                     obj[i]["DateRange"],
                     obj[i]["Bets"],
                     "$" + obj[i]["RiskAmount"],
@@ -992,7 +1023,22 @@
                ]);
              }
          }
-      }
+
+             $("#groupTable td").each(function () {
+
+                 var n = $(this).text().includes("%");
+                 if (n == "true" || n == true)
+                 {
+                     var d = $(this).text().replace("%", "");
+
+                     if (d >= 80) $(this).css('color', 'yellow');
+                     else if (d < 80 && d >= 0) $(this).css('color', 'green');
+                     else $(this).css('color', 'red');
+                 }
+                
+             });
+
+     }
 
   </script>
 
