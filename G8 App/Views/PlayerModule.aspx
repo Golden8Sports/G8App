@@ -152,7 +152,7 @@
            dataType: 'json',
            success: function (data)
            {
-               // $("#tableProPlay").DataTable().clear();
+               $("#tableProPlay").DataTable().clear();
                var ob = JSON.parse(data.d);
                for (var i = 0; i < ob.length; i++)
                {
