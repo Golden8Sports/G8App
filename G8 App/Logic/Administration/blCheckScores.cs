@@ -151,6 +151,11 @@ namespace G8_App.Logic.Administration
         private csGame CastSeleccion(csGame g,csGame DGS)
         {
 
+            if(DGS.VisitorNumber == 305911)
+            {
+                int SD = 01;
+            }
+
             if (g.IdSportDonBest == "1") return ScoresGeneral(g, DGS);
             else if (g.IdSportDonBest == "2") return ScoresGeneral(g, DGS);
             else if (g.IdSportDonBest == "3") return ScoresGeneral(g, DGS);
@@ -794,21 +799,30 @@ namespace G8_App.Logic.Administration
                     int n1 = Headers.Count;
                     int n2 = Opp1.Count;
                     int n3 = Opp2.Count;
+                    
 
                     if (Headers.Count == Opp1.Count && Opp1.Count == Opp2.Count && Headers.Count > 0)
                     {
                         csScore score = new csScore();
+
                         for (int i = 0; i < Headers.Count; i++)
                         {
                             score.Values.Add(new csDictionary(Headers[i], Opp1[i], Opp2[i]));
                         }
+
                         score.sportId = sport;
+                        if(sport == "2")
+                        {
+                            int ds = 1;
+                        }
+
                         ScoreList.Add(score);
                     }
                     else if (Headers.Count > 0)
                     {
                         int dssd = 0;
                     }
+
                     ClearValues();
                 }
 
@@ -904,7 +918,7 @@ namespace G8_App.Logic.Administration
             if (sport.ToUpper().Contains("SOCCER")) return "5";
             else if (sport.ToUpper().Contains("NHL") || sport.ToUpper().Contains("HOCKEY")) return "4";
             else if (sport.ToUpper().Contains("NFL") || sport.ToUpper().Contains("CFB") || sport.ToUpper().Contains("FOOTBALL")) return "1";
-            else if (sport.ToUpper().Contains("NBA") || sport.ToUpper().Contains("CBB") || sport.ToUpper().Contains("BASKETBALL") || sport.ToUpper().Contains("WNBA")) return "2";
+            else if (sport.ToUpper().Contains("NBA") || sport.ToUpper().Contains("CBB") || sport.ToUpper().Contains("BASKETBALL") || sport.ToUpper().Contains("WNBA") || sport.ToUpper().Contains("EUROLEAGUE")) return "2";
             else if (sport.ToUpper().Contains("BASEBALL") || sport.ToUpper().Contains("MLB")) return "3";
             else if (sport.ToUpper().Contains("BOXING") || sport.ToUpper().Contains("FIGHT") || sport.ToUpper().Contains("MMA")) return "6";
             else if (sport.ToUpper().Contains("GOLF")) return "7";

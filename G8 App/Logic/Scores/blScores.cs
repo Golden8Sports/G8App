@@ -14,6 +14,7 @@ namespace G8_App.Logic.Scores
         {
             try
             {
+
                 int o;
                 parameters.Clear();
                 parameters.Add("@pAwayRot", Convert.ToInt32(s.awayRot.Trim()));

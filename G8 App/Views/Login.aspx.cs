@@ -6,6 +6,7 @@ using System.Web.Script.Services;
 using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using G8_App.Entities;
 using G8_App.Logic;
 using G8_App.Views;
 using NHL_BL.Connection;
@@ -20,6 +21,7 @@ namespace G8_App.Views
         {
             Session.Clear();
             Session.RemoveAll();
+            csUser.obj = null;
         }
 
         public void ClickLogin(object sender, EventArgs e)
@@ -34,6 +36,7 @@ namespace G8_App.Views
                 if (log == "TRUE")
                 {
                     Session.Add("Login",user);
+                    csUser.LoginName = user;
                     Response.Redirect("dashboard.aspx");
                 }
 

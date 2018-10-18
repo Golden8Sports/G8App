@@ -93,10 +93,7 @@ namespace G8_App.Views
 
             if(GamesList != null)
             {
-                //rptTable.DataSource = GamesList;
-                //rptTable.DataBind();
 
-                string pathToFiles = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 try
                 {
                   BetsWithLeans = new ObservableCollection<csBet>();

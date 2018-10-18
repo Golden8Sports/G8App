@@ -18,7 +18,7 @@ namespace NHL_BL.Logic
 
         private blLeansLines LeansDB = new blLeansLines();
 
-        public ObservableCollection<csBet> BetListFromIdGame(csGame game, string player)
+        public ObservableCollection<csBet> BetListFromIdGame(csGame game, string player, bool flag = true)
         {
             ObservableCollection<csBet> data = new ObservableCollection<csBet>();
 
@@ -69,9 +69,12 @@ namespace NHL_BL.Logic
                             Convert.ToString(fila["IP"]),
                             Convert.ToString(fila["BeatLine"]));
 
-                            u = LeansDB.OurNextLine(u, game);
-                            u = LeansDB.CrisLines(u, game, 489);
-                            u = LeansDB.PinniLines(u, game);
+                            if(flag)
+                            {
+                                u = LeansDB.OurNextLine(u, game);
+                                u = LeansDB.CrisLines(u, game, 489);
+                                u = LeansDB.PinniLines(u, game);
+                            }
                             u.EventDate = game.EventDate;
                             u.EventName = game.VisitorTeam + " vs " + game.HomeTeam;
                             u.Pick = (game.VisitorNumber == u.Rot) ? game.VisitorTeam : game.HomeTeam;
@@ -100,7 +103,7 @@ namespace NHL_BL.Logic
 
 
 
-        public ObservableCollection<csBet> GetBetsAfterLeans(int idGame, csBet bet, string wagerPlay,string player)
+        public ObservableCollection<csBet> GetBetsAfterLeans(int idGame, csBet bet, string wagerPlay,string player, int caso = 1)
         {
             ObservableCollection<csBet> data = new ObservableCollection<csBet>();
 
@@ -124,7 +127,10 @@ namespace NHL_BL.Logic
                 parameters.Add("@pWagerType", wagerPlay);
                 parameters.Add("@pPlayer", player);
 
-                dataset = csG8Apps.ExecutePA("[dbo].[web_GetAfterLeans]", parameters);
+                string casito = (caso == 1) ? "[dbo].[web_GetAfterLeans]" : "[dbo].[web_GetAfterLeans2]";
+
+
+                dataset = csG8Apps.ExecutePA(casito, parameters);
 
                 if (dataset.Tables[0].Rows.Count > 0)
                 {

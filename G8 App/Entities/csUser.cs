@@ -9,5 +9,7 @@ namespace G8_App.Entities
     {
         public static string Name = "";
         public static string Profile = "";
+        public static string LoginName = "";
+        public static Object obj = null;
     }
 }

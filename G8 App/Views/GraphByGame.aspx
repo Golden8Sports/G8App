@@ -568,7 +568,7 @@
                           <label class="col-sm-2 control-label">Start Date:</label>
                             <div class="col-sm-3">
                               <div class="input-group">
-                                <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="startDate" runat="server" value="MM. dd. yyyy" name="startDate" required="required" autocomplete="off" />
+                                <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="startDate" runat="server" value="" name="startDate" required="required" autocomplete="off" />
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                               </div>
                             </div>
@@ -576,7 +576,7 @@
                             <label class="col-sm-2 control-label">End Date:</label>
                             <div class="col-sm-3">
                               <div class="input-group">
-                                 <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="endDate" runat="server" value="MM. dd. yyyy." name="endDate" required="required" autocomplete="off" />
+                                 <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="endDate" runat="server" value="" name="endDate" required="required" autocomplete="off" />
                                  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                               </div>
                             </div>

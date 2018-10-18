@@ -105,15 +105,15 @@ namespace NHL_BL.Logic
                                                 summary.ContNoLeansBets += 1;
                                             }
 
-                                            //by player
-                                            bool flag = Players.Any(x => x.IdPlayer == b.IdPlayer);
-                                            if (!flag)
-                                            {
-                                                csSummary s = new csSummary();
-                                                s.IdPlayer = b.IdPlayer;
-                                                s.Player = b.Player;
-                                                Players.Add(s);
-                                            }
+                                            ////by player
+                                            //bool flag = Players.Any(x => x.IdPlayer == b.IdPlayer);
+                                            //if (!flag)
+                                            //{
+                                            //    csSummary s = new csSummary();
+                                            //    s.IdPlayer = b.IdPlayer;
+                                            //    s.Player = b.Player;
+                                            //    Players.Add(s);
+                                            //}
                                             // sum total
                                             //GameSum.TotalBets += 1;
                                             //GameSum.WinAmount += b.WinAmount;
@@ -872,7 +872,6 @@ namespace NHL_BL.Logic
 
 
         //By player
-
         private void ShowPlayer(Excel.Worksheet ws, int posY, csSummary s)
         {
             ws.Range["A" + (posY + 2).ToString()].Value = s.Player;
@@ -936,11 +935,6 @@ namespace NHL_BL.Logic
         }
 
 
-
-
-
-
-
         private void CenterAllInfoGeneral(Excel.Worksheet ws, int i)
         {
             CenterValue(ws, "A", i);
@@ -957,11 +951,142 @@ namespace NHL_BL.Logic
         }
 
 
-
         private void RangeTab(Excel.Worksheet ws, string txt, int posY)
         {
             RangeNormal(ws, "A" + posY.ToString(), txt, 15);
         }
 
+
+        // leans table 
+        public csBet GenerateExcel(ObservableCollection<csGame> Games, string player, csBet  Bet)
+        {
+            ObservableCollection<csBet> Sports = new ObservableCollection<csBet>();
+            ObservableCollection<csGame> SportsAux = new ObservableCollection<csGame>();
+
+            try
+            {
+                if (Games != null)
+                {
+                    Bet = new csBet();
+                    var sport = new csBet();
+
+                    foreach (var g in Games)
+                    {
+                        ObservableCollection<csBet> LeansBets = betDB.BetListFromIdGame(g, "LEANS",false );
+                        csBet GameSum = new csBet();
+                        GameSum.Event = g.VisitorTeam + " vs " + g.HomeTeam;
+                        if(g.VisitorTeam == "CANUCKS RT")
+                        {
+                            int asda = 0;
+                        }
+
+                        GameSum.Sport = g.IdSport;
+                        GameSum.GameDate = g.EventDate.Month + "/" + g.EventDate.Day + "/" + g.EventDate.Year;
+
+
+                        if (LeansBets != null)
+                        {
+                            foreach (var l in LeansBets)
+                            {
+                                ObservableCollection<csBet> bets = betDB.GetBetsAfterLeans(g.IdGame, l, l.WagerPlay, player,2);
+                                GameSum.Line += l.Odds + ", " + l.OverUnder + l.Points;
+                                GameSum.CrisLine += l.CrisJuice + ", " + l.OverUnder + l.CrisPoints;
+                                GameSum.PinniLine += l.PinniJuice + ", " + l.OverUnder + l.PinniPoints;
+                                GameSum.OurLine += l.OurNextLine;
+                                GameSum.Team += (l.Rot == g.HomeNumber) ? g.HomeTeam : g.VisitorTeam;
+                                GameSum.WagerPlay = l.WagerPlay;
+                                l.GameDate = GameSum.GameDate;
+
+                                //LeansBetsList.Add(l);
+                                //L.Add(l);
+
+                                if (bets != null && bets.Count > 0)
+                                {
+                                    foreach (var b in bets)
+                                    {
+                                        // **************************** Aqui es donde hay que generar el excel ***********************
+                                        b.EventDate = g.EventDate;
+                                        b.EventName = g.VisitorTeam + " vs " + g.HomeTeam;
+                                        b.GameDate = GameSum.GameDate;
+
+                                        try
+                                        {
+                                            if (b.Rot == l.Rot)
+                                            {
+                                                //Same team with LEANS
+                                                b.Pick = (g.VisitorNumber == b.Rot) ? g.VisitorTeam : g.HomeTeam;
+
+                                                GameSum.ContLeansBets += 1;
+                                                GameSum.WinLeans += b.WinAmount;
+                                                GameSum.RiskLeans += b.RiskAmount;
+                                                GameSum.NetLeans += b.Net;
+
+                                                //BetsWithLeans.Add(b);
+                                                Bet.Risk_wADJ += b.RiskAmount;
+                                                Bet.Net_wADJ += b.Net;
+                                                Bet.LinesPlayed_wADJ += 1;
+
+                                                if(b.FAV_DOG.ToUpper().Contains("FAV"))
+                                                {
+                                                    Bet.Fav_wADJ += 1;
+                                                }else if(b.FAV_DOG.ToUpper().Contains("DOG"))
+                                                {
+                                                    Bet.Dog_wADJ += 1;
+                                                }
+
+
+                                                summary.ContLeansBets += 1;
+                                            }
+                                            else
+                                            {
+                                                //Different team with LEANS
+                                                b.Pick = (g.VisitorNumber == b.Rot) ? g.VisitorTeam : g.HomeTeam;
+
+                                                GameSum.ContNoLeansBets += 1;
+                                                GameSum.WinNoLeans += b.WinAmount;
+                                                GameSum.RiskNoLeans += b.RiskAmount;
+                                                GameSum.NetNoLeans += b.Net;
+
+                                                //NoLeansBets.Add(b);
+                                                summary.ContNoLeansBets += 1;
+
+
+                                                Bet.Risk_aADJ += b.RiskAmount;
+                                                Bet.Net_aADJ += b.Net;
+                                                Bet.LinesPlayed_aADJ += 1;
+
+                                                if (b.FAV_DOG.ToUpper().Contains("FAV"))
+                                                {
+                                                    Bet.Fav_aADJ += 1;
+                                                }
+                                                else if (b.FAV_DOG.ToUpper().Contains("DOG"))
+                                                {
+                                                    Bet.Dog_aADJ += 1;
+                                                }
+                                            }
+                                        }
+                                        catch (Exception)
+                                        {
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        GameSum.LeansHold = Math.Round(Convert.ToDouble((GameSum.NetLeans * 100) / GameSum.RiskLeans), 2, MidpointRounding.AwayFromZero);
+                        GameSum.NoLeansHold = Math.Round(Convert.ToDouble((GameSum.NetNoLeans * 100) / GameSum.RiskNoLeans), 2, MidpointRounding.AwayFromZero);
+
+                        //SumGames.Add(GameSum);
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+            return Bet;
+        }
     }
 }

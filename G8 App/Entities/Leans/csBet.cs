@@ -9,20 +9,20 @@ namespace NHL_BL.Entities
     public class csBet
     {
         private long Id_BI { get; set; }
-        
-        public string Player { get; set; }         
+
+        public string Player { get; set; }
         public double WinAmount { get; set; }
-        public double RiskAmount { get; set; }      
+        public double RiskAmount { get; set; }
         public string Result { get; set; }
-        public Nullable<Double> Net { get; set; }     
+        public double Net { get; set; }
         public string WagerPlay { get; set; }
-        public string IdSport { get; set; }       
+        public string IdSport { get; set; }
         public System.DateTime PlacedDate { get; set; }
         public int Odds { get; set; }
         public double Points { get; set; }
         public int Rot { get; set; }
         private string Score { get; set; }
-  
+
         private string BeatLine { get; set; }
         public int IdWager { get; set; }
         public int IdWagerDetail { get; set; }
@@ -65,7 +65,7 @@ namespace NHL_BL.Entities
         public string GameDate { get; set; }
 
         public string EventName { get; set; }
-        public DateTime EventDate  { get; set; }
+        public DateTime EventDate { get; set; }
 
 
         public string OurNextLine { get; set; }
@@ -100,8 +100,37 @@ namespace NHL_BL.Entities
         public string PinniLine { get; set; }
         public string OurLine { get; set; }
 
+        public double Risk_wADJ {get; set;}
+        public double Risk_aADJ { get; set; }
+        public double Risk_woADJ { get; set; }
 
-        public csBet(long id_BI, int idWager, int idWagerDetail, int? idAgent, string agent, int? idPlayer, string player, int idLineType, string lineTypeName, string loginName, double winAmount, double riskAmount, string result, double? net, string gamePeriod, string league, string completeDescription, string detailDescription, string team, int idGame, int idLeague, int? period, string fAV_DOG, int play, string wagerPlay, string idSport, DateTime settledDate, DateTime placedDate, int odds, double points, string score, string iP, string beatLine)
+        public double Net_wADJ { get; set; }
+        public double Net_aADJ { get; set; }
+        public double Net_woADJ { get; set; }
+
+        public int LinesPlayed_wADJ { get; set; }
+        public int LinesPlayed_aADJ { get; set; }
+        public int LinesPlayed_woADJ { get; set; }
+
+
+        public int Fav_wADJ { get; set; }
+        public int Fav_aADJ { get; set; }
+        public int Fav_woADJ { get; set; }
+
+
+        public int Dog_wADJ { get; set; }
+        public int Dog_aADJ { get; set; }
+        public int Dog_woADJ { get; set; }
+
+
+
+        public double Hold_wADJ { get; set; }
+        public double Hold_aADJ { get; set; }
+        public double Hold_woADJ { get; set; }
+
+
+
+        public csBet(long id_BI, int idWager, int idWagerDetail, int? idAgent, string agent, int? idPlayer, string player, int idLineType, string lineTypeName, string loginName, double winAmount, double riskAmount, string result, double net, string gamePeriod, string league, string completeDescription, string detailDescription, string team, int idGame, int idLeague, int? period, string fAV_DOG, int play, string wagerPlay, string idSport, DateTime settledDate, DateTime placedDate, int odds, double points, string score, string iP, string beatLine)
         {
             Id_BI = id_BI;
             IdWager = idWager;
@@ -158,6 +187,10 @@ namespace NHL_BL.Entities
             this.Sport = "";
             this.Event = "";
             this.WinBetsLeans = 0;
+
+            this.LinesPlayed_aADJ = 0;
+            this.LinesPlayed_wADJ = 0;
+            this.LinesPlayed_woADJ = 0;
         }
 
 

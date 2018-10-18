@@ -3,6 +3,24 @@
 
 <asp:Content runat="server" ID="head" ContentPlaceHolderID="head1">
   
+    
+  <link href="../css/loading.css" rel="stylesheet">
+
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.4.2/randomColor.min.js"></script>
+  <script src="../js/loading.js"></script>
+
+
+
+  
+
+
+
 
 <%--<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="../js/jquery-loader.js" type="text/javascript"></script>
@@ -48,30 +66,55 @@
    //Today
      var objT;
      var objTP;
-    
-    function NavigationMain()
+
+   //Leans
+    var objLeans;
+
+
+    $(document).ready(function () {
+
+          $("#btnSection").mouseup(function () {
+              LoadCharts();
+          });
+
+          NavigationMain();
+      });
+
+
+    window.onload = function()
       {
+          alert("Entro");
+      };
+   
+    function NavigationMain()
+    {       
           if (page == 1) {
               FinancialAJX();
               BetsAJX();
               TodayAJX();
+              LeansAJX();
           } else if (page == 2) {
               BetsAJX();
               FinancialAJX();
               TodayAJX();
+              LeansAJX();
           } else if (page == 4)
           {
               TodayAJX();
               BetsAJX();
               FinancialAJX();
+              LeansAJX();
+          }else if (page == 3)
+          {
+              LeansAJX();
           }
-      }
-
+    }
+    
     function FinancialAJX()
-      {
+    {
           LastThisWeekAJX();
           RangeSummaryAJX();
-      }
+    }
 
     function BetsAJX()
     {
@@ -87,8 +130,15 @@
         TodayChartAJX();      
         TableTodayAJX();      
     }
+
+    function LeansAJX()
+    {
+       LeansMethodAJX();
+    }
+
     function ProPlayAJX()
-    {       
+    {    
+        //ShowLoading("#tableProPlay");
         var sport = $("#MainContent_inSportBets").val();
         var range = $("#inProPlay").val();
         var player = $("#MainContent_inPlayer").val();
@@ -102,7 +152,7 @@
            dataType: 'json',
            success: function (data)
            {
-               $("#tableProPlay").DataTable().clear();
+               // $("#tableProPlay").DataTable().clear();
                var ob = JSON.parse(data.d);
                for (var i = 0; i < ob.length; i++)
                {
@@ -169,6 +219,7 @@
                document.getElementById("tableProPlay_filter").style.display = "none";
                document.getElementById("tableProPlay_info").style.display = "none";
                document.getElementById("tableProPlay_paginate").style.display = "none";
+               //HideLoading("#tableProPlay");
            },
            error: function (data)
            {
@@ -453,7 +504,98 @@
               alert('No Data: ' + data.statusText);
            }
         });
-      }
+    }
+    function LeansMethodAJX()
+    {
+        var sport = $("#MainContent_inSportLeans").val();
+        var player = $("#MainContent_inPlayer").val();
+
+        var start = $("#MainContent_startDate").val();
+        var end = $("#MainContent_endDate").val();
+
+        var parameter = { 'start': start, 'end': end, 'player': player, 'sport': sport }
+        $.ajax({                    
+           type: 'POST',
+           url: 'PlayerModule.aspx/Leans',
+           data: JSON.stringify(parameter),
+           contentType: 'application/json; charset=utf-8',
+           dataType: 'json',
+           success: function (data)
+           {
+
+               objLeans = JSON.parse(data.d);
+               
+               if (objLeans != null)
+               {
+                   $("#leansTable").DataTable().clear();
+
+                   for (var i = 0; i < objLeans.length; i++)
+                   {                    
+                       if (i == 0) {
+                           $('#leansTable').dataTable().fnAddData([
+                               "Total Risk",
+                               "$" + objLeans[i]["Risk_wADJ"],
+                               "$" + objLeans[i]["Risk_aADJ"],
+                               "0"
+                           ]);
+                       } else if (i == 1)
+                       {
+                           $('#leansTable').dataTable().fnAddData([
+                               "Net",
+                               "$" + objLeans[i]["Net_wADJ"],
+                               "$" + objLeans[i]["Net_aADJ"],
+                               "0"
+                           ]);
+                       }else if (i == 2)
+                       {
+                           $('#leansTable').dataTable().fnAddData([
+                               "Lines Played",
+                               objLeans[i]["LinesPlayed_wADJ"],
+                               objLeans[i]["LinesPlayed_aADJ"],
+                               "0"
+                           ]);
+                       }else if (i == 3)
+                       {
+                           $('#leansTable').dataTable().fnAddData([
+                               "Favorites",
+                               objLeans[i]["Fav_wADJ"],
+                               objLeans[i]["Fav_aADJ"],
+                               "0"
+                           ]);
+                       }else if (i == 4)
+                       {
+                           $('#leansTable').dataTable().fnAddData([
+                               "Dog",
+                               objLeans[i]["Dog_wADJ"],
+                               objLeans[i]["Dog_aADJ"],
+                               "0"
+                           ]);
+                       }else if (i == 5)
+                       {
+                           $('#leansTable').dataTable().fnAddData([
+                               "Hold%",
+                               objLeans[i]["Hold_wADJ"],
+                               objLeans[i]["Hold_aADJ"],
+                               "0"
+                           ]);
+                       }
+
+                   }
+
+               document.getElementById("leansTable_length").style.display = "none";
+               document.getElementById("leansTable_filter").style.display = "none";
+               document.getElementById("leansTable_info").style.display = "none";
+               document.getElementById("leansTable_paginate").style.display = "none";
+               }
+
+               //DrawChart5();
+           },
+           error: function (data)
+           {
+              alert('No Data: ' + data.statusText);
+           }
+        });
+    }
 
     function DrawChart1()
     {
@@ -836,45 +978,6 @@
 
         chart.render();
       }
-    function DrawChart8()
-    {
-        var chart = new CanvasJS.Chart("leansChart", {
-	    animationEnabled: true,
-	    title: {
-            text: "Leans Info",
-            fontSize: 20
-	    },
-	    axisX: {
-		    interval: 1
-	    },
-	    axisY: {
-            title: "Values",
-            fontSize: 10,
-		    scaleBreaks: {
-			    type: "wavy",
-			    customBreaks: [{
-				    startValue: 80,
-				    endValue: 210
-				    },
-				    {
-					    startValue: 230,
-					    endValue: 600
-				    }
-		    ]}
-	    },
-	    data: [{
-		    type: "bar",
-		    toolTipContent: "<img src=\"https://canvasjs.com/wp-content/uploads/images/gallery/javascript-column-bar-charts/\"{url}\"\" style=\"width:40px; height:20px;\"> <b>{label}</b><br>Budget: ${y}bn<br>{gdp}% of GDP",
-		    dataPoints: [
-			    { label: "NFL", y: 25, gdp: 5.8, url: "israel.png" },
-			    { label: "SOC", y: 30, gdp: 5.7, url: "uae.png" },
-			    { label: "MLB", y: 35, gdp: 1.3, url: "brazil.png"},
-			    { label: "Overall", y: 40, gdp: 2.0, url: "australia.png" }
-		    ]
-	    }]
-    });
-    chart.render();
-      }
     function DrawChart9() 
     {       
         var chart = new CanvasJS.Chart("donutChart", {
@@ -950,21 +1053,9 @@
     function LoadChartLeans()
     {
        page = 3;
-        setTimeout(function () {
-            DrawChart8();
-        }, 1);
     }
 
-    window.onload = function ()
-    {
-        $("#btnSection").mouseup(function () {
-            LoadCharts();
-        });
-
-        NavigationMain();
-    }
-
-      function LoadCharts() {
+    function LoadCharts() {
           setTimeout(function () {
               DrawChart1();
               DrawChart2();
@@ -977,7 +1068,7 @@
           }, 15);
       }
 
-     function ThisLastWeekJava(info)
+    function ThisLastWeekJava(info)
      {
          obj = JSON.parse(info);
          typeFinancial = $("#inFinancialStats").val();
@@ -1038,8 +1129,23 @@
                 
              });
 
-     }
+      }
 
+    function ShowLoading(txt)
+    {
+        $(txt).loading({
+            stoppable: true,
+            message: 'testing...',
+            theme: 'dark'
+        });
+
+
+    }
+
+    function HideLoading(txt)
+      {
+          $(txt).loading('stop');
+      }
   </script>
 
 </asp:Content>
@@ -1064,9 +1170,16 @@
 
 
 
+
+
+
+
+
+
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  
+    <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Solution Config
@@ -1075,8 +1188,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <form>
 
+        <form>
            <div class="form-group">
             <label class="col-sm-2 control-label">Solution:</label>
                     <div class="col-sm-7">
@@ -1088,7 +1201,6 @@
                </div>
           </div>
 
-
            <div class="form-group">
             <label class="col-sm-2 control-label">Tigger:</label>
                     <div class="col-sm-7">
@@ -1099,7 +1211,6 @@
                    </select>
                </div>
           </div>
-
 
           <div class="form-group">
             <label class="col-sm-2 control-label">Comments:</label>
@@ -1186,12 +1297,12 @@
                      </div>
                    </div>
 
-              </div>   
-            </form>                              
+                 </div>   
+               </form>                              
              </div>
            </div>
-          </div>
-        </div>
+         </div>
+       </div>
       </div>
    <div class="row" runat="server">
     <div class="col-xs-12">
@@ -1237,7 +1348,7 @@
                              <label class="col-sm-2 control-label">Last Week:</label>
                              <div class="col-sm-4">
                                <div class="input-group">
-                                <input type="text" class="form-control" style="background-color:white; font-weight:bold;" placeholder="$0" id="inLastWeek" value="$2500" runat="server" required="required" autocomplete="off" readonly="readonly" />
+                                <input type="text" class="form-control" style="background-color:white; font-weight:bold;" placeholder="$0" id="inLastWeek" value="$0" runat="server" required="required" autocomplete="off" readonly="readonly" />
                                </div>
                             </div>
     
@@ -1665,7 +1776,7 @@
 
                     <div class="col-sm-2">
                        <div class="input-group">
-                        <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="startDate" runat="server" name="startDate" required="required" autocomplete="off" />
+                        <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="startDate" runat="server" name="startDate" required="required"  autocomplete="off" />
                          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                          </div>
                      </div>
@@ -1684,105 +1795,30 @@
                   </select>
               </div>
 
-                  <button class="btn btn-success">Go</button>
+                  <button class="btn btn-success" onclick="LeansMethodAJX();">Go</button>
            </div>
 
-                <div class="col-md-6 col-sm-6 col-xs-12 boxes" style="height:100%; margin-top:10px;">
+                <div class="col-md-12 col-sm-12 col-xs-12 boxes" style="height:100%; margin-top:10px;">
                 <div class="x_panel h-10 d-inline-block p-2">
                   <div class="x_title">
-                    <h3>Leans</h3>
+                    <h3>Leans Table</h3>
                   </div>
                   <div class="x_content" style="height:100%; width:100%; margin-right:10px; margin-bottom:10px; overflow-x:auto;">
                       
-                    <table class="table table-responsive table-hover" style="overflow-x:auto;">
+                    <table class="table table-responsive table-hover tablin" id="leansTable" style="width:100%; border:none;">
                       <thead>
                         <tr>
                           <th>Values</th>
                           <th>Overall w/adj</th>
-                          <th>Overall w/adj</th>
-                          <th>Sport w/adj</th>
-                          <th>Sport w/o adj </th>
+                          <th>Overall a/adj</th>
+                          <th>Overall if w/o adj </th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr>
-                          <td>Net</td>
-                          <td>15</td>
-                          <td>10</td>
-                          <td>17</td>
-                          <td>43</td>
-                        </tr>
-                        <tr>
-                          <td>Lines Played</td>
-                          <td>23</td>
-                          <td>25</td>
-                          <td>67</td>
-                          <td>43</td>
-                        </tr>
-                        <tr>
-                          <td>Current Line</td>
-                          <td>10</td>
-                          <td>35</td>
-                          <td>27</td>
-                          <td>74</td>
-                        </tr>
-                         <tr>
-                          <td>Negative Line</td>
-                          <td>50</td>
-                          <td>12</td>
-                          <td>18</td>
-                          <td>25</td>
-                        </tr>
-                        <tr>
-                          <td>Positive Line</td>
-                          <td>25</td>
-                          <td>12</td>
-                          <td>18</td>
-                          <td>25</td>
-                        </tr>
-                        <tr>
-                          <td>Result</td>
-                          <td>20</td>
-                          <td>12</td>
-                          <td>18</td>
-                          <td>25</td>
-                        </tr>
-                      </tbody>
                     </table>
 
                   </div>
                 </div>
               </div>
-
-
-            <%-- leans graph --%>
-
-               <div class="col-md-6 col-sm-6 col-xs-12 boxes" style="height:100%; margin-top:10px;">
-                <div class="x_panel h-10 d-inline-block p-2">
-                  <div class="x_title">
-                  <div class="form-group">
-              
-               <h4>Leans Chart</h4>
-               <div class="col-sm-3" style="float:right; position:absolute;top:0;right:0; margin-top:5px; margin-bottom:5px;">
-                 <select ID="inLeansChart" runat="server" class="form-control" onchange="DrawChart8();">
-                     <option Selected="selected" Value="BET">Bets</option>
-                     <option Value="RISK">Risk</option>
-                     <option Value="NET">Net</option>
-                     <option Value="HOLD">Hold%</option>
-                     <option Value="WIN">Win%</option>
-                  </select>
-                </div>
-
-                </div>  
-                  </div>
-                  <div class="x_content" style="height:100%; width:100%; margin-right:10px; margin-bottom:10px;">
-                      <div style="height:294px; width:100%;" id="leansChart"></div>
-                  </div>
-                </div>
-              </div>
-
-            <%-- end leans grapgh --%>
-
 
         </div>
       </div>
@@ -1790,5 +1826,18 @@
       
     </div><!-- contentpanel -->
   </div><!-- mainpanel -->
+
+
+    <script>
+        window.onload = function ()
+        {
+            $("#btnSection").mouseup(function () {
+              LoadCharts();
+          });
+
+          NavigationMain();
+        }
+    </script>
+
 
 </asp:Content>

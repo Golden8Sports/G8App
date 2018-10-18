@@ -24,6 +24,47 @@
            <!-- Page-specific content will go here... -->
       </asp:contentplaceholder>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        
+
+        window.onload = function ()
+        {
+            var flag = true;
+            var obj;
+            obj = <%=GetData()%>;   
+
+            $("li").each(function (index)
+            {
+                var page = $(this).text().trim();
+                var vec = page.split("\n");
+
+                page = vec[0].trim();
+                if (page == "LogOut") flag = false;
+                
+                if (index > 4 && flag == true)
+                {
+                    var find = false;
+                    if (obj != null) {
+                        for (var i = 0; i < obj.length; i++) {
+                            if (obj[i]["Page"].trim() == page) {
+                                find = true;
+                            }
+                        }
+                    }
+
+                    if (find == false) {
+                        $(this).hide();
+                    }
+                }
+
+            }); 
+
+            flag = true;
+        }
+    </script>
+
 </head>
 
  
@@ -34,17 +75,13 @@
   <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
 </div>
 
-
 <section>
-  <div class="leftpanel">
-    
+  <div class="leftpanel">  
     <div class="logopanel">
       <h1><span>[</span> G8 Apps <span>]</span></h1>
     </div><!-- logopanel -->
         
-    <div class="leftpanelinner">
-      
-		
+   <div class="leftpanelinner">     		
     <div class="visible-xs hidden-sm hidden-md hidden-lg">
             <div class="media userlogged">
                 <div class="media-body">
@@ -83,7 +120,7 @@
             </ul>
         </li>
 
-       <li class="nav-parent">
+         <li class="nav-parent">
             <a href="#"><i class="fa fa-book"></i> <span>Reports</span></a>
             <ul class="children">
                 <li><a href="nhlRanges.aspx"><i class="fa fa-caret-right"></i> NHL Ranges</a></li>
@@ -93,7 +130,7 @@
                 <li><a href="CheckScores.aspx"><i class="fa fa-caret-right"></i> Check Scores </a></li>
                 <%--<li><a href="RangesReport.aspx"><i class="fa fa-caret-right"></i> Ranges Report </a></li>--%>
             </ul>
-        </li>
+         </li>
 
         <li class="nav-parent">
             <a href="#"><i class="fa fa-soccer-ball-o"></i> <span> Sports Intelligence </span></a>
@@ -106,7 +143,7 @@
             </ul>
         </li>
 
-        <li class="nav-parent">
+    <li class="nav-parent">
             <a href="#"><i class="fa fa-wrench"></i> <span> Tools </span></a>
             <ul class="children">
                 <li><a href="Scraping.aspx"><i class="fa fa-caret-right"></i> Scraping Covers </a></li>

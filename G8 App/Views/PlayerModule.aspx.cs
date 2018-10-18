@@ -14,6 +14,8 @@ using System.Web.Script.Services;
 using System.Web.Services;
 using System.Web.Helpers;
 using G8_App.Logic.Dashboard;
+using NHL_BL.Logic;
+using Newtonsoft.Json;
 
 namespace G8_App.Views
 {
@@ -24,6 +26,8 @@ namespace G8_App.Views
         private static blProfile profileDB = new blProfile();
         private static blSummary summaryDB = new blSummary();
         private static blSeason seasonDB = new blSeason();
+        private static csGenerateLeansExcel LeansExcel = new csGenerateLeansExcel();
+        private static blGame gameDB = new blGame();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -35,10 +39,35 @@ namespace G8_App.Views
                 {
                     LoadPlayers(sender, e);
                     LoadSport();
+                    GetToday();
                 }
             }
             else Response.Redirect("Login.aspx");
         }
+
+
+
+        private void GetToday()
+        {
+            DateTime dt = DateTime.Now;
+
+            startDate.Value = dt.ToString("MM/dd/yyyy");
+
+           dt = dt.AddDays(1);
+           endDate.Value = dt.ToString("MM/dd/yyyy");
+        }
+
+
+
+        public string GetTomorrow()
+        {
+            DateTime dt = DateTime.Now;
+            dt = dt.AddDays(1);
+
+            return dt.ToString("MM/dd/YYYY");
+        }
+
+
 
 
         private void LoadSport()
@@ -638,6 +667,87 @@ namespace G8_App.Views
         }
 
 
+
+
+
+        // ************************************ LEANS ******************************************
+        [WebMethod]
+        [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+        public static string Leans(string start, string end, string player, string sport)
+        {
+            csBet BetGeneral = null;
+            var obj = new ObservableCollection<csBet>();
+            var ByGame = new ObservableCollection<csBet>();
+
+            if (start != "" && end != "")
+            {                
+                sport = (sport == "ALL") ? "" : sport;
+
+                var spli1 = start.Split('/');
+                var spli2 = end.Split('/');
+                var date1 = spli1[2] + "-" + spli1[0] + "-" + spli1[1];
+                var date2 = spli2[2] + "-" + spli2[0] + "-" + spli2[1];
+
+                DateTime dt2 = Convert.ToDateTime(date2);
+                dt2 = dt2.AddDays(1);
+                date2 = dt2.Year + "-" + dt2.Month + "-" + dt2.Day;
+             
+                var GamesList = gameDB.ListGames(date1, date2, sport, -1, "LEANS");
+
+                if (GamesList != null && GamesList.Count > 0)
+                {
+                    BetGeneral = LeansExcel.GenerateExcel(GamesList, player, BetGeneral);
+                }
+            }
+
+
+            //************************************ EXECUTION **************************************
+
+            var b = new csBet();
+
+            if(BetGeneral != null)
+            {
+                b.Risk_wADJ = BetGeneral.Risk_wADJ;
+                b.Risk_aADJ = BetGeneral.Risk_aADJ;
+                obj.Add(b);
+
+                b.Net_wADJ = BetGeneral.Net_wADJ;
+                b.Net_aADJ = BetGeneral.Net_aADJ;
+                obj.Add(b);
+
+                b.LinesPlayed_wADJ = BetGeneral.LinesPlayed_wADJ;
+                b.LinesPlayed_aADJ = BetGeneral.LinesPlayed_aADJ;
+                obj.Add(b);
+
+                b.Fav_wADJ = BetGeneral.Fav_wADJ;
+                b.Fav_aADJ = BetGeneral.Fav_aADJ;
+                obj.Add(b);
+
+                b.Dog_wADJ = BetGeneral.Dog_wADJ;
+                b.Dog_aADJ = BetGeneral.Dog_aADJ;
+                obj.Add(b);
+
+
+                b.Hold_wADJ = Math.Round((BetGeneral.Net_wADJ * 100 / BetGeneral.Risk_wADJ),2,MidpointRounding.AwayFromZero);
+                b.Hold_aADJ = Math.Round((BetGeneral.Net_aADJ * 100 / BetGeneral.Risk_aADJ), 2, MidpointRounding.AwayFromZero);
+                b.Hold_wADJ = (Double.IsNaN(b.Hold_wADJ)) ? 0 : b.Hold_wADJ;
+                b.Hold_aADJ = (Double.IsNaN(b.Hold_aADJ)) ? 0 : b.Hold_aADJ;
+
+                obj.Add(b);
+
+            }
+            else
+            {
+                obj.Add(b);
+                obj.Add(b);
+                obj.Add(b);
+                obj.Add(b);
+                obj.Add(b);
+                obj.Add(b);
+            }
+
+            return JsonConvert.SerializeObject(obj);
+        }
 
     }
 } 
