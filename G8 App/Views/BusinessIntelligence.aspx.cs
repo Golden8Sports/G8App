@@ -20,7 +20,6 @@ namespace G8_App.Views
 {
     public partial class BusinessIntelligence : System.Web.UI.Page
     {
-
         private blBet betDB = new blBet();
         private blSport sportDB = new blSport();
         private blAgent agentDB = new blAgent();

@@ -32,6 +32,8 @@ namespace G8_App.Views
             DateTime date = Convert.ToDateTime(startD);            
             gameDB.SyncUp(date.Year + "-" + ((date.Month < 10) ? "0" + date.Month.ToString() : date.Month.ToString()) + "-" + ((date.Day < 10) ? "0" + date.Day.ToString() : date.Day.ToString()));
             idStaus.InnerHtml = "Scores Updated for " + startD;
+
+            gameDB.GetFlash();
         }
     }
 }

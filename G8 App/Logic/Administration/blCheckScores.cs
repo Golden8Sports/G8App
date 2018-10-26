@@ -926,5 +926,44 @@ namespace G8_App.Logic.Administration
             else if (sport.ToUpper().Contains("RACING")) return "9";
             else return "10";
         }
+
+
+
+
+        public void GetFlash()
+        {
+            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create("https://www.flashscore.com/");
+            myRequest.Method = "GET";
+            try
+            {
+                WebResponse myResponse = myRequest.GetResponse();
+                StreamReader sr = new StreamReader(myResponse.GetResponseStream(), System.Text.Encoding.UTF8);
+                string result = sr.ReadToEnd();
+                var doc = new HtmlAgilityPack.HtmlDocument();
+                doc.LoadHtml(result);
+
+                foreach (HtmlNode table in doc.DocumentNode.SelectNodes("//table"))
+                {
+                    //search tables info
+                    foreach (HtmlNode row in table.SelectNodes("tr"))
+                    {
+                        foreach (HtmlNode cell in row.SelectNodes("td"))
+                        {
+                            String c = cell.InnerText.ToString().Replace("&nbsp;", "").Trim().Replace("&nbsp", "").Trim();
+                        }
+                    }
+                }
+            }
+            catch (WebException ex)
+            {
+                //lblNotFound.Text = "There is nothing to read. Error: " + ex.ToString() + "";
+            }
+        }
+
+
+
+
+
+
     }
 }
