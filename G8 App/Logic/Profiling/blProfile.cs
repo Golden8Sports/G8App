@@ -129,7 +129,7 @@ namespace G8_App.Logic.Profiling
                         profile.MoveLine = Convert.ToInt32(fila["LineMover"]);
                         profile.BeatLine = Convert.ToInt32(fila["BeatLine"]);
 
-                        if(profile.Sport.ToUpper().Trim().Contains(sport.ToUpper().Trim()))
+                        if(profile.Sport.ToUpper().Trim() == sport.ToUpper().Trim())
                         {
                             data.Add(profile);
                         }
@@ -196,7 +196,7 @@ namespace G8_App.Logic.Profiling
                         profile.BeatLine = Convert.ToInt32(fila["BeatLine"]);
 
 
-                        if (profile.League.ToUpper().Trim().Contains(league.ToUpper().Trim()))
+                        if (profile.League.ToUpper().Trim() == league.ToUpper().Trim())
                         {
                             data.Add(profile);
                         }

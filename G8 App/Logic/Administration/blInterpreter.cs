@@ -35,6 +35,7 @@ namespace G8_App.Logic.Administration
             listaDeporte.Add(new csSport("NFL", "NFL"));
             listaDeporte.Add(new csSport("PGA", "GOLF"));
             listaDeporte.Add(new csSport("CYCLING", "CYCLING"));
+            listaDeporte.Add(new csSport("MEN'S ROLEX PARIS MASTERS", "TENNIS"));
         }
 
 

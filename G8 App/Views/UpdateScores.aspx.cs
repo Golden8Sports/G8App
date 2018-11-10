@@ -27,13 +27,13 @@ namespace G8_App.Views
 
         protected void Update(object sender, EventArgs e)
         {
+            gameDB.GetFlash();
+
             idStaus.InnerHtml = "";
             string startD = Request[startDate.UniqueID];
-            DateTime date = Convert.ToDateTime(startD);            
+            DateTime date = Convert.ToDateTime(startD);
             gameDB.SyncUp(date.Year + "-" + ((date.Month < 10) ? "0" + date.Month.ToString() : date.Month.ToString()) + "-" + ((date.Day < 10) ? "0" + date.Day.ToString() : date.Day.ToString()));
-            idStaus.InnerHtml = "Scores Updated for " + startD;
-
-            gameDB.GetFlash();
+            idStaus.InnerHtml = "Scores Updated for " + startD;          
         }
     }
 }

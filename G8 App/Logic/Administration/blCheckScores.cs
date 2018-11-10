@@ -14,6 +14,8 @@ using System.Net;
 using System.IO;
 using HtmlAgilityPack;
 using G8_App.Entities.Scores;
+using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace G8_App.Logic.Administration
 {
@@ -932,32 +934,191 @@ namespace G8_App.Logic.Administration
 
         public void GetFlash()
         {
-            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create("https://www.flashscore.com/");
-            myRequest.Method = "GET";
             try
             {
-                WebResponse myResponse = myRequest.GetResponse();
-                StreamReader sr = new StreamReader(myResponse.GetResponseStream(), System.Text.Encoding.UTF8);
-                string result = sr.ReadToEnd();
-                var doc = new HtmlAgilityPack.HtmlDocument();
-                doc.LoadHtml(result);
 
-                foreach (HtmlNode table in doc.DocumentNode.SelectNodes("//table"))
-                {
-                    //search tables info
-                    foreach (HtmlNode row in table.SelectNodes("tr"))
+                string test = GetHtmlPage("https://www.flashscore.com/");
+
+
+                string result = string.Empty;
+                HtmlAgilityPack.HtmlWeb web = new HtmlWeb();
+                HtmlAgilityPack.HtmlDocument doc = web.Load(test);
+
+                HtmlNodeCollection tables = doc.DocumentNode.SelectNodes("//td");
+                if (tables != null)
+                    for (int k = 0; k < tables.Count; k++)
                     {
-                        foreach (HtmlNode cell in row.SelectNodes("td"))
+                        //tables
+                        if(tables[k].Attributes.Contains("class"))
                         {
-                            String c = cell.InnerText.ToString().Replace("&nbsp;", "").Trim().Replace("&nbsp", "").Trim();
+                            int wew = 0;
+                            string dsds = tables[k].InnerHtml;
                         }
+
+                        HtmlNodeCollection t = tables[k].SelectNodes("//table");
+                        if(t != null)
+                        {
+                            foreach (var ta in t)
+                            {
+                                HtmlNodeCollection rows = ta.SelectNodes(".//tr");
+
+                                if (rows != null)
+                                    for (int i = 1; i < rows.Count; ++i)
+                                    {
+                                        HtmlNodeCollection cols = rows[i].SelectNodes(".//td");
+
+                                        if (cols != null)
+                                        {
+                                            for (int j = 0; j < cols.Count; ++j)
+                                            {
+
+                                                string txt = cols[j].InnerText.Replace("\r\n", "").Trim().Replace("\t\t (R)", "").Trim().Replace("\t\t (L)", "").Trim();
+                                                txt = txt.Replace("(OT)", "").Trim();
+                                                txt = txt.Replace("@ ", "").Trim();
+                                                txt = txt.Replace("(R)", "").Trim();
+                                            }
+                                        }
+
+                                    }
+                            }
+                        }
+
+                    }
+
+                //Response.Clear();
+                //Response.ContentType = "text/plain";
+                //Response.AddHeader("Content-Disposition", "attachment;filename=Scrap.csv");
+                //Response.Write(stringContent);
+                //Response.End();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+        }
+
+
+
+        private string GetHtmlPage(string strURL)
+        {
+
+            String strResult;
+            WebResponse objResponse;
+            WebRequest objRequest = HttpWebRequest.Create(strURL);
+            objResponse = objRequest.GetResponse();
+            using (StreamReader sr = new StreamReader(objResponse.GetResponseStream()))
+            {
+                strResult = sr.ReadToEnd();
+                sr.Close();
+            }
+            // strResult = strResult.Remove(0, strResult.LastIndexOf("<table>"));
+            string[] values = strResult.Split(new string[] { "<tbody>", "</tbody>" }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Response.Write("<table>" + values[1] + "</table>");
+            ConvertHTMLTablesToDataSet("<table>" + values[0] + "</table>");
+            //  List<string> list = new List<string>(values);
+
+            return values[0];
+        }
+
+        private DataSet ConvertHTMLTablesToDataSet(string HTML)
+        {
+            // Declarations 
+            DataSet ds = new DataSet();
+            DataTable dt = null;
+            DataRow dr = null;
+            DataColumn dc = null;
+            string TableExpression = "<table[^>]*>(.*?)</string></string></table>";
+            string HeaderExpression = "<th[^>]*>(.*?)";
+            string RowExpression = "<tr[^>]*>(.*?)";
+            string ColumnExpression = "<td[^>]*>(.*?)";
+            bool HeadersExist = false;
+            int iCurrentColumn = 0;
+            int iCurrentRow = 0;
+
+            // Get a match for all the tables in the HTML 
+            MatchCollection Tables = Regex.Matches(HTML, TableExpression, RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.IgnoreCase);
+
+            // Loop through each table element 
+            foreach (Match Table in Tables)
+            {
+                // Reset the current row counter and the header flag 
+                iCurrentRow = 0;
+                HeadersExist = false;
+
+                // Add a new table to the DataSet 
+                dt = new DataTable();
+
+                //Create the relevant amount of columns for this table (use the headers if they exist, otherwise use default names) 
+                if (Table.Value.Contains("<th"))
+                {
+                    // Set the HeadersExist flag 
+                    HeadersExist = true;
+
+                    // Get a match for all the rows in the table 
+                    MatchCollection Headers = Regex.Matches(Table.Value, HeaderExpression, RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.IgnoreCase);
+
+                    // Loop through each header element 
+                    foreach (Match Header in Headers)
+                    {
+                        dt.Columns.Add(Header.Groups[1].ToString());
                     }
                 }
-            }
-            catch (WebException ex)
+            else
             {
-                //lblNotFound.Text = "There is nothing to read. Error: " + ex.ToString() + "";
+                    for (int iColumns = 1; iColumns <= Regex.Matches(Regex.Matches(Regex.Matches(Table.Value, TableExpression, RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.IgnoreCase)[0].ToString(), RowExpression, RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.IgnoreCase)[0].ToString(), ColumnExpression, RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.IgnoreCase).Count; iColumns++)
+                    {
+                        dt.Columns.Add("Column " + iColumns);
+                    }
+                }
+
+
+                //Get a match for all the rows in the table 
+
+                MatchCollection Rows = Regex.Matches(Table.Value, RowExpression, RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.IgnoreCase);
+
+                // Loop through each row element 
+                foreach (Match Row in Rows)
+                {
+                    // Only loop through the row if it isn't a header row 
+                    if (!(iCurrentRow == 0 && HeadersExist))
+                    {
+                        // Create a new row and reset the current column counter 
+                        dr = dt.NewRow();
+                        iCurrentColumn = 0;
+
+                        // Get a match for all the columns in the row 
+                        MatchCollection Columns = Regex.Matches(Row.Value, ColumnExpression, RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.IgnoreCase);
+
+                        // Loop through each column element 
+                        foreach (Match Column in Columns)
+                        {
+                            // Add the value to the DataRow 
+                            dr[iCurrentColumn] = Column.Groups[1].ToString();
+
+                            // Increase the current column  
+                            iCurrentColumn++;
+                        }
+
+                        // Add the DataRow to the DataTable 
+                        dt.Rows.Add(dr);
+
+                    }
+
+                    // Increase the current row counter 
+                    iCurrentRow++;
+                }
+
+
+                // Add the DataTable to the DataSet 
+                ds.Tables.Add(dt);
+
             }
+            //GridView1.DataSource = ds;
+            //GridView1.DataBind();
+            return ds;
+
         }
 
 
