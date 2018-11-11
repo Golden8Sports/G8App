@@ -674,7 +674,7 @@ namespace G8_App.Logic.Profiling
                     {
                         profile = new csProfile();
                         profile.Net = Convert.ToInt32(fila["Net"]);
-                        profile.PlacedDateString = CastDate(Convert.ToDateTime(fila["PlacedDate"]));
+                        profile.PlacedDateString = Convert.ToDateTime(fila["PlacedDate"]).ToString("MM/dd/yyy hh:mm tt").Replace(". ", ".");
                         profile.RiskAmount = Convert.ToInt32(fila["RiskAmount"]);
                         profile.Points = Convert.ToDouble(fila["Points"]);
                         profile.Odds = Convert.ToInt32(fila["Odds"]);
